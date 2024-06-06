@@ -1,0 +1,26 @@
+/* src/Components.css */
+.rounded-square {
+    width: 100%; /* Make it responsive */
+    padding: 20px; /* Add some padding */
+    border: 1px solid #007bff; /* Thin border with a color (primary blue) */
+    border-radius: 10px; /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa; /* Light background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add some shadow for better visibility */
+    margin-bottom: 15px;
+}
+
+.rounded-square h1 {
+    margin: 0; /* Remove default margin */
+    font-size: 1.5rem; /* Adjust font size */
+}
+
+.rounded-square p {
+    margin-top: 10px; /* Add some spacing between h1 and p */
+    font-size: 1rem; /* Adjust font size */
+}
+
+

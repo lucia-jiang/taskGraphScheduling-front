@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from "prop-types"
-import "./Algorithms.css"
+import "./Components.css"
 import {Button} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
+import {useShortName} from "../contexts/ShortNameContext";
 
 const AlgorithmExplanation = ({algorithmName, shortName, desc}) => {
-    const navigate = useNavigate()
-    function handleExample(){
-        navigate()
-    }
+    const navigate = useNavigate();
+    const { storeShortName } = useShortName();
 
     function handleCustomisedGraph(){
-
+        storeShortName(shortName);
+        navigate("/create-customised-graph")
     }
 
     return (

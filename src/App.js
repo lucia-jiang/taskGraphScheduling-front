@@ -10,6 +10,9 @@ import Algorithm1 from "./algorithms/Algorithm1";
 import Algorithm2 from "./algorithms/Algorithm2";
 import Algorithm3 from "./algorithms/Algorithm3";
 import Algorithm4 from "./algorithms/Algorithm4";
+import Graph from "./components/Graph";
+import TimeChallengePage from "./pages/TimeChallengePage";
+import GuessNextStepPage from "./pages/GuessNextStepPage";
 
 const App = () => {
     return (
@@ -26,10 +29,16 @@ const App = () => {
                     <Route path="/algorithms/alg2" element={<Algorithm2 />} />
                     <Route path="/algorithms/alg3" element={<Algorithm3 />} />
                     <Route path="/algorithms/alg4" element={<Algorithm4 />} />
+                    <Route path="/game/time-challenge" element={<TimeChallengePage />} />
+                    <Route path="/game/guess-next-step" element={<GuessNextStepPage />} />
                 </Routes>
             </div>
         </Router>
-    );
+        );
+        // <div className="App">
+        //     <Graph />
+        // </div>
+    // );
 };
 
 export default App;
