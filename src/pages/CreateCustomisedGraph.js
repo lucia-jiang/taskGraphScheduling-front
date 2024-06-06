@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import Graph from "../components/Graph";
-import {useShortName} from "../contexts/ShortNameContext";
+import {useAlgorithmName} from "../contexts/algorithmNameContext";
+import {useParams} from "react-router-dom";
 
 const CreateCustomisedGraph = () => {
-    const { shortName, resetShortName } = useShortName();
+    const { algorithmName: paramAlgorithmName } = useParams();
+    const { algorithmName, storeAlgorithmName, resetAlgorithmName } = useAlgorithmName();
 
     useEffect(() => {
+        if (paramAlgorithmName) {
+            storeAlgorithmName(paramAlgorithmName);
+        }
         return () => {
-            resetShortName(); // Reset the shortName when the component unmounts
+            resetAlgorithmName();
         };
-    }, []);
+    }, [paramAlgorithmName, storeAlgorithmName, resetAlgorithmName]);
 
     return (
         <div>
             <h1>Create Customised Graph</h1>
             <p>Users create customised graphs using drag and drop features.</p>
-            {shortName && <p> Short name: {shortName}</p>}
-            <Graph/>
-            {/*<Graph/>*/}
+            {algorithmName ? (
+                <div>
+                    <p>Algorithm name: {algorithmName}</p>
+                </div>
+            ) : (
+                <div>
+                    <p>Please select an algorithm to customise the graph.</p>
+                </div>
+            )}
+            {/*<Graph />*/}
         </div>
     );
 };

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Col, Container, Row} from "react-bootstrap";
-import Pseudocode from "../components/Pseudocode";
-import ProcessorAssignment from "../components/ProcessorAssignment";
-import GraphComponent from "../components/GraphComponent";
-import GraphProperties from "../components/GraphProperties";
-import StepsList from "../components/StepsList";
+import Pseudocode from "../components/algorithm/Pseudocode";
+import ProcessorAssignment from "../components/algorithm/ProcessorAssignment";
+import GraphComponent from "../components/algorithm/GraphComponent";
+import GraphProperties from "../components/algorithm/GraphProperties";
+import StepsList from "../components/algorithm/StepsList";
 
 const Algorithm3 = () => {
     const pseudocodeSteps = "Step 1: Do this<br />Step 2: Do that";

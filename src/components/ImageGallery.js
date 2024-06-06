@@ -10,11 +10,9 @@ const ImageGallery = () => {
 
     return (
         <div className="text-center">
-            {/* Display the current image */}
             <div style={{ maxWidth: '90%', maxHeight: '100vh' }}>
                 <img src={`/graph-examples/${images[currentIndex]}`} alt={`Image ${currentIndex + 1}`} style={{ maxWidth: '100%', maxHeight: '100%' }} />
             </div>
-            {/* Button to refresh the image */}
             <button className="btn btn-primary mt-3" onClick={handleRefresh}>Refresh</button>
         </div>
     );

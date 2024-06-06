@@ -7,7 +7,6 @@ const Home = () => {
         <div className="container">
             <div className="row">
                 <div className="col-md-6">
-                    {/*<h2>Task Graph Schedule Example</h2>*/}
                     <div className="task-graph-example">
                         <ImageGallery />
                     </div>

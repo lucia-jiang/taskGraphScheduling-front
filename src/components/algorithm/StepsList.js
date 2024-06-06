@@ -7,7 +7,7 @@ const StepsList = ({ steps }) => {
         <div className="rounded-square">
             <h3>Steps</h3>
             <div dangerouslySetInnerHTML={{ __html: steps.replace(/\n/g, '<br />') }} />
-            <div className="step-buttons">
+            <div className="step-buttons mt-3">
                 <Button className={'mr-4'} variant="primary">Previous Step</Button>
                 <Button variant="primary">Next Step</Button>
             </div>

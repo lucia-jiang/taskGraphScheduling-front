@@ -1,6 +1,5 @@
 import React from 'react';
 import TimeChallenge from "../components/games/TimeChallenge";
-import AlgorithmExplanation from "../components/AlgorithmExplanation";
 import GuessNextStep from "../components/games/GuessNextStep";
 
 const Games = () => {

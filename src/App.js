@@ -10,7 +10,6 @@ import Algorithm1 from "./algorithms/Algorithm1";
 import Algorithm2 from "./algorithms/Algorithm2";
 import Algorithm3 from "./algorithms/Algorithm3";
 import Algorithm4 from "./algorithms/Algorithm4";
-import Graph from "./components/Graph";
 import TimeChallengePage from "./pages/TimeChallengePage";
 import GuessNextStepPage from "./pages/GuessNextStepPage";
 
@@ -23,7 +22,7 @@ const App = () => {
                     <Route path="/" element={<Home />} /> {/* Home route */}
                     <Route path="/algorithms" element={<Algorithms />} />
                     <Route path="/users-solve-problem" element={<UsersSolveProblem />} />
-                    <Route path="/create-customised-graph" element={<CreateCustomisedGraph />} />
+                    <Route path="/create-customised-graph/:algorithmName?" element={<CreateCustomisedGraph />} />
                     <Route path="/games" element={<Games />} />
                     <Route path="/algorithms/alg1" element={<Algorithm1 />} />
                     <Route path="/algorithms/alg2" element={<Algorithm2 />} />
@@ -35,10 +34,6 @@ const App = () => {
             </div>
         </Router>
         );
-        // <div className="App">
-        //     <Graph />
-        // </div>
-    // );
 };
 
 export default App;
