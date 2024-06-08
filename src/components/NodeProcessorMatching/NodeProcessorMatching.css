@@ -1,0 +1,124 @@
+/* NodeProcessorMatching.css */
+
+/* General container styling */
+.container {
+    max-width: 100%;
+    padding: 0 15px; /* Reducing padding on the sides */
+    margin: 0 auto;
+}
+
+/* Row styling */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+/* Column styling */
+.col-md-4, .col-md-6 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Specific columns for the layout */
+.col-md-4 {
+    flex: 0 0 32%;
+    max-width: 32%;
+}
+
+.col-md-6 {
+    flex: 0 0 48%;
+    max-width: 48%;
+}
+
+/* Aligning label and input spinner horizontally */
+.number-processors-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Styling the graph container */
+.graph-container {
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+/* Styling the processors assignment container */
+.assignment-container {
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+/* Styling the results container */
+.results-container {
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+/* Styling for bubbles (nodes) */
+.bubble {
+    display: block;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border: 2px solid #6c757d;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.bubble.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.bubble.assigned {
+    background-color: #28a745;
+    color: #fff;
+}
+
+/* Styling for processor list */
+.processor-list {
+    list-style: none;
+    padding: 0;
+}
+
+.processor-list-item {
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid #6c757d;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+/* Flexbox styling for the main content */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Node processor matching styling */
+.node-processor-matching {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.node-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+}
+
+.processor-selection {
+    margin-left: 15px;
+}
