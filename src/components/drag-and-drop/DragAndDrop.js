@@ -15,14 +15,15 @@ import Sidebar from './Sidebar';
 
 import './DragAndDrop.css';
 
-const initialNodes = [
-    {
-        id: '1',
-        type: 'input',
-        data: { label: 'input node' },
-        position: { x: 250, y: 5 },
-    },
-];
+// const initialNodes = [
+//     {
+//         id: '1',
+//         type: 'input',
+//         data: { label: 'input node' },
+//         position: { x: 250, y: 5 },
+//     },
+// ];
+const initialNodes = []
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -34,12 +35,13 @@ const DnDFlow = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const [viewport, setViewport] = useState(null);
     const [edgeLabel, setEdgeLabel] = useState('');
+    const [nodeWeight, setNodeWeight] = useState(0);
 
     const handleInputChange = (event) => {
         const input = event.target.value;
         // Validate if input is a number
         if (!isNaN(input)) {
-            setEdgeLabel(input);
+            setNodeWeight(parseInt(input));
         }
     };
 
@@ -86,12 +88,12 @@ const DnDFlow = () => {
                 id: getId(),
                 type,
                 position,
-                data: { label: `${type} node` },
+                data: { label: `Node ${nodes.length + 1}: ${nodeWeight}`, weight: nodeWeight },
             };
 
             setNodes((nds) => nds.concat(newNode));
         },
-        [reactFlowInstance]
+        [reactFlowInstance, nodes, nodeWeight]
     );
 
     useEffect(() => {
@@ -107,8 +109,14 @@ const DnDFlow = () => {
                     <input
                         type="text"
                         value={edgeLabel}
-                        onChange={handleInputChange}
+                        onChange={(e) => setEdgeLabel(e.target.value)}
                         placeholder="Enter label (only numbers)"
+                    />
+                    <input
+                        type="text"
+                        value={nodeWeight}
+                        onChange={handleInputChange}
+                        placeholder="Enter node weight"
                     />
                     <ReactFlow
                         nodes={nodes}
