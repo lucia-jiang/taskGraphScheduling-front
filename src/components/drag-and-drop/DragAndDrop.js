@@ -32,6 +32,7 @@ const DnDFlow = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const [viewport, setViewport] = useState(null);
 
     const onConnect = useCallback(
         (params) => {
@@ -78,13 +79,14 @@ const DnDFlow = () => {
                 data: { label: `${type} node` },
             };
 
+            // Store current viewport position
+            const savedViewport = reactFlowInstance.toObject().zoom;
+
             // Update the state with the new node
             setNodes((nds) => nds.concat(newNode));
 
-            // Optionally, you can also fit the view to display the new node
-            if (reactFlowInstance) {
-                reactFlowInstance.fitView();
-            }
+            // Restore viewport position
+            setViewport(savedViewport);
         },
         [reactFlowInstance]
     );
@@ -92,10 +94,10 @@ const DnDFlow = () => {
 
     useEffect(() => {
         // Ensure React Flow re-renders after edges change
-        if (reactFlowInstance) {
-            reactFlowInstance.fitView();
+        if (reactFlowInstance && viewport) {
+            reactFlowInstance.setTransform(viewport);
         }
-    }, [edges, reactFlowInstance]);
+    }, [viewport, reactFlowInstance]);
 
     return (
         <div className="dndflow">
@@ -110,11 +112,11 @@ const DnDFlow = () => {
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
                         onDragOver={onDragOver}
-                        fitView
+                        fitView={false} // Disable fitView
                     >
                         <Controls />
-                        <MiniMap />*/}
-                        {/*        <Background variant="dots" gap={12} size={1} />*/}
+                        <MiniMap />
+                        <Background variant="dots" gap={12} size={1} />
                     </ReactFlow>
                 </div>
                 <Sidebar />
