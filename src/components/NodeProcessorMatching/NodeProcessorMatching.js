@@ -21,6 +21,12 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
         }
     };
 
+    const handleRefresh = () => {
+        setAssignments({});
+        setSelectedNode(null);
+        onAssignment({});
+    };
+
     return (
         <div className="node-processor-matching">
             <div className="node-list">
@@ -33,6 +39,7 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
                         isAssigned={assignments[node] !== undefined}
                     />
                 ))}
+                <button onClick={handleRefresh} className="refresh-button">Refresh Choices</button>
             </div>
             <div className="processor-selection">
                 {selectedNode && (

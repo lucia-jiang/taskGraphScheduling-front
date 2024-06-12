@@ -17,26 +17,26 @@ const UsersSolveProblem = () => {
             <h1>Users solve problem</h1>
             <p>Here users solve a problem</p>
             <div className="container">
+                <div className="number-processors-container">
+                    <label htmlFor="processor-spinner" className="col-form-label">
+                        Number of processors:
+                    </label>
+                    {/*TODO: i don't think quantity picker should go here*/}
+                    {/*TODO: style better component*/}
+                    <QuantityPicker min={0} max={10} />
+                </div>
                 <div className="row">
                     <div className="col-md-4">
-                        <div className="number-processors-container">
-                            <label htmlFor="processor-spinner" className="col-form-label">
-                                Number of processors:
-                            </label>
-                            {/*TODO: i don't think quantity picker should go here*/}
-                            {/*TODO: style better component*/}
-                            <QuantityPicker min={0} max={10} />
-                        </div>
                         <div className="graph-container">
                             {/*TODO: change image*/}
                             <GraphComponent image={"image-path"} />
                         </div>
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-md-3">
                         {/*TODO: this is hardcoded right now*/}
                         <NodeProcessorMatching
-                            nodes={['N1', 'N2', 'N3']}
-                            processors={['P1', 'P2', 'P3']}
+                            nodes={['N1', 'N2', 'N3', 'N4', 'N5']}
+                            processors={['P1', 'P2', 'P3', 'P4']}
                             onAssignment={handleAssignment}
                         />
                     </div>

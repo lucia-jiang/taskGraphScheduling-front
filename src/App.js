@@ -12,6 +12,7 @@ import Algorithm3 from "./algorithms/Algorithm3";
 import Algorithm4 from "./algorithms/Algorithm4";
 import TimeChallengePage from "./pages/TimeChallengePage";
 import GuessNextStepPage from "./pages/GuessNextStepPage";
+import GenerateGraphPage from "./pages/GenerateGraphPage";
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                     <Route path="/algorithms/alg4" element={<Algorithm4 />} />
                     <Route path="/game/time-challenge" element={<TimeChallengePage />} />
                     <Route path="/game/guess-next-step" element={<GuessNextStepPage />} />
+                    <Route path="/generate-graph" element={<GenerateGraphPage />} />
                 </Routes>
             </div>
         </Router>

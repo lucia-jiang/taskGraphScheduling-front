@@ -111,14 +111,31 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .node-list {
     display: flex;
     flex-direction: column;
     min-width: 100px;
+    flex-shrink: 0;
 }
 
 .processor-selection {
     margin-left: 15px;
+}
+
+/* Refresh button styling */
+.refresh-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.refresh-button:hover {
+    background-color: #0056b3;
 }
