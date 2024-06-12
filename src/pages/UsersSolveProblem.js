@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import QuantityPicker from "../components/QuantityPicker";
 import GraphComponent from "../components/algorithm/GraphComponent";
 import "../components/Components.css"
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
@@ -19,11 +18,10 @@ const UsersSolveProblem = () => {
             <div className="container">
                 <div className="number-processors-container">
                     <label htmlFor="processor-spinner" className="col-form-label">
-                        Number of processors:
+                        Number of processors: 3
+                    {/*    TODO: change processors*/}
                     </label>
-                    {/*TODO: i don't think quantity picker should go here*/}
-                    {/*TODO: style better component*/}
-                    <QuantityPicker min={0} max={10} />
+
                 </div>
                 <div className="row">
                     <div className="col-md-4">

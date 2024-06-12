@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {useAlgorithmName} from "../contexts/algorithmNameContext";
 import {useParams} from "react-router-dom";
 import DragAndDrop from "../components/drag-and-drop/DragAndDrop";

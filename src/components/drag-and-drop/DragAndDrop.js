@@ -10,19 +10,11 @@ import ReactFlow, {
     MarkerType
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-
 import Sidebar from './Sidebar';
-
 import './DragAndDrop.css';
+import QuantityPicker from "../input-forms/QuantityPicker";
+import InputLabel from "../input-forms/InputLabel";
 
-// const initialNodes = [
-//     {
-//         id: '1',
-//         type: 'input',
-//         data: { label: 'input node' },
-//         position: { x: 250, y: 5 },
-//     },
-// ];
 const initialNodes = []
 
 let id = 0;
@@ -34,15 +26,17 @@ const DnDFlow = () => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const [viewport, setViewport] = useState(null);
-    const [edgeLabel, setEdgeLabel] = useState('');
-    const [nodeWeight, setNodeWeight] = useState(0);
+    // TODO: default weight and cost
+    const [edgeLabel, setEdgeLabel] = useState(5);
+    const [nodeWeight, setNodeWeight] = useState(5);
+    const [processorCount, setProcessorCount] = useState(3);
 
-    const handleInputChange = (event) => {
-        const input = event.target.value;
-        // Validate if input is a number
-        if (!isNaN(input)) {
-            setNodeWeight(parseInt(input));
-        }
+    const handleInputChange = (valueSetter) => (value) => {
+        valueSetter(value);
+    };
+
+    const handleQuantityChange = (value) => {
+        setProcessorCount(value);
     };
 
     const onConnect = useCallback(
@@ -58,7 +52,6 @@ const DnDFlow = () => {
                     label: edgeLabel,
                 };
                 setEdges((eds) => addEdge(edgeWithArrow, eds));
-                setEdgeLabel('');
             }
         },
         [edgeLabel]
@@ -103,21 +96,20 @@ const DnDFlow = () => {
     }, [viewport, reactFlowInstance]);
 
     return (
-        <div className="dndflow">
+        <div>
+            <div className="form-group row">
+                <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)} />
+                <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)} />
+                <div className="col-md-4">
+                    <QuantityPicker onChange={handleQuantityChange} />
+                </div>
+            </div>
+
+
+
+            <div className="dndflow">
             <ReactFlowProvider>
                 <div style={{ width: '100vw', height: '50vh' }} className="reactflow-wrapper" ref={reactFlowWrapper}>
-                    <input
-                        type="text"
-                        value={edgeLabel}
-                        onChange={(e) => setEdgeLabel(e.target.value)}
-                        placeholder="Enter label (only numbers)"
-                    />
-                    <input
-                        type="text"
-                        value={nodeWeight}
-                        onChange={handleInputChange}
-                        placeholder="Enter node weight"
-                    />
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}
@@ -136,6 +128,7 @@ const DnDFlow = () => {
                 </div>
                 <Sidebar />
             </ReactFlowProvider>
+        </div>
         </div>
     );
 };

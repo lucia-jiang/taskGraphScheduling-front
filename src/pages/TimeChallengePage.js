@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import QuantityPicker from "../components/QuantityPicker";
 import GraphComponent from "../components/algorithm/GraphComponent";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 

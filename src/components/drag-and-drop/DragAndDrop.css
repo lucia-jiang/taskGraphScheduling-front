@@ -55,3 +55,17 @@
         max-width: 250px;
     }
 }
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-row label {
+    margin-right: 10px;
+}
