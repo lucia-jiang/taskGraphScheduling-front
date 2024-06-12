@@ -33,20 +33,33 @@ const DnDFlow = () => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const [viewport, setViewport] = useState(null);
+    const [edgeLabel, setEdgeLabel] = useState('');
+
+    const handleInputChange = (event) => {
+        const input = event.target.value;
+        // Validate if input is a number
+        if (!isNaN(input)) {
+            setEdgeLabel(input);
+        }
+    };
 
     const onConnect = useCallback(
         (params) => {
-            const edgeWithArrow = {
-                ...params,
-                markerEnd: {
-                    type: MarkerType.Arrow,
-                    width: 20,
-                    height: 20,
-                },
-            };
-            setEdges((eds) => addEdge(edgeWithArrow, eds));
+            if (edgeLabel !== '') {
+                const edgeWithArrow = {
+                    ...params,
+                    markerEnd: {
+                        type: MarkerType.Arrow,
+                        width: 20,
+                        height: 20,
+                    },
+                    label: edgeLabel,
+                };
+                setEdges((eds) => addEdge(edgeWithArrow, eds));
+                setEdgeLabel('');
+            }
         },
-        [],
+        [edgeLabel]
     );
 
     const onDragOver = useCallback((event) => {
@@ -65,9 +78,6 @@ const DnDFlow = () => {
                 return;
             }
 
-            // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
-            // and you don't need to subtract the reactFlowBounds.left/top anymore
-            // details: https://reactflow.dev/whats-new/2023-11-10
             const position = reactFlowInstance.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
@@ -79,21 +89,12 @@ const DnDFlow = () => {
                 data: { label: `${type} node` },
             };
 
-            // Store current viewport position
-            const savedViewport = reactFlowInstance.toObject().zoom;
-
-            // Update the state with the new node
             setNodes((nds) => nds.concat(newNode));
-
-            // Restore viewport position
-            setViewport(savedViewport);
         },
         [reactFlowInstance]
     );
 
-
     useEffect(() => {
-        // Ensure React Flow re-renders after edges change
         if (reactFlowInstance && viewport) {
             reactFlowInstance.setTransform(viewport);
         }
@@ -103,6 +104,12 @@ const DnDFlow = () => {
         <div className="dndflow">
             <ReactFlowProvider>
                 <div style={{ width: '100vw', height: '50vh' }} className="reactflow-wrapper" ref={reactFlowWrapper}>
+                    <input
+                        type="text"
+                        value={edgeLabel}
+                        onChange={handleInputChange}
+                        placeholder="Enter label (only numbers)"
+                    />
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}
