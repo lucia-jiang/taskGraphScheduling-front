@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {useAlgorithmName} from "../contexts/algorithmNameContext";
 import {useParams} from "react-router-dom";
+import DragAndDrop from "../components/drag-and-drop/DragAndDrop";
+
+import 'reactflow/dist/style.css';
 
 const CreateCustomisedGraph = () => {
     const { algorithmName: paramAlgorithmName } = useParams();
@@ -15,10 +18,13 @@ const CreateCustomisedGraph = () => {
         };
     }, [paramAlgorithmName, storeAlgorithmName, resetAlgorithmName]);
 
+
     return (
         <div>
             <h1>Create Customised Graph</h1>
             <p>Users create customised graphs using drag and drop features.</p>
+            <DragAndDrop/>
+
             {algorithmName ? (
                 <div>
                     <p>Algorithm name: {algorithmName}</p>
@@ -28,7 +34,6 @@ const CreateCustomisedGraph = () => {
                     <p>Please select an algorithm to customise the graph.</p>
                 </div>
             )}
-            {/*<Graph />*/}
         </div>
     );
 };

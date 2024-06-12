@@ -1,8 +1,8 @@
-// src/components/NodeProcessorMatching.js
 import React, { useState } from 'react';
 import NodeBubble from './NodeBubble';
 import ProcessorList from './ProcessorList';
 import './NodeProcessorMatching.css';
+import { Button } from 'react-bootstrap';
 
 const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
     const [selectedNode, setSelectedNode] = useState(null);
@@ -39,7 +39,7 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
                         isAssigned={assignments[node] !== undefined}
                     />
                 ))}
-                <button onClick={handleRefresh} className="refresh-button">Refresh Choices</button>
+                <Button onClick={handleRefresh}>Refresh Choices</Button>
             </div>
             <div className="processor-selection">
                 {selectedNode && (
