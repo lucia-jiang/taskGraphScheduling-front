@@ -14,6 +14,7 @@ import Sidebar from './Sidebar';
 import './DragAndDrop.css';
 import QuantityPicker from "../input-forms/QuantityPicker";
 import InputLabel from "../input-forms/InputLabel";
+import DownloadButton from "./DownloadButton";
 
 const initialNodes = []
 
@@ -124,6 +125,7 @@ const DnDFlow = () => {
                         <Controls />
                         <MiniMap />
                         <Background variant="dots" gap={12} size={1} />
+                        <DownloadButton/>
                     </ReactFlow>
                 </div>
                 <Sidebar />
