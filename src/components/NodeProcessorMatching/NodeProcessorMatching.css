@@ -1,7 +1,7 @@
 /* General container styling */
 .container {
     max-width: 100%;
-    padding: 0 15px; /* Reducing padding on the sides */
+    padding: 0 15px;
     margin: 0 auto;
 }
 
@@ -65,6 +65,7 @@
 /* Styling for bubbles (nodes) */
 .bubble {
     display: block;
+    width: 80px; /* Adjusted width for node bubbles */
     padding: 10px 15px;
     margin: 5px 0;
     border: 2px solid #6c757d;
@@ -102,24 +103,29 @@
 .main-content {
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
-/* Node processor matching styling */
+/* Node Processor Matching styling */
 .node-processor-matching {
     display: flex;
-    flex-direction: row; /* Align items in a row */
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
+    width: 100%;
 }
 
 .node-list {
     display: flex;
     flex-direction: column;
-    min-width: 200px; /* Set a fixed or minimum width for node list */
+    min-width: 150px; /* Reduced minimum width for node list */
     flex-shrink: 0;
+    margin-right: 20px; /* Adjusted margin to separate from processor selection */
 }
 
 .processor-selection {
-    margin-left: 15px; /* Add margin to separate from node list */
+    display: flex;
+    flex-direction: column;
+    min-width: 120px; /* Reduced minimum width for processor list */
     flex-shrink: 0;
 }

@@ -1,4 +1,3 @@
-// src/components/NodeBubble.js
 import React from 'react';
 import './NodeProcessorMatching.css';
 

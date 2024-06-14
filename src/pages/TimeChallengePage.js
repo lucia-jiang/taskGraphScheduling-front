@@ -42,12 +42,12 @@ const TimeChallengePage = () => {
 
             <div className="container">
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-12 col-md-4">
                         <div className="graph-container">
                             <GraphComponent image={"image-path"} />
                         </div>
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-12 col-md-3">
                         {/*TODO: isDisabled not working*/}
                         <NodeProcessorMatching
                             nodes={['N1', 'N2', 'N3', 'N4', 'N5']}
@@ -56,7 +56,7 @@ const TimeChallengePage = () => {
                             isDisabled={isTimeUp}
                         />
                     </div>
-                    <div className="col-md-5">
+                    <div className="col-12 col-md-5">
                         <div className="assignment-container">
                             <h3>Assignment Details</h3>
                             <ul>

@@ -24,13 +24,13 @@ const UsersSolveProblem = () => {
 
                 </div>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-12 col-md-4">
                         <div className="graph-container">
                             {/*TODO: change image*/}
                             <GraphComponent image={"image-path"} />
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-md-3">
                         {/*TODO: this is hardcoded right now*/}
                         <NodeProcessorMatching
                             nodes={['N1', 'N2', 'N3', 'N4', 'N5']}
@@ -38,7 +38,7 @@ const UsersSolveProblem = () => {
                             onAssignment={handleAssignment}
                         />
                     </div>
-                    <div className="col-md-5">
+                    <div className="col-12 col-md-5">
                         <div className="assignment-container">
                             <h3>Assignment Details</h3>
                             <ul>

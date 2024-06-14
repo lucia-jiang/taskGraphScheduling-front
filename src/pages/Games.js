@@ -10,10 +10,10 @@ const Games = () => {
 
             <div className={"container"}>
             <div className={"row"}>
-                <div className={"col-md-6"}>
+                <div className={"col-12 col-md-6"}>
                     <TimeChallenge/>
                 </div>
-                <div className={"col-md-6"}>
+                <div className={"col-12 col-md-6"}>
                     <GuessNextStep/>
                 </div>
             </div>
