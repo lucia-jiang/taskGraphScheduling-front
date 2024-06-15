@@ -1,3 +1,4 @@
+//code extracted from https://reactflow.dev/examples/misc/download-image
 import React from 'react';
 import { Panel, useReactFlow, getRectOfNodes, getTransformForBounds } from 'reactflow';
 import { toPng } from 'html-to-image';
@@ -6,7 +7,7 @@ import {Button} from "react-bootstrap";
 function downloadImage(dataUrl) {
     const a = document.createElement('a');
 
-    a.setAttribute('download', 'reactflow.png');
+    a.setAttribute('download', 'graph.png');
     a.setAttribute('href', dataUrl);
     a.click();
 }

@@ -15,6 +15,7 @@ import './DragAndDrop.css';
 import QuantityPicker from "../input-forms/QuantityPicker";
 import InputLabel from "../input-forms/InputLabel";
 import DownloadButton from "./DownloadButton";
+import TransformToJsonButton from "./TransformToJsonButton";
 
 const initialNodes = []
 
@@ -106,31 +107,30 @@ const DnDFlow = () => {
                 </div>
             </div>
 
-
-
             <div className="dndflow">
-            <ReactFlowProvider>
-                <div style={{ width: '100vw', height: '50vh' }} className="reactflow-wrapper" ref={reactFlowWrapper}>
-                    <ReactFlow
-                        nodes={nodes}
-                        edges={edges}
-                        onNodesChange={onNodesChange}
-                        onEdgesChange={onEdgesChange}
-                        onConnect={onConnect}
-                        onInit={setReactFlowInstance}
-                        onDrop={onDrop}
-                        onDragOver={onDragOver}
-                        fitView={false} // Disable fitView
-                    >
-                        <Controls />
-                        <MiniMap />
-                        <Background variant="dots" gap={12} size={1} />
-                        <DownloadButton/>
-                    </ReactFlow>
-                </div>
-                <Sidebar />
-            </ReactFlowProvider>
-        </div>
+                <ReactFlowProvider>
+                    <div style={{ width: '100vw', height: '50vh' }} className="reactflow-wrapper" ref={reactFlowWrapper}>
+                        <ReactFlow
+                            nodes={nodes}
+                            edges={edges}
+                            onNodesChange={onNodesChange}
+                            onEdgesChange={onEdgesChange}
+                            onConnect={onConnect}
+                            onInit={setReactFlowInstance}
+                            onDrop={onDrop}
+                            onDragOver={onDragOver}
+                            fitView={false} // Disable fitView
+                        >
+                            <Controls />
+                            <MiniMap />
+                            <Background variant="dots" gap={12} size={1} />
+                            <DownloadButton nodes={nodes} edges={edges} />
+                            <TransformToJsonButton nodes={nodes} edges={edges} />
+                        </ReactFlow>
+                    </div>
+                    <Sidebar />
+                </ReactFlowProvider>
+            </div>
         </div>
     );
 };
