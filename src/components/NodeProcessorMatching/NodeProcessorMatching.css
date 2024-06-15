@@ -118,14 +118,9 @@
 .node-list {
     display: flex;
     flex-direction: column;
-    min-width: 150px; /* Reduced minimum width for node list */
-    flex-shrink: 0;
-    margin-right: 20px; /* Adjusted margin to separate from processor selection */
 }
 
 .processor-selection {
     display: flex;
     flex-direction: column;
-    min-width: 120px; /* Reduced minimum width for processor list */
-    flex-shrink: 0;
 }

@@ -29,7 +29,7 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
 
     return (
         <div className="node-processor-matching">
-            <div className="node-list">
+            <div className="node-list mr-1">
                 {nodes.map((node, index) => (
                     <NodeBubble
                         key={index}
@@ -39,9 +39,11 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
                         isAssigned={assignments[node] !== undefined}
                     />
                 ))}
-                <Button onClick={handleRefresh}>Refresh Choices</Button>
+                {Object.keys(assignments).length > 0 && (
+                    <Button className={"mt-1"} onClick={handleRefresh}>Refresh Choices</Button>
+                )}
             </div>
-            <div className="processor-selection">
+            <div className="processor-selection ml-1 mr-1">
                 {selectedNode && (
                     <>
                         <p>Select Processor for Node {selectedNode}</p>
@@ -49,6 +51,7 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
                     </>
                 )}
             </div>
+
         </div>
     );
 };
