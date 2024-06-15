@@ -1,39 +1,67 @@
 import React, {useState} from 'react';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
+import Dropdown from 'react-bootstrap/Dropdown';
+import {Link} from 'react-router-dom';
 
 const GuessNextStepPage = () => {
     const [assignments, setAssignments] = useState({});
+    const [selectedAlgorithm, setSelectedAlgorithm] = useState('Algorithm Selection');
 
     const handleAssignment = (newAssignments) => {
         setAssignments(newAssignments);
+    };
+
+    const handleSelect = (algorithmName) => {
+        setSelectedAlgorithm(algorithmName);
     };
 
     return (
         <div>
             <h1>Guess the next step</h1>
             <p>Guess the next step</p>
+            <label>Select the algorithm: </label>
+            <Dropdown>
+                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                    {selectedAlgorithm}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item as={Link} to="#/algorithm-1" onClick={() => handleSelect('Algorithm 1')}>
+                        Algorithm 1
+                    </Dropdown.Item>
+                    <Dropdown.Item as={Link} to="#/algorithm-2" onClick={() => handleSelect('Algorithm 2')}>
+                        Algorithm 2
+                    </Dropdown.Item>
+                    <Dropdown.Item as={Link} to="#/algorithm-3" onClick={() => handleSelect('Algorithm 3')}>
+                        Algorithm 3
+                    </Dropdown.Item>
+                    <Dropdown.Item as={Link} to="#/algorithm-4" onClick={() => handleSelect('Algorithm 4')}>
+                        Algorithm 4
+                    </Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
             <div className="container">
                 <div className="number-processors-container">
                     <label htmlFor="processor-spinner" className="col-form-label">
                         Number of processors: 3
-                        {/*    TODO: change processors*/}
+                        {/* TODO: change processors */}
                     </label>
-
                 </div>
                 <div className="row">
                     <div className="col-12 col-md-4">
                         <div className="graph-container">
-                            {/*TODO: change image*/}
-                            <GraphComponent image={"image-path"} />
+                            {/* TODO: change image */}
+                            <GraphComponent image={"image-path"}/>
                         </div>
                     </div>
                     <div className="col-12 col-md-3">
-                        {/*TODO: this is hardcoded right now*/}
+                        {/* TODO: this is hardcoded right now */}
                         <NodeProcessorMatching
                             nodes={['N1', 'N2', 'N3', 'N4', 'N5']}
                             processors={['P1', 'P2', 'P3', 'P4']}
                             onAssignment={handleAssignment}
+                            refreshButton={false}
                         />
                     </div>
                     <div className="col-12 col-md-5">

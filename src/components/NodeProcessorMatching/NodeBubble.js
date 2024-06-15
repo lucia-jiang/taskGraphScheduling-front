@@ -1,7 +1,7 @@
 import React from 'react';
 import './NodeProcessorMatching.css';
 
-const NodeBubble = ({ node, onClick, isSelected, isAssigned }) => {
+const NodeBubble = ({node, onClick, isSelected, isAssigned}) => {
     return (
         <div
             className={`bubble ${isSelected ? 'selected' : ''} ${isAssigned ? 'assigned' : ''}`}

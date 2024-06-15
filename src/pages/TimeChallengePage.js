@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 
@@ -44,7 +44,7 @@ const TimeChallengePage = () => {
                 <div className="row">
                     <div className="col-12 col-md-4">
                         <div className="graph-container">
-                            <GraphComponent image={"image-path"} />
+                            <GraphComponent image={"image-path"}/>
                         </div>
                     </div>
                     <div className="col-12 col-md-3">

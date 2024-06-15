@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, {createContext, useContext, useState} from 'react';
+
 const AlgorithmNameContext = createContext();
 
 export const useAlgorithmName = () => useContext(AlgorithmNameContext);
 
-export const AlgorithmNameProvider = ({ children }) => {
+export const AlgorithmNameProvider = ({children}) => {
     const [algorithmName, setAlgorithmName] = useState(null);
 
     const storeAlgorithmName = (name) => {
@@ -15,7 +16,7 @@ export const AlgorithmNameProvider = ({ children }) => {
     };
 
     return (
-        <AlgorithmNameContext.Provider value={{ algorithmName, storeAlgorithmName,  resetAlgorithmName }}>
+        <AlgorithmNameContext.Provider value={{algorithmName, storeAlgorithmName, resetAlgorithmName}}>
             {children}
         </AlgorithmNameContext.Provider>
     );

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Col, Container, Row } from "react-bootstrap";
+import React, {useState, useEffect} from 'react';
+import {Col, Container, Row} from "react-bootstrap";
 import Pseudocode from "../components/algorithm/Pseudocode";
 import ProcessorAssignment from "../components/algorithm/ProcessorAssignment";
 import GraphComponent from "../components/algorithm/GraphComponent";
@@ -34,21 +34,20 @@ const Algorithm1 = () => {
             <h1>Algorithm 1</h1>
             <Container>
                 <Row className={"mt-3"}>
-                    <Col md={4} >
-                        <Pseudocode steps={pseudocodeSteps} />
-                        <ProcessorAssignment assignments={processorAssignments} />
+                    <Col md={4}>
+                        <Pseudocode steps={pseudocodeSteps}/>
+                        <ProcessorAssignment assignments={processorAssignments}/>
                     </Col>
                     <Col md={4}>
-                        <GraphComponent image={graphImage} />
+                        <GraphComponent image={graphImage}/>
                     </Col>
                     <Col md={4}>
-                        <GraphProperties properties={graphProperties} />
-                        <StepsList steps={stepsList} />
+                        <GraphProperties properties={graphProperties}/>
+                        <StepsList steps={stepsList}/>
                     </Col>
                 </Row>
             </Container>
-        </div>
-    );
+        </div>);
 };
 
 export default Algorithm1;

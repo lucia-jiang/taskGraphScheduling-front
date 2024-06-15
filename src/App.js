@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Navbar from './components/NavBar';
 import Home from './pages/Home';
 import Algorithms from './pages/Algorithms';
@@ -17,25 +17,25 @@ import GenerateGraphPage from "./pages/GenerateGraphPage";
 const App = () => {
     return (
         <Router>
-            <Navbar />
+            <Navbar/>
             <div className="container mt-4"> {/* Add margin-top */}
                 <Routes>
-                    <Route path="/" element={<Home />} /> {/* Home route */}
-                    <Route path="/algorithms" element={<Algorithms />} />
-                    <Route path="/users-solve-problem" element={<UsersSolveProblem />} />
-                    <Route path="/create-customised-graph/:algorithmName?" element={<CreateCustomisedGraph />} />
-                    <Route path="/games" element={<Games />} />
-                    <Route path="/algorithms/alg1" element={<Algorithm1 />} />
-                    <Route path="/algorithms/alg2" element={<Algorithm2 />} />
-                    <Route path="/algorithms/alg3" element={<Algorithm3 />} />
-                    <Route path="/algorithms/alg4" element={<Algorithm4 />} />
-                    <Route path="/game/time-challenge" element={<TimeChallengePage />} />
-                    <Route path="/game/guess-next-step" element={<GuessNextStepPage />} />
-                    <Route path="/generate-graph" element={<GenerateGraphPage />} />
+                    <Route path="/" element={<Home/>}/> {/* Home route */}
+                    <Route path="/algorithms" element={<Algorithms/>}/>
+                    <Route path="/users-solve-problem" element={<UsersSolveProblem/>}/>
+                    <Route path="/create-customised-graph/:algorithmName?" element={<CreateCustomisedGraph/>}/>
+                    <Route path="/games" element={<Games/>}/>
+                    <Route path="/algorithms/alg1" element={<Algorithm1/>}/>
+                    <Route path="/algorithms/alg2" element={<Algorithm2/>}/>
+                    <Route path="/algorithms/alg3" element={<Algorithm3/>}/>
+                    <Route path="/algorithms/alg4" element={<Algorithm4/>}/>
+                    <Route path="/game/time-challenge" element={<TimeChallengePage/>}/>
+                    <Route path="/game/guess-next-step" element={<GuessNextStepPage/>}/>
+                    <Route path="/generate-graph" element={<GenerateGraphPage/>}/>
                 </Routes>
             </div>
         </Router>
-        );
+    );
 };
 
 export default App;

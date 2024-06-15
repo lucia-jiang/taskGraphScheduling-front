@@ -1,7 +1,7 @@
 //code extracted from https://reactflow.dev/examples/misc/download-image
 import React from 'react';
-import { Panel, useReactFlow, getRectOfNodes, getTransformForBounds } from 'reactflow';
-import { toPng } from 'html-to-image';
+import {Panel, useReactFlow, getRectOfNodes, getTransformForBounds} from 'reactflow';
+import {toPng} from 'html-to-image';
 import {Button} from "react-bootstrap";
 
 function downloadImage(dataUrl) {
@@ -16,7 +16,7 @@ const imageWidth = 1024;
 const imageHeight = 768;
 
 function DownloadButton() {
-    const { getNodes } = useReactFlow();
+    const {getNodes} = useReactFlow();
     const onClick = () => {
         // we calculate a transform for the nodes so that all nodes are visible
         // we then overwrite the transform of the `.react-flow__viewport` element
@@ -25,10 +25,7 @@ function DownloadButton() {
         const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
 
         toPng(document.querySelector('.react-flow__viewport'), {
-            backgroundColor: '#1a365d',
-            width: imageWidth,
-            height: imageHeight,
-            style: {
+            backgroundColor: '#1a365d', width: imageWidth, height: imageHeight, style: {
                 width: imageWidth,
                 height: imageHeight,
                 transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
@@ -36,13 +33,11 @@ function DownloadButton() {
         }).then(downloadImage);
     };
 
-    return (
-        <Panel position="top-right">
-            <Button className="download-btn" onClick={onClick}>
-                Download Image
-            </Button>
-        </Panel>
-    );
+    return (<Panel position="top-right">
+        <Button className="download-btn" onClick={onClick}>
+            Download Image
+        </Button>
+    </Panel>);
 }
 
 export default DownloadButton;

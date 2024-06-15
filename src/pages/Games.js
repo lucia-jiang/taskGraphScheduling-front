@@ -9,16 +9,16 @@ const Games = () => {
             <p>Games for users to play: timing and guess the next step</p>
 
             <div className={"container"}>
-            <div className={"row"}>
-                <div className={"col-12 col-md-6"}>
-                    <TimeChallenge/>
+                <div className={"row"}>
+                    <div className={"col-12 col-md-6"}>
+                        <TimeChallenge/>
+                    </div>
+                    <div className={"col-12 col-md-6"}>
+                        <GuessNextStep/>
+                    </div>
                 </div>
-                <div className={"col-12 col-md-6"}>
-                    <GuessNextStep/>
-                </div>
-            </div>
 
-        </div>
+            </div>
         </div>
     );
 };

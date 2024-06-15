@@ -6,18 +6,16 @@ export default () => {
         event.dataTransfer.effectAllowed = 'move';
     };
 
-    return (
-        <aside>
-            <div className="description">Drag these nodes to the pane on the left.</div>
-            <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'input')} draggable>
-                Initial Node
-            </div>
-            <div className="dndnode" onDragStart={(event) => onDragStart(event, 'default')} draggable>
-                Intermediate Node
-            </div>
-            <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'output')} draggable>
-                Final Node
-            </div>
-        </aside>
-    );
+    return (<aside>
+        <div className="description">Drag these nodes to the pane on the left.</div>
+        <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'input')} draggable>
+            Initial Node
+        </div>
+        <div className="dndnode" onDragStart={(event) => onDragStart(event, 'default')} draggable>
+            Intermediate Node
+        </div>
+        <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'output')} draggable>
+            Final Node
+        </div>
+    </aside>);
 };

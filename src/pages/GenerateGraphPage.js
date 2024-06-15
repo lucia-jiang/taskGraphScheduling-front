@@ -1,5 +1,5 @@
 // src/pages/GenerateGraphPage.js
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import ReactFlow, {
     ReactFlowProvider,
     addEdge,
@@ -13,9 +13,9 @@ import CustomNode from '../components/CustomNode';
 import './GenerateGraphPage.css';
 
 const initialElements = [
-    { id: '1', type: 'custom', data: { label: 'Node 1', weight: 1 }, position: { x: 250, y: 5 } },
-    { id: '2', type: 'custom', data: { label: 'Node 2', weight: 2 }, position: { x: 100, y: 100 } },
-    { id: '3', type: 'custom', data: { label: 'Node 3', weight: 3 }, position: { x: 400, y: 100 } },
+    {id: '1', type: 'custom', data: {label: 'Node 1', weight: 1}, position: {x: 250, y: 5}},
+    {id: '2', type: 'custom', data: {label: 'Node 2', weight: 2}, position: {x: 100, y: 100}},
+    {id: '3', type: 'custom', data: {label: 'Node 3', weight: 3}, position: {x: 400, y: 100}},
 ];
 
 const GenerateGraphPage = () => {
@@ -40,7 +40,7 @@ const GenerateGraphPage = () => {
         setElements((els) =>
             els.map((el) => {
                 if (el.id === id) {
-                    el.data = { ...el.data, weight: newWeight };
+                    el.data = {...el.data, weight: newWeight};
                 }
                 return el;
             })
@@ -48,7 +48,7 @@ const GenerateGraphPage = () => {
     };
 
     return (
-        <div style={{ height: '90vh' }}>
+        <div style={{height: '90vh'}}>
             <ReactFlowProvider>
                 <ReactFlow
                     elements={elements}
@@ -58,11 +58,11 @@ const GenerateGraphPage = () => {
                     deleteKeyCode={46} /* 'delete'-key */
                     onNodeDragStop={(_, node) => console.log('drag stop', node)}
                     onElementClick={(_, element) => console.log('click', element)}
-                    nodeTypes={{ custom: CustomNode }}
+                    nodeTypes={{custom: CustomNode}}
                 >
-                    <Controls />
-                    <MiniMap />
-                    <Background />
+                    <Controls/>
+                    <MiniMap/>
+                    <Background/>
                 </ReactFlow>
             </ReactFlowProvider>
         </div>

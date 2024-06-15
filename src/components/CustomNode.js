@@ -1,9 +1,9 @@
 // src/components/CustomNode.js
 import React from 'react';
-import { Handle } from 'react-flow-renderer';
+import {Handle} from 'react-flow-renderer';
 import './CustomNode.css';
 
-const CustomNode = ({ data, id }) => {
+const CustomNode = ({data, id}) => {
     const handleChange = (event) => {
         const newWeight = event.target.value;
         data.onChange(event, id);
@@ -19,8 +19,8 @@ const CustomNode = ({ data, id }) => {
                 onChange={handleChange}
                 placeholder="Weight"
             />
-            <Handle type="source" position="right" />
-            <Handle type="target" position="left" />
+            <Handle type="source" position="right"/>
+            <Handle type="target" position="left"/>
         </div>
     );
 };

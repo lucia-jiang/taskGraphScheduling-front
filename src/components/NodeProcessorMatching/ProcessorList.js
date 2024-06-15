@@ -1,7 +1,7 @@
 import React from 'react';
 import './NodeProcessorMatching.css';
 
-const ProcessorList = ({ processors, onSelect }) => {
+const ProcessorList = ({processors, onSelect}) => {
     return (
         <ul className="processor-list">
             {processors.map((processor, index) => (

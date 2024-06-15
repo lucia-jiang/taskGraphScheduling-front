@@ -19,7 +19,7 @@ const UsersSolveProblem = () => {
                 <div className="number-processors-container">
                     <label htmlFor="processor-spinner" className="col-form-label">
                         Number of processors: 3
-                    {/*    TODO: change processors*/}
+                        {/*    TODO: change processors*/}
                     </label>
 
                 </div>
@@ -27,7 +27,7 @@ const UsersSolveProblem = () => {
                     <div className="col-12 col-md-4">
                         <div className="graph-container">
                             {/*TODO: change image*/}
-                            <GraphComponent image={"image-path"} />
+                            <GraphComponent image={"image-path"}/>
                         </div>
                     </div>
                     <div className="col-12 col-md-3">
@@ -36,6 +36,7 @@ const UsersSolveProblem = () => {
                             nodes={['N1', 'N2', 'N3', 'N4', 'N5']}
                             processors={['P1', 'P2', 'P3', 'P4']}
                             onAssignment={handleAssignment}
+                            refreshButton={true}
                         />
                     </div>
                     <div className="col-12 col-md-5">

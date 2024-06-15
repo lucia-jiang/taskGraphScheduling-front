@@ -4,7 +4,7 @@ import ProcessorList from './ProcessorList';
 import './NodeProcessorMatching.css';
 import { Button } from 'react-bootstrap';
 
-const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
+const NodeProcessorMatching = ({ nodes, processors, onAssignment, refreshButton }) => {
     const [selectedNode, setSelectedNode] = useState(null);
     const [assignments, setAssignments] = useState({});
 
@@ -39,7 +39,7 @@ const NodeProcessorMatching = ({ nodes, processors, onAssignment }) => {
                         isAssigned={assignments[node] !== undefined}
                     />
                 ))}
-                {Object.keys(assignments).length > 0 && (
+                {refreshButton && Object.keys(assignments).length > 0 && (
                     <Button className={"mt-1"} onClick={handleRefresh}>Refresh Choices</Button>
                 )}
             </div>
