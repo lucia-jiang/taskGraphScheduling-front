@@ -1,8 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import GraphComponent from "../components/algorithm/GraphComponent";
-import "../components/Components.css"
+import "../components/Components.css";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 import '../components/NodeProcessorMatching/NodeProcessorMatching.css';
+
+// Import the JSON data
+// import graphData from '../graph-examples-json/graph-1.json';
+// import graphData from '../graph-examples-json/graph-2.json';
+// import graphData from '../graph-examples-json/graph-3.json';
+import graphData from '../graph-examples-json/graph-4.json';
 
 const UsersSolveProblem = () => {
     const [assignments, setAssignments] = useState({});
@@ -11,29 +17,28 @@ const UsersSolveProblem = () => {
         setAssignments(newAssignments);
     };
 
+    // Extract node IDs from graphData
+    const nodeIds = graphData.nodes.map(node => node.id);
+
     return (
-        <div>
+        <div className={"mb-4"}>
             <h1>Users solve problem</h1>
-            <p>Here users solve a problem</p>
             <div className="container">
                 <div className="number-processors-container">
                     <label htmlFor="processor-spinner" className="col-form-label">
-                        Number of processors: 3
-                        {/*    TODO: change processors*/}
+                        Number of processors: 4
+                        {/* TODO: change processors */}
                     </label>
-
                 </div>
                 <div className="row">
-                    <div className="col-12 col-md-4">
+                    <div className="col-12 col-md-5">
                         <div className="graph-container">
-                            {/*TODO: change image*/}
-                            <GraphComponent image={"image-path"}/>
+                            <GraphComponent graphData={graphData} />
                         </div>
                     </div>
-                    <div className="col-12 col-md-3">
-                        {/*TODO: this is hardcoded right now*/}
+                    <div className="col-12 col-md-2">
                         <NodeProcessorMatching
-                            nodes={['N1', 'N2', 'N3', 'N4', 'N5']}
+                            nodes={nodeIds}
                             processors={['P1', 'P2', 'P3', 'P4']}
                             onAssignment={handleAssignment}
                             refreshButton={true}

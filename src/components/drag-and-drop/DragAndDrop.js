@@ -13,7 +13,7 @@ import TransformToJsonButton from "./TransformToJsonButton";
 const initialNodes = []
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `${id++}`;
 
 const DnDFlow = () => {
     const reactFlowWrapper = useRef(null);
@@ -87,7 +87,7 @@ const DnDFlow = () => {
 
         <div className="dndflow">
             <ReactFlowProvider>
-                <div style={{width: '100vw', height: '50vh'}} className="reactflow-wrapper" ref={reactFlowWrapper}>
+                <div style={{width: '100vw', height: '100vh'}} className="reactflow-wrapper" ref={reactFlowWrapper}>
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}

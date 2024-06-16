@@ -25,7 +25,7 @@ function DownloadButton() {
         const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
 
         toPng(document.querySelector('.react-flow__viewport'), {
-            backgroundColor: '#1a365d', width: imageWidth, height: imageHeight, style: {
+            width: imageWidth, height: imageHeight, style: {
                 width: imageWidth,
                 height: imageHeight,
                 transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
@@ -33,7 +33,7 @@ function DownloadButton() {
         }).then(downloadImage);
     };
 
-    return (<Panel position="top-right">
+    return (<Panel>
         <Button className="download-btn" onClick={onClick}>
             Download Image
         </Button>

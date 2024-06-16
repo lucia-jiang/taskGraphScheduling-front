@@ -1,27 +1,62 @@
-import React from 'react';
-import {Button} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 
-const StepsList = ({steps}) => {
-    // Ensure steps is always an array
-    const stepsArray = Array.isArray(steps) ? steps : [];
+const StepsList = ({ steps, onUpdateAssignments }) => {
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+    useEffect(() => {
+        if (steps[currentStepIndex]) {
+            onUpdateAssignments(steps.slice(0, currentStepIndex + 1));
+        }
+    }, [currentStepIndex, steps, onUpdateAssignments]);
+
+    const handlePreviousStep = () => {
+        if (currentStepIndex > 0) {
+            setCurrentStepIndex(currentStepIndex - 1);
+        }
+    };
+
+    const handleNextStep = () => {
+        if (currentStepIndex < steps.length - 1) {
+            setCurrentStepIndex(currentStepIndex + 1);
+        }
+    };
+
+    const currentStep = steps[currentStepIndex];
 
     return (
         <div className="rounded-square">
             <h3>Steps</h3>
             <div>
-                {stepsArray.map((step, index) => (<div key={index} className="step-item">
-                    <p>
-                        <strong>Step {index + 1}: </strong>
-                        Processor {step.processor} to Node {step.node} in {step.time} units of time. Total
-                        time: {step.total} units.
-                    </p>
-                </div>))}
+                {currentStep && (
+                    <div className="step-item">
+                        <p>
+                            <strong>Step {currentStepIndex + 1}: </strong>
+                            {currentStep.desc}. <br/>
+                            Processor {currentStep.processor} to Node {currentStep.node} in {currentStep.time} units of time.
+                        </p>
+                    </div>
+                )}
             </div>
             <div className="step-buttons mt-3">
-                <Button className={'mr-4'} variant="primary">Previous Step</Button>
-                <Button variant="primary">Next Step</Button>
+                <Button
+                    className={'mr-4'}
+                    variant="primary"
+                    onClick={handlePreviousStep}
+                    disabled={currentStepIndex === 0}
+                >
+                    Previous Step
+                </Button>
+                <Button
+                    variant="primary"
+                    onClick={handleNextStep}
+                    disabled={currentStepIndex >= steps.length - 1}
+                >
+                    Next Step
+                </Button>
             </div>
-        </div>);
+        </div>
+    );
 };
 
 export default StepsList;
