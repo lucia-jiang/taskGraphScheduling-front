@@ -2,37 +2,37 @@
   "nodes": [
     {
       "id": "1",
-      "weight": "8",
+      "weight": 8,
       "pos": [0, 70]
     },
     {
       "id": "2",
-      "weight": "12",
+      "weight": 12,
       "pos": [-120, 220]
     },
     {
       "id": "3",
-      "weight": "18",
+      "weight": 18,
       "pos": [120, 220]
     },
     {
       "id": "4",
-      "weight": "22",
+      "weight": 22,
       "pos": [-180, 370]
     },
     {
       "id": "5",
-      "weight": "28",
+      "weight": 28,
       "pos": [0, 370]
     },
     {
       "id": "6",
-      "weight": "32",
+      "weight": 32,
       "pos": [180, 370]
     },
     {
       "id": "7",
-      "weight": "36",
+      "weight": 36,
       "pos": [90, 520]
     }
   ],
@@ -40,42 +40,42 @@
     {
       "source": "1",
       "target": "2",
-      "cost": "6"
+      "cost": 6
     },
     {
       "source": "1",
       "target": "3",
-      "cost": "12"
+      "cost": 12
     },
     {
       "source": "2",
       "target": "4",
-      "cost": "18"
+      "cost": 18
     },
     {
       "source": "2",
       "target": "5",
-      "cost": "24"
+      "cost": 24
     },
     {
       "source": "3",
       "target": "5",
-      "cost": "30"
+      "cost": 30
     },
     {
       "source": "3",
       "target": "6",
-      "cost": "36"
+      "cost": 36
     },
     {
       "source": "5",
       "target": "7",
-      "cost": "42"
+      "cost": 42
     },
     {
       "source": "6",
       "target": "7",
-      "cost": "48"
+      "cost": 48
     }
   ]
 }

@@ -4,17 +4,18 @@ import { Button } from 'react-bootstrap';
 import { Panel } from 'reactflow';
 
 const TransformToJsonButton = ({ nodes, edges }) => {
+    // TODO: transform to Json shouldn't call axios
     const transformToJson = async () => {
         const graphData = {
             nodes: nodes.map((node) => ({
                 id: node.id,
-                weight: node.data.weight,
+                weight: Number(node.data.weight), // Convert weight to a number
                 pos: [node.position.x, node.position.y],
             })),
             edges: edges.map((edge) => ({
                 source: edge.source,
                 target: edge.target,
-                cost: edge.label,
+                cost: Number(edge.label), // Convert cost to a number
             }))
         };
         console.log(graphData)

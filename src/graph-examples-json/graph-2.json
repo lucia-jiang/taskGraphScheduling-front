@@ -2,27 +2,27 @@
   "nodes": [
     {
       "id": "1",
-      "weight": "10",
+      "weight": 10,
       "pos": [100, 50]
     },
     {
       "id": "2",
-      "weight": "15",
+      "weight": 15,
       "pos": [0, 200]
     },
     {
       "id": "3",
-      "weight": "20",
+      "weight": 20,
       "pos": [200, 200]
     },
     {
       "id": "4",
-      "weight": "25",
+      "weight": 25,
       "pos": [0, 350]
     },
     {
       "id": "5",
-      "weight": "30",
+      "weight": 30,
       "pos": [200, 350]
     }
   ],
@@ -30,27 +30,27 @@
     {
       "source": "1",
       "target": "2",
-      "cost": "5"
+      "cost": 5
     },
     {
       "source": "1",
       "target": "3",
-      "cost": "10"
+      "cost": 10
     },
     {
       "source": "2",
       "target": "4",
-      "cost": "15"
+      "cost": 15
     },
     {
       "source": "3",
       "target": "4",
-      "cost": "20"
+      "cost": 20
     },
     {
       "source": "3",
       "target": "5",
-      "cost": "25"
+      "cost": 25
     }
   ]
 }
