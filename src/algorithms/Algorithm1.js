@@ -8,10 +8,10 @@ import StepsList from '../components/algorithm/StepsList';
 import axios from 'axios';
 
 // Import graph data from JSON file
-// import graphData from '../graph-examples-json/graph-1.json';
+import graphData from '../graph-examples-json/graph-1.json';
 // import graphData from '../graph-examples-json/graph-2.json';
 // import graphData from '../graph-examples-json/graph-3.json';
-import graphData from '../graph-examples-json/graph-4.json';
+// import graphData from '../graph-examples-json/graph-4.json';
 
 const Algorithm1 = () => {
     const pseudocodeSteps = 'Step 1: Do this<br />Step 2: Do that';
