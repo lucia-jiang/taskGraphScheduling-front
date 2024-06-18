@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import ReactFlow, { Background, Controls, MarkerType } from 'react-flow-renderer';
+import React, {useState} from 'react';
+import ReactFlow, {Background, Controls, MarkerType} from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 
 // Import your JSON graph data
@@ -28,7 +28,7 @@ const ImageGallery = () => {
     return (
         <div className="rounded-square">
             <h3>Graph</h3>
-            <div style={{ width: '100%', height: '500px' }}>
+            <div style={{width: '100%', height: '500px'}}>
                 {graphData && (
                     <ReactFlow
                         key={key}
@@ -48,8 +48,8 @@ const ImageGallery = () => {
                         }))}
                         fitView={true}
                     >
-                        <Controls />
-                        <Background variant="dots" gap={12} size={1} />
+                        <Controls/>
+                        {/*<Background variant="dots" gap={12} size={1} />*/}
                     </ReactFlow>
                 )}
             </div>

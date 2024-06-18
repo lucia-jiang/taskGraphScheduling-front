@@ -8,10 +8,8 @@ import {AlgorithmNameProvider} from "./contexts/algorithmNameContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <AlgorithmNameProvider>
-            <App/>
-        </AlgorithmNameProvider>
-    </React.StrictMode>
+    <AlgorithmNameProvider>
+        <App/>
+    </AlgorithmNameProvider>
 );
 

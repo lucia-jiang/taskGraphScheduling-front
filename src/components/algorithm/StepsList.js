@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import React, {useState, useEffect, useCallback} from 'react';
+import {Button} from 'react-bootstrap';
 
-const StepsList = ({ steps, onUpdateAssignments }) => {
+const StepsList = ({steps, onUpdateAssignments}) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
     useEffect(() => {
@@ -10,17 +10,17 @@ const StepsList = ({ steps, onUpdateAssignments }) => {
         }
     }, [currentStepIndex, steps, onUpdateAssignments]);
 
-    const handlePreviousStep = () => {
+    const handlePreviousStep = useCallback(() => {
         if (currentStepIndex > 0) {
             setCurrentStepIndex(currentStepIndex - 1);
         }
-    };
+    }, [currentStepIndex]);
 
-    const handleNextStep = () => {
+    const handleNextStep = useCallback(() => {
         if (currentStepIndex < steps.length - 1) {
             setCurrentStepIndex(currentStepIndex + 1);
         }
-    };
+    }, [currentStepIndex, steps.length]);
 
     const currentStep = steps[currentStepIndex];
 
@@ -33,7 +33,8 @@ const StepsList = ({ steps, onUpdateAssignments }) => {
                         <p>
                             <strong>Step {currentStepIndex + 1}: </strong>
                             {currentStep.desc}. <br/>
-                            Processor {currentStep.processor} to Node {currentStep.node} in {currentStep.time} units of time.
+                            Processor {currentStep.processor} to Node {currentStep.node} in {currentStep.time} units of
+                            time.
                         </p>
                     </div>
                 )}

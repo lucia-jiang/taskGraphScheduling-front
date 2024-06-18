@@ -6,6 +6,7 @@ import Algorithms from './pages/Algorithms';
 import UsersSolveProblem from './pages/UsersSolveProblem';
 import CreateCustomisedGraph from './pages/CreateCustomisedGraph';
 import Games from './pages/Games';
+import Algorithm from "./algorithms/Algorithm";
 import Algorithm1 from "./algorithms/Algorithm1";
 import Algorithm2 from "./algorithms/Algorithm2";
 import Algorithm3 from "./algorithms/Algorithm3";
@@ -13,6 +14,8 @@ import Algorithm4 from "./algorithms/Algorithm4";
 import TimeChallengePage from "./pages/TimeChallengePage";
 import GuessNextStepPage from "./pages/GuessNextStepPage";
 import GenerateGraphPage from "./pages/GenerateGraphPage";
+
+import graphData from './graph-examples-json/graph-1.json';
 
 const App = () => {
     return (
@@ -25,6 +28,7 @@ const App = () => {
                     <Route path="/users-solve-problem" element={<UsersSolveProblem/>}/>
                     <Route path="/create-customised-graph/:algorithmName?" element={<CreateCustomisedGraph/>}/>
                     <Route path="/games" element={<Games/>}/>
+                    {/*<Route path="/algorithms/alg1" element={<Algorithm algorithmName={"Algorithm 1"} graphData={graphData}/>}/>*/}
                     <Route path="/algorithms/alg1" element={<Algorithm1/>}/>
                     <Route path="/algorithms/alg2" element={<Algorithm2/>}/>
                     <Route path="/algorithms/alg3" element={<Algorithm3/>}/>

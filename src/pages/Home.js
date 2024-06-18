@@ -6,13 +6,13 @@ const Home = () => {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-7">
                     <div className="task-graph-example">
                         <ImageGallery/>
                     </div>
                 </div>
                 {/* Explanation Section */}
-                <div className="col-md-6">
+                <div className="col-md-5">
                     <h2>What is Task Graph Scheduling?</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non hendrerit ipsum. In at
                         dapibus sem. Etiam et porta quam, at fermentum diam. Suspendisse potenti. Aliquam eu iaculis
