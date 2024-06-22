@@ -1,3 +1,5 @@
+// ProcessorAssignment.js
+
 import React from 'react';
 
 const ProcessorAssignment = ({assignments}) => {
@@ -5,12 +7,15 @@ const ProcessorAssignment = ({assignments}) => {
         <div className="rounded-square">
             <div className="rounded-subsection">
                 <h4>Processor Assignment</h4>
-                {assignments.map((assignment, index) => (
+                {assignments.map((step, index) => (
                     <div key={index}>
-                        <p>
-                            <strong>Step {index + 1}:</strong> Processor {assignment.processor} ->
-                            Node {assignment.node}, Time: {assignment.time} units, Total time: {assignment.total} units
-                        </p>
+                        {step.details.candidates && (
+                            <p>
+                                <strong>Processor {step.details.processor} -> Node {step.details.node},</strong>
+                                Time: {step.details.start_time} - {step.details.end_time} units,
+                                Total time: {step.details.total_time} units
+                            </p>
+                        )}
                     </div>
                 ))}
             </div>

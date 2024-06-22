@@ -1,7 +1,10 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {Button} from 'react-bootstrap';
+// StepsList.js
 
-const StepsList = ({steps, onUpdateAssignments}) => {
+import React, { useEffect, useState, useCallback } from 'react';
+import { Button } from 'react-bootstrap';
+import Accordion from 'react-bootstrap/Accordion';
+
+const StepsList = ({ steps, onUpdateAssignments }) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
     useEffect(() => {
@@ -32,10 +35,29 @@ const StepsList = ({steps, onUpdateAssignments}) => {
                     <div className="step-item">
                         <p>
                             <strong>Step {currentStepIndex + 1}: </strong>
-                            {currentStep.desc}. <br/>
-                            Processor {currentStep.processor} to Node {currentStep.node} in {currentStep.time} units of
-                            time.
+                            {currentStep.step} <br />
+                            {currentStep.details.candidates && currentStep.desc}
                         </p>
+                        {currentStep.details.candidates && (
+                            <div>
+                                <Accordion>
+                                    <Accordion.Item eventKey={0}>
+                                        <Accordion.Header>
+                                            Candidates
+                                        </Accordion.Header>
+                                        <Accordion.Body>
+                                            {currentStep.details.candidates.map((candidate, idx) => (
+                                                <p key={idx}>
+                                                    Node {currentStep.details.node} -> Processor {candidate.processor}.
+                                                    Time: {candidate.start_time} - {candidate.end_time} units
+                                                </p>
+                                            ))}
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
