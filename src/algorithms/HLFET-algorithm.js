@@ -16,30 +16,38 @@ import graphData from '../graph-examples-json/graph-1.json';
 
 const HLFETAlgorithm = () => {
     const pseudocodeSteps = `
-        <strong>Step 1: </strong>
+        <strong>Step 1:</strong> 
         Calculate Static Level (SL) for each task.
         <ul>
-        <li>For each task (node), if it hasn't been calculated:</li>
+            <li>For each task (node), if it hasn't been calculated:</li>
             <ul>
                 <li>If it has no successors, SL = execution time of the task.</li>
                 <li>Otherwise, SL = execution time + maximum SL of its successors.</li>
             </ul>
         </ul>
         
-        <strong>Step 2: </strong>
-        List all tasks and sort them by SL in descending order. </br>
+        <strong>Step 2:</strong> 
+        List all tasks and sort them by SL in descending order.
+        <br />
         
-        <strong>Step 3: </strong>
+        <strong>Step 3:</strong> 
         Schedule tasks:
         <ul>
             <li>While there are tasks to schedule:</li>
             <ul>
                 <li>Take the task with the highest SL.</li>
                 <li>Determine the earliest start time on available processors.</li>
+                 <ul>
+                    <li>If the task's processor is the same as the previous task's processor:
+                        Earliest start time = end time of the previous task. </li>
+                    <li>Otherwise:
+                        Earliest start time = end time of the previous task + communication time (cost of the edge).</li>
+                </ul>
                 <li>Assign the task to the processor that allows the earliest start.</li>
             </ul>
         </ul>
-        `;
+    `;
+
 
     const [stepsList, setStepsList] = useState([]);
     const [cumulativeAssignments, setCumulativeAssignments] = useState([]);

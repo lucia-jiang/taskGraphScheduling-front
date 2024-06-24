@@ -8,20 +8,43 @@ import StepsList from '../components/algorithm/StepsList';
 import axios from 'axios';
 
 // Import graph data from JSON file
-// import graphData from '../graph-examples-json/graph-1.json';
-import graphData from '../graph-examples-json/graph-2.json';
+import graphData from '../graph-examples-json/graph-1.json';
+// import graphData from '../graph-examples-json/graph-2.json';
 // import graphData from '../graph-examples-json/graph-3.json';
 // import graphData from '../graph-examples-json/graph-4.json';
 
-const Algorithm2 = () => {
-    const pseudocodeSteps = 'Step 1: Do this<br />Step 2: Do that';
+const DLSAlgorithm = () => {
+    const pseudocodeSteps = `
+    <strong>Step 1:</strong> 
+    Compute the SL (static level) for each node in the graph.<br />
+    <strong>Step 2:</strong> 
+    Initially, the ready nodes list includes only the entry node. <br/>
+    <strong>Step 3:</strong> 
+    While the ready list is not empty, do:<br />
+    <ul>
+        <li> Compute the earliest execution start time on each processor for every node in the ready list.</li>
+        <ul>
+            <li>If the task's processor is the same as the previous task's processor:
+                Earliest start time = end time of the previous task. </li>
+            <li>Otherwise:
+                Earliest start time = end time of the previous task + communication time (cost of the edge).</li>
+        </ul>
+        <li> Compute the Dynamic Level (DL) of every node-processor pair by subtracting the earliest execution start time from the node's static level (SL).</li>
+        <li> Select the node-processor pair that gives the largest DL.</li>
+        <li> Schedule the node to the corresponding selected processor.</li>
+        <li> Add the newly ready nodes to the ready list.</li>
+    </ul>
+`;
+
     const [stepsList, setStepsList] = useState([]);
     const [cumulativeAssignments, setCumulativeAssignments] = useState([]);
 
     useEffect(() => {
         const fetchStepsList = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/steps');
+                const response = await axios.post('http://localhost:8000/algorithm/dls-steps', graphData, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
                 setStepsList(response.data);
                 console.log("Fetched stepsList:", response.data);
             } catch (error) {
@@ -39,7 +62,7 @@ const Algorithm2 = () => {
 
     return (
         <div>
-            <h1>Algorithm 2</h1>
+            <h1>Dynamic Level Scheduling (DLS) Algorithm</h1>
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-12 col-md-4">
@@ -59,4 +82,4 @@ const Algorithm2 = () => {
     );
 };
 
-export default Algorithm2;
+export default DLSAlgorithm;

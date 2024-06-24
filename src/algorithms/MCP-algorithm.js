@@ -9,19 +9,44 @@ import axios from 'axios';
 
 // Import graph data from JSON file
 // import graphData from '../graph-examples-json/graph-1.json';
-// import graphData from '../graph-examples-json/graph-2.json';
+import graphData from '../graph-examples-json/graph-2.json';
 // import graphData from '../graph-examples-json/graph-3.json';
-import graphData from '../graph-examples-json/graph-4.json';
+// import graphData from '../graph-examples-json/graph-4.json';
 
-const Algorithm4 = () => {
-    const pseudocodeSteps = 'Step 1: Do this<br />Step 2: Do that';
+const MCPAlgorithm = () => {
+    const pseudocodeSteps = `
+        <strong>Step 1:</strong> 
+        Calculate the Latest Start Time (LST) for each task in the graph.<br />
+        <strong>Step 2:</strong> 
+        For each task, create a list containing its LST and the LST of all its dependent tasks.<br />
+        <strong>Step 3:</strong> 
+        Sort these lists in ascending order of tasks' LST.<br />
+        <strong>Step 4:</strong> 
+        Create a task list (L) sorted by ascending LST. Resolve ties using the sorted lists from Step 2.<br />
+        <strong>Step 5:</strong> 
+        While there are tasks in L:<br />
+        <ul>
+            <li>Dequeue task v<sub>i</sub> from L.</li>
+            <li>Determine the earliest possible start time for v<sub>i</sub> on available processors.</li>
+            <ul>
+                <li>If the task's processor is the same as the previous task's processor:
+                    Earliest start time = end time of the previous task. </li>
+                <li>Otherwise:
+                    Earliest start time = end time of the previous task + communication time (cost of the edge).</li>
+            </ul>
+            <li>Assign v<sub>i</sub> to the processor that minimizes its earliest start time.</li>
+        </ul>
+    `;
+
     const [stepsList, setStepsList] = useState([]);
     const [cumulativeAssignments, setCumulativeAssignments] = useState([]);
 
     useEffect(() => {
         const fetchStepsList = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/steps');
+                const response = await axios.post('http://localhost:8000/algorithm/mcp-steps', graphData, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
                 setStepsList(response.data);
                 console.log("Fetched stepsList:", response.data);
             } catch (error) {
@@ -39,7 +64,7 @@ const Algorithm4 = () => {
 
     return (
         <div>
-            <h1>Algorithm 4</h1>
+            <h1>Modified Critical Path (MCP) Algorithm</h1>
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-12 col-md-4">
@@ -59,4 +84,4 @@ const Algorithm4 = () => {
     );
 };
 
-export default Algorithm4;
+export default MCPAlgorithm;
