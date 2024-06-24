@@ -1,10 +1,10 @@
 // StepsList.js
 
-import React, { useEffect, useState, useCallback } from 'react';
-import { Button } from 'react-bootstrap';
+import React, {useEffect, useState, useCallback} from 'react';
+import {Button} from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
-const StepsList = ({ steps, onUpdateAssignments }) => {
+const StepsList = ({steps, onUpdateAssignments}) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
     useEffect(() => {
@@ -29,13 +29,13 @@ const StepsList = ({ steps, onUpdateAssignments }) => {
 
     return (
         <div className="rounded-square">
-            <h3>Steps</h3>
+            <h4>Steps</h4>
             <div>
                 {currentStep && (
                     <div className="step-item">
                         <p>
                             <strong>Step {currentStepIndex + 1}: </strong>
-                            {currentStep.step} <br />
+                            {currentStep.step} <br/>
                             {currentStep.details.candidates && currentStep.desc}
                         </p>
                         {currentStep.details.candidates && (

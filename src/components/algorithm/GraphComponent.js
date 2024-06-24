@@ -12,7 +12,7 @@ const GraphComponent = ({imageSrc = null, graphData = null}) => {
 
     return (
         <div className="rounded-square graph-placeholder">
-            <h3>Graph</h3>
+            <h4>Graph</h4>
             {isImage ? (
                 <img src={imageSrc} alt="Graph" className="img-fluid"/>
             ) : (

@@ -11,7 +11,7 @@ const ProcessorAssignment = ({assignments}) => {
                     <div key={index}>
                         {step.details.candidates && (
                             <p>
-                                <strong>Processor {step.details.processor} -> Node {step.details.node},</strong>
+                                <strong>Processor {step.details.processor} -> Node {step.details.node}, </strong>
                                 Time: {step.details.start_time} - {step.details.end_time} units,
                                 Total time: {step.details.total_time} units
                             </p>

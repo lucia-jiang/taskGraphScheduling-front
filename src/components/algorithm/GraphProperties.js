@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Table, Container, Row, Col} from 'react-bootstrap';
 import axios from 'axios';
+import Accordion from "react-bootstrap/Accordion";
 
 const GraphProperties = ({graphData}) => {
     const [properties, setProperties] = useState({});
@@ -35,11 +36,44 @@ const GraphProperties = ({graphData}) => {
     const nodeIds = Object.keys(properties[propertyNames[0]]);
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <div className="rounded-square">
-                        <h3>Graph Properties</h3>
+        // <Container>
+        //     <Row>
+        //         <Col>
+        //             <div className="rounded-square">
+        //                 <h3>Graph Properties</h3>
+        //                 <Table striped bordered hover responsive className="border">
+        //                     <thead>
+        //                     <tr>
+        //                         <th>Node ID</th>
+        //                         {propertyNames.map((property) => (
+        //                             <th key={property}>{property}</th>
+        //                         ))}
+        //                     </tr>
+        //                     </thead>
+        //                     <tbody>
+        //                     {nodeIds.map((nodeId) => (
+        //                         <tr key={nodeId}>
+        //                             <td>{nodeId}</td>
+        //                             {propertyNames.map((property) => (
+        //                                 <td key={`${nodeId}-${property}`}>
+        //                                     {properties[property][nodeId]}
+        //                                 </td>
+        //                             ))}
+        //                         </tr>
+        //                     ))}
+        //                     </tbody>
+        //                 </Table>
+        //             </div>
+        //         </Col>
+        //     </Row>
+        // </Container>
+        <div>
+            <Accordion className={"mb-3 custom-accordion"}>
+                <Accordion.Item>
+                    <Accordion.Header>
+                        <h4>Graph Properties</h4>
+                    </Accordion.Header>
+                    <Accordion.Body>
                         <Table striped bordered hover responsive className="border">
                             <thead>
                             <tr>
@@ -62,10 +96,10 @@ const GraphProperties = ({graphData}) => {
                             ))}
                             </tbody>
                         </Table>
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </div>
     );
 };
 
