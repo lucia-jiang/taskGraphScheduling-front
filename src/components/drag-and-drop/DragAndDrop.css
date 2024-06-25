@@ -69,3 +69,24 @@
 .input-row label {
     margin-right: 10px;
 }
+
+
+.drop-zone {
+    border: 2px dashed #007bff;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.drop-zone.dragging {
+    background-color: #f0f9ff;
+}
+
+.file-list {
+    margin-top: 20px;
+}
+
+.file-list div {
+    margin-bottom: 5px;
+}

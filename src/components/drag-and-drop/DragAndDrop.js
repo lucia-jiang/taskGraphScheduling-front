@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, useEffect} from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import ReactFlow, {
     MiniMap, Background, ReactFlowProvider, addEdge, useNodesState, useEdgesState, Controls, MarkerType
 } from 'reactflow';
@@ -9,8 +9,9 @@ import QuantityPicker from "../input-forms/QuantityPicker";
 import InputLabel from "../input-forms/InputLabel";
 import DownloadButton from "./DownloadButton";
 import TransformToJsonButton from "./TransformToJsonButton";
+import DragAndDropUpload from "./DragAndDropUpload";
 
-const initialNodes = []
+const initialNodes = [];
 
 let id = 0;
 const getId = () => `${id++}`;
@@ -21,7 +22,6 @@ const DnDFlow = () => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const [viewport, setViewport] = useState(null);
-    // TODO: default weight and cost
     const [edgeLabel, setEdgeLabel] = useState(5);
     const [nodeWeight, setNodeWeight] = useState(5);
     const [processorCount, setProcessorCount] = useState(3);
@@ -55,7 +55,6 @@ const DnDFlow = () => {
 
         const type = event.dataTransfer.getData('application/reactflow');
 
-        // check if the dropped element is valid
         if (typeof type === 'undefined' || !type) {
             return;
         }
@@ -76,40 +75,71 @@ const DnDFlow = () => {
         }
     }, [viewport, reactFlowInstance]);
 
-    return (<div>
-        <div className="form-group row">
-            <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)}/>
-            <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)}/>
-            <div className="col-md-4">
-                <QuantityPicker onChange={handleQuantityChange}/>
-            </div>
-        </div>
+    const handleFileUpload = (json) => {
+        const { nodes, edges } = json;
 
-        <div className="dndflow">
-            <ReactFlowProvider>
-                <div style={{width: '100vw', height: '75vh'}} className="reactflow-wrapper" ref={reactFlowWrapper}>
-                    <ReactFlow
-                        nodes={nodes}
-                        edges={edges}
-                        onNodesChange={onNodesChange}
-                        onEdgesChange={onEdgesChange}
-                        onConnect={onConnect}
-                        onInit={setReactFlowInstance}
-                        onDrop={onDrop}
-                        onDragOver={onDragOver}
-                        fitView={false} // Disable fitView
-                    >
-                        <Controls/>
-                        <MiniMap/>
-                        <Background variant="dots" gap={12} size={1}/>
-                        <DownloadButton nodes={nodes} edges={edges}/>
-                        <TransformToJsonButton nodes={nodes} edges={edges}/>
-                    </ReactFlow>
+        const validNodes = nodes.map((node) => ({
+            id: node.id,
+            position: { x: node.pos[0], y: node.pos[1] },
+            data: { label: `Node ${node.id}: ${node.weight}`, weight: node.weight },
+        }));
+
+        const validEdges = edges.map((edge) => ({
+            id: `e${edge.source}-${edge.target}`,
+            source: edge.source,
+            target: edge.target,
+            label: edge.cost,
+            markerEnd: {
+                type: MarkerType.Arrow,
+                width: 20,
+                height: 20,
+            },
+        }));
+
+        setNodes(validNodes);
+        setEdges(validEdges);
+    };
+
+    return (
+        <div>
+            <div className="form-group row">
+                <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)} />
+                <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)} />
+                <div className="col-md-4">
+                    <QuantityPicker onChange={handleQuantityChange} />
                 </div>
-                <Sidebar/>
-            </ReactFlowProvider>
+            </div>
+
+            <DragAndDropUpload onFileUpload={handleFileUpload} />
+
+            <div className="dndflow">
+                <ReactFlowProvider>
+                    <div style={{ width: '100vw', height: '75vh' }} className="reactflow-wrapper" ref={reactFlowWrapper}>
+                        <ReactFlow
+                            nodes={nodes}
+                            edges={edges}
+                            onNodesChange={onNodesChange}
+                            onEdgesChange={onEdgesChange}
+                            onConnect={onConnect}
+                            onInit={setReactFlowInstance}
+                            onDrop={onDrop}
+                            onDragOver={onDragOver}
+                            fitView={true}
+                        >
+                            <Controls />
+                            <MiniMap />
+                            <Background variant="dots" gap={12} size={1} />
+                            <DownloadButton nodes={nodes} edges={edges} />
+                            <TransformToJsonButton nodes={nodes} edges={edges} />
+                        </ReactFlow>
+                    </div>
+                    <Sidebar />
+                </ReactFlowProvider>
+
+            </div>
+
         </div>
-    </div>);
+    );
 };
 
 export default DnDFlow;
