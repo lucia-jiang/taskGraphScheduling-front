@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
 import Pseudocode from '../components/algorithm/Pseudocode';
 import ProcessorAssignment from '../components/algorithm/ProcessorAssignment';
 import GraphComponent from '../components/algorithm/GraphComponent';
@@ -8,12 +7,16 @@ import StepsList from '../components/algorithm/StepsList';
 import axios from 'axios';
 
 // Import graph data from JSON file
-// import graphData from '../graph-examples-json/graph-1.json';
-import graphData from '../graph-examples-json/graph-2.json';
-// import graphData from '../graph-examples-json/graph-3.json';
-// import graphData from '../graph-examples-json/graph-4.json';
+// import defaultGraphData from '../graph-examples-json/graph-1.json';
+import defaultGraphData from '../graph-examples-json/graph-2.json';
+import {useLocation} from "react-router-dom";
+// import defaultGraphData from '../graph-examples-json/graph-3.json';
+// import defaultGraphData from '../graph-examples-json/graph-4.json';
 
 const MCPAlgorithm = () => {
+    const location = useLocation();
+    const graphData = location.state?.graphData || defaultGraphData;
+
     const pseudocodeSteps = `
         <strong>Step 1:</strong> 
         Calculate the Latest Start Time (LST) for each task in the graph.<br />

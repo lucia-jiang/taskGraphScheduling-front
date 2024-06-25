@@ -9,12 +9,16 @@ import './Pseudocode.css'
 import axios from 'axios';
 
 // Import graph data from JSON file
-import graphData from '../graph-examples-json/graph-1.json';
-// import graphData from '../graph-examples-json/graph-2.json';
-// import graphData from '../graph-examples-json/graph-3.json';
-// import graphData from '../graph-examples-json/graph-4.json';
+import defaultGraphData from '../graph-examples-json/graph-1.json';
+import {useLocation} from "react-router-dom";
+// import defaultGraphData from '../graph-examples-json/graph-2.json';
+// import defaultGraphData from '../graph-examples-json/graph-3.json';
+// import defaultGraphData from '../graph-examples-json/graph-4.json';
 
 const HLFETAlgorithm = () => {
+    const location = useLocation();
+    const graphData = location.state?.graphData || defaultGraphData;
+
     const pseudocodeSteps = `
         <strong>Step 1:</strong> 
         Calculate Static Level (SL) for each task.

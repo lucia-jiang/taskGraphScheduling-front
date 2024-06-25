@@ -16,7 +16,7 @@ const initialNodes = [];
 let id = 0;
 const getId = () => `${id++}`;
 
-const DnDFlow = () => {
+const DnDFlow = ({ onFileUpload }) => {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -98,6 +98,7 @@ const DnDFlow = () => {
 
         setNodes(validNodes);
         setEdges(validEdges);
+        onFileUpload(json);
     };
 
     return (
