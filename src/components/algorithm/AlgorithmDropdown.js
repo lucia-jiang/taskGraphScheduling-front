@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Assuming you are using react-router-dom for navigation
 
-const AlgorithmDropdown = () => {
+const AlgorithmDropdown = ({ onSelect }) => {
     const [selectedAlgorithm, setSelectedAlgorithm] = useState('Algorithm Selection');
 
-    const handleSelect = (algorithmName) => {
-        setSelectedAlgorithm(algorithmName);
+    const handleSelect = (algorithmName, displayName) => {
+        console.log(algorithmName, displayName)
+        setSelectedAlgorithm(displayName);
+        onSelect(algorithmName, displayName); // Pass both algorithmName and displayName back to the parent component
     };
 
     return (
@@ -16,17 +17,17 @@ const AlgorithmDropdown = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="#/algorithm-1" onClick={() => handleSelect('Algorithm 1')}>
-                    Algorithm 1
+                <Dropdown.Item onClick={() => handleSelect('hlfet', 'HLFET (Highest Level First with Estimated Time)')}>
+                    HLFET (Highest Level First with Estimated Time)
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="#/algorithm-2" onClick={() => handleSelect('Algorithm 2')}>
-                    Algorithm 2
+                <Dropdown.Item onClick={() => handleSelect('mcp', 'MCT (Minimum Communication Time)')}>
+                    MCT (Minimum Communication Time)
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="#/algorithm-3" onClick={() => handleSelect('Algorithm 3')}>
-                    Algorithm 3
+                <Dropdown.Item onClick={() => handleSelect('etf', 'ETF (Earliest Task First)')}>
+                    ETF (Earliest Task First)
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="#/algorithm-4" onClick={() => handleSelect('Algorithm 4')}>
-                    Algorithm 4
+                <Dropdown.Item onClick={() => handleSelect('dls', 'DLS (Dynamic Level Scheduling)')}>
+                    DLS (Dynamic Level Scheduling)
                 </Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>

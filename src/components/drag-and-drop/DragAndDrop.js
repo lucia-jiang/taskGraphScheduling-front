@@ -1,15 +1,15 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, {useRef, useCallback, useEffect, useState} from 'react';
 import ReactFlow, {
     MiniMap, Background, ReactFlowProvider, addEdge, useNodesState, useEdgesState, Controls, MarkerType
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import Sidebar from './Sidebar';
 import './DragAndDrop.css';
 import QuantityPicker from "../input-forms/QuantityPicker";
 import InputLabel from "../input-forms/InputLabel";
 import DownloadButton from "./DownloadButton";
 import TransformToJsonButton from "./TransformToJsonButton";
 import DragAndDropUpload from "./DragAndDropUpload";
+import Sidebar from './Sidebar';
 
 const initialNodes = [];
 
@@ -25,6 +25,7 @@ const DnDFlow = ({ onFileUpload }) => {
     const [edgeLabel, setEdgeLabel] = useState(5);
     const [nodeWeight, setNodeWeight] = useState(5);
     const [processorCount, setProcessorCount] = useState(3);
+    const [graphData, setGraphData] = useState(null); // State to store graph data
 
     const handleInputChange = (valueSetter) => (value) => {
         valueSetter(value);
@@ -62,12 +63,27 @@ const DnDFlow = ({ onFileUpload }) => {
         const position = reactFlowInstance.screenToFlowPosition({
             x: event.clientX, y: event.clientY,
         });
+        const newNodeId = generateUniqueId(nodes);
         const newNode = {
-            id: getId(), type, position, data: {label: `Node ${nodes.length + 1}: ${nodeWeight}`, weight: nodeWeight},
+            id: newNodeId,
+            type,
+            position,
+            data: {
+                label: `Node ${newNodeId}: ${nodeWeight}`,
+                weight: nodeWeight,
+            },
         };
 
         setNodes((nds) => nds.concat(newNode));
     }, [reactFlowInstance, nodes, nodeWeight]);
+
+    const generateUniqueId = (currentNodes) => {
+        let newId = 1;
+        while (currentNodes.find(node => node.id === `${newId}`)) {
+            newId++;
+        }
+        return `${newId}`;
+    };
 
     useEffect(() => {
         if (reactFlowInstance && viewport) {
@@ -75,11 +91,35 @@ const DnDFlow = ({ onFileUpload }) => {
         }
     }, [viewport, reactFlowInstance]);
 
+
+    useEffect(() => {
+        // Convert nodes and edges to JSON format
+        const json = {
+            nodes: nodes.map(node => ({
+                id: node.id,
+                pos: [node.position.x, node.position.y],
+                weight: node.data.weight,
+            })),
+            edges: edges.map(edge => ({
+                source: edge.source,
+                target: edge.target,
+                cost: edge.label,
+            })),
+        };
+
+        // Update graphData state
+        setGraphData(json);
+
+        // Notify parent component about graph data change
+        onFileUpload(json);
+    }, [nodes, edges, onFileUpload]);
+
     const handleFileUpload = (json) => {
         const { nodes, edges } = json;
 
         const validNodes = nodes.map((node) => ({
             id: node.id,
+            type: 'default',
             position: { x: node.pos[0], y: node.pos[1] },
             data: { label: `Node ${node.id}: ${node.weight}`, weight: node.weight },
         }));
@@ -100,6 +140,7 @@ const DnDFlow = ({ onFileUpload }) => {
         setEdges(validEdges);
         onFileUpload(json);
     };
+
 
     return (
         <div>
@@ -136,9 +177,7 @@ const DnDFlow = ({ onFileUpload }) => {
                     </div>
                     <Sidebar />
                 </ReactFlowProvider>
-
             </div>
-
         </div>
     );
 };
