@@ -1,4 +1,5 @@
 {
+  "num_processors": 4,
   "nodes": [
     {
       "id": "1",

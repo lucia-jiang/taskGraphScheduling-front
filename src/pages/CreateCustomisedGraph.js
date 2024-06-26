@@ -79,7 +79,7 @@ const CreateCustomisedGraph = () => {
             <h1>Create Customised Graph</h1>
             {algorithmName !== null ? (
                 <div>
-                    <p>Algorithm name: {algorithmName}</p>
+                    <h3>{getDisplayNameForAlgorithm(algorithmName)}</h3>
                 </div>
             ) : (
                 <div>

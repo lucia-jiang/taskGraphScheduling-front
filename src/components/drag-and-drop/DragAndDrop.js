@@ -1,4 +1,4 @@
-import React, {useRef, useCallback, useEffect, useState} from 'react';
+import React, { useRef, useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
     MiniMap, Background, ReactFlowProvider, addEdge, useNodesState, useEdgesState, Controls, MarkerType
 } from 'reactflow';
@@ -21,23 +21,26 @@ const DnDFlow = ({ onFileUpload }) => {
     const [viewport, setViewport] = useState(null);
     const [edgeLabel, setEdgeLabel] = useState(5);
     const [nodeWeight, setNodeWeight] = useState(5);
-    const [processorCount, setProcessorCount] = useState(3);
+    const [processorCount, setProcessorCount] = useState(3); // State for processor count
     const [graphData, setGraphData] = useState(null); // State to store graph data
 
     const handleInputChange = (valueSetter) => (value) => {
         valueSetter(value);
     };
 
+    // Function to handle quantity change from QuantityPicker
     const handleQuantityChange = (value) => {
-        setProcessorCount(value);
+        setProcessorCount(value); // Update processorCount state
     };
 
     const onConnect = useCallback((params) => {
         if (edgeLabel !== '') {
             const edgeWithArrow = {
-                ...params, markerEnd: {
+                ...params,
+                markerEnd: {
                     type: MarkerType.Arrow, width: 20, height: 20,
-                }, label: edgeLabel,
+                },
+                label: edgeLabel,
             };
             setEdges((eds) => addEdge(edgeWithArrow, eds));
         }
@@ -83,15 +86,9 @@ const DnDFlow = ({ onFileUpload }) => {
     };
 
     useEffect(() => {
-        if (reactFlowInstance && viewport) {
-            reactFlowInstance.setTransform(viewport);
-        }
-    }, [viewport, reactFlowInstance]);
-
-
-    useEffect(() => {
         // Convert nodes and edges to JSON format
         const json = {
+            num_processors: processorCount,
             nodes: nodes.map(node => ({
                 id: node.id,
                 pos: [node.position.x, node.position.y],
@@ -109,10 +106,10 @@ const DnDFlow = ({ onFileUpload }) => {
 
         // Notify parent component about graph data change
         onFileUpload(json);
-    }, [nodes, edges, onFileUpload]);
+    }, [nodes, edges, onFileUpload, processorCount]);
 
     const handleFileUpload = (json) => {
-        const { nodes, edges } = json;
+        const { num_processors, nodes, edges } = json; // Destructure num_processors from json
 
         const validNodes = nodes.map((node) => ({
             id: node.id,
@@ -135,9 +132,9 @@ const DnDFlow = ({ onFileUpload }) => {
 
         setNodes(validNodes);
         setEdges(validEdges);
+        setProcessorCount(num_processors); // Set processorCount state
         onFileUpload(json);
     };
-
 
     return (
         <div>
@@ -145,7 +142,7 @@ const DnDFlow = ({ onFileUpload }) => {
                 <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)} />
                 <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)} />
                 <div className="col-md-4">
-                    <QuantityPicker onChange={handleQuantityChange} />
+                    <QuantityPicker value={processorCount} onChange={handleQuantityChange} />
                 </div>
             </div>
 
