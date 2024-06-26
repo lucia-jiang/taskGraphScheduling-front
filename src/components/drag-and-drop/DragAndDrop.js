@@ -13,9 +13,6 @@ import Sidebar from './Sidebar';
 
 const initialNodes = [];
 
-let id = 0;
-const getId = () => `${id++}`;
-
 const DnDFlow = ({ onFileUpload }) => {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
