@@ -2,6 +2,12 @@ import React, {useState, useEffect} from 'react';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 
+// Import graph data from JSON file
+import graphData from '../graph-examples-json/graph-1.json';
+// import graphData from '../graph-examples-json/graph-2.json';
+// import graphData from '../graph-examples-json/graph-3.json';
+// import graphData from '../graph-examples-json/graph-4.json';
+
 const TimeChallengePage = () => {
     const [assignments, setAssignments] = useState({});
     const [timeRemaining, setTimeRemaining] = useState(10); // 3 minutes in seconds
@@ -44,7 +50,7 @@ const TimeChallengePage = () => {
                 <div className="row">
                     <div className="col-12 col-md-4">
                         <div className="graph-container">
-                            <GraphComponent image={"image-path"}/>
+                            <GraphComponent graphData={graphData} />
                         </div>
                     </div>
                     <div className="col-12 col-md-3">

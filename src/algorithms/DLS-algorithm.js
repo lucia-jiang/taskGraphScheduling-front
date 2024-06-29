@@ -5,10 +5,11 @@ import GraphComponent from '../components/algorithm/GraphComponent';
 import GraphProperties from '../components/algorithm/GraphProperties';
 import StepsList from '../components/algorithm/StepsList';
 import axios from 'axios';
+import {useLocation} from "react-router-dom";
+
 
 // Import graph data from JSON file
 import defaultGraphData from '../graph-examples-json/graph-1.json';
-import {useLocation} from "react-router-dom";
 // import defaultGraphData from '../graph-examples-json/graph-2.json';
 // import defaultGraphData from '../graph-examples-json/graph-3.json';
 // import defaultGraphData from '../graph-examples-json/graph-4.json';
@@ -57,7 +58,6 @@ const DLSAlgorithm = () => {
         };
 
         fetchStepsList();
-        console.log("Component mounted");
     }, []); // Empty dependency array ensures this effect runs only once
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {
