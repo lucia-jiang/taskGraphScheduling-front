@@ -47,15 +47,45 @@ const StepsList = ({steps, onUpdateAssignments}) => {
                                         </Accordion.Header>
                                         <Accordion.Body>
                                             {currentStep.details.candidates.map((candidate, idx) => (
-                                                <p key={idx}>
-                                                    Node {currentStep.details.node} -> Processor {candidate.processor}.
-                                                    Time: {candidate.start_time} - {candidate.end_time} units
-                                                </p>
+                                                <div key={idx}>
+                                                    <p>
+                                                        <strong>
+                                                            Node {currentStep.details.node} ->
+                                                            Processor {candidate.processor}.
+                                                            Time: {candidate.start_time} - {candidate.end_time} units
+                                                        </strong>
+                                                    </p>
+                                                    <div>
+                                                        {(candidate["predecessor_details"]).length > 0 && (
+                                                            <div>
+                                                                Earliest execution time calculated based on its predecessors:
+                                                            <ul>
+                                                                {candidate.predecessor_details.map((pred, predIdx) => (
+                                                                    <li key={predIdx}>
+                                                                        <strong>Node {pred.predecessor} (P{pred.processor}): </strong>
+
+                                                                        {pred.same_processor ?
+                                                                        `Same processor, no communication cost. 
+                                                                        The earliest start time is the maximum of predecessor end time, and
+                                                                        the ending time of the processor: 
+                                                                        Start time: max(${pred.pred_end_time}, ${pred.available_time}) = 
+                                                                         ${pred.max_start_time} units`:
+
+                                                                        `Different processors. 
+                                                                        The earliest start time is the maximum of predecessor end time + communication cost, and
+                                                                        the ending time of the processor: 
+                                                                        max(${pred.pred_end_time}+${pred.comm_cost}, ${pred.available_time}) = ${pred.max_start_time} units.`}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             ))}
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
-
                             </div>
                         )}
                     </div>
