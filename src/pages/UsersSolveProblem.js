@@ -6,8 +6,8 @@ import '../components/NodeProcessorMatching/NodeProcessorMatching.css';
 import axios from 'axios';
 
 // Import the JSON data
-import graphData from '../graph-examples-json/graph-1.json';
-// import graphData from '../graph-examples-json/graph-2.json';
+// import graphData from '../graph-examples-json/graph-1.json';
+import graphData from '../graph-examples-json/graph-2.json';
 // import graphData from '../graph-examples-json/graph-3.json';
 // import graphData from '../graph-examples-json/graph-4.json';
 
@@ -28,19 +28,56 @@ const fetchAlgorithmResults = async () => {
     };
 };
 
+const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes) => {
+    let startTime = 0;
+    const predecessors = graphData.edges.filter(edge => edge.target === node);
+
+    for (const { source } of predecessors) {
+        const predecessorTask = scheduledTasks.find(task => task.node === source);
+        if (predecessorTask) {
+            if (predecessorTask.processor === processor) {
+                startTime = Math.max(startTime, predecessorTask.endTime);
+            } else {
+                const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node).cost;
+                startTime = Math.max(startTime, predecessorTask.endTime + commCost);
+            }
+        }
+    }
+
+    const latestProcessorTime = currentProcessorTimes[processor] || 0;
+    return Math.max(startTime, latestProcessorTime);
+};
+
 const UsersSolveProblem = () => {
     const [assignments, setAssignments] = useState({});
     const [finished, setFinished] = useState(false);
     const [algorithmResults, setAlgorithmResults] = useState(null);
+    const [scheduledTasks, setScheduledTasks] = useState([]);
+    const [currentProcessorTimes, setCurrentProcessorTimes] = useState({});
 
     const handleAssignment = (newAssignments) => {
-        setAssignments(newAssignments);
-        setFinished(false); // Reset finished state when assignments change
+        const updatedAssignments = { ...assignments, ...newAssignments };
+        const updatedProcessorTimes = { ...currentProcessorTimes };
+        const updatedScheduledTasks = [...scheduledTasks];
+
+        for (const [node, processor] of Object.entries(newAssignments)) {
+            const startTime = calculateAssignmentTime(node, processor, assignments, scheduledTasks, currentProcessorTimes);
+            const nodeWeight = graphData.nodes.find(n => n.id === node).weight;
+            const endTime = startTime + nodeWeight;
+
+            updatedScheduledTasks.push({ node, processor, startTime, endTime });
+            updatedProcessorTimes[processor] = endTime;
+        }
+
+        setAssignments(updatedAssignments);
+        setScheduledTasks(updatedScheduledTasks);
+        setCurrentProcessorTimes(updatedProcessorTimes);
+        setFinished(false);
     };
 
     const handleFinished = async () => {
         try {
-            const results = await fetchAlgorithmResults(); // Replace with actual API call
+            const results = await fetchAlgorithmResults();
             setAlgorithmResults(results);
             setFinished(true);
         } catch (error) {
@@ -48,14 +85,23 @@ const UsersSolveProblem = () => {
         }
     };
 
-    // Extract node IDs from graphData
     const nodeIds = graphData.nodes.map(node => node.id);
-
-    // Extract number of processors from graphData
-    const numProcessors = graphData.num_processors || 4; // Default to 4 if num_processors is not defined
-
-    // Generate a list of processors based on num_processors
+    const numProcessors = graphData.num_processors || 4;
     const processors = Array.from({ length: numProcessors }, (_, i) => `P${i + 1}`);
+    const nodePredecessors = nodeIds.reduce((acc, nodeId) => {
+        acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source);
+        return acc;
+    }, {});
+
+    useEffect(() => {
+        setCurrentProcessorTimes(processors.reduce((acc, processor) => ({ ...acc, [processor]: 0 }), {}));
+    }, []);
+
+    // Calculate user's total end time
+    const userEndTime = scheduledTasks.length > 0
+        ? Math.max(...scheduledTasks.map(task => task.endTime))
+        : 0;
+
 
     return (
         <div className={"mb-4"}>
@@ -69,10 +115,11 @@ const UsersSolveProblem = () => {
                         <NodeProcessorMatching
                             nodes={nodeIds}
                             processors={processors}
+                            nodePredecessors={nodePredecessors}
+                            assignments={assignments}
                             onAssignment={handleAssignment}
                             refreshButton={true}
                         />
-
                         {Object.keys(assignments).length === nodeIds.length && !finished && (
                             <button className="btn btn-primary mt-2" onClick={handleFinished}>
                                 Finished
@@ -83,18 +130,29 @@ const UsersSolveProblem = () => {
                         <div className="assignment-container">
                             <h3>Assignment Details</h3>
                             <ul>
-                                {Object.entries(assignments).map(([node, processor], index) => (
-                                    <li key={index}>Node {node} assigned to Processor {processor}</li>
-                                ))}
+                                {Object.entries(assignments).map(([node, processor], index) => {
+                                    const task = scheduledTasks.find(task => task.node === node);
+                                    return (
+                                        <li key={index}>
+                                            Node {node} assigned to Processor {processor}
+                                            {task && (
+                                                <span>
+                                                    &nbsp;(Start time: {task.startTime}, End time: {task.endTime})
+                                                </span>
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                         <div className="results-container">
                             <h3>Results</h3>
                             {finished && algorithmResults && (
                                 <ul>
-                                    <li>HLFET algorithm time: {algorithmResults.algorithm1.time}</li>
-                                    <li>MCP algorithm time: {algorithmResults.algorithm2.time}</li>
-                                    <li>ETF algorithm time: {algorithmResults.algorithm3.time}</li>
+                                    <li>Your time: {userEndTime} units of time.</li>
+                                    <li>HLFET algorithm time: {algorithmResults.algorithm1.time} units of time.</li>
+                                    <li>MCP algorithm time: {algorithmResults.algorithm2.time} units of time.</li>
+                                    <li>ETF algorithm time: {algorithmResults.algorithm3.time} units of time.</li>
                                 </ul>
                             )}
                         </div>

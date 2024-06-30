@@ -85,6 +85,12 @@
     color: #fff;
 }
 
+.bubble.disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
+
 /* Styling for processor list */
 .processor-list {
     list-style: none;
