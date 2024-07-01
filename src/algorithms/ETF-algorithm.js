@@ -15,7 +15,10 @@ import defaultGraphData from '../graph-examples-json/graph-3.json';
 
 const ETFAlgorithm = () => {
     const location = useLocation();
-    const graphData = location.state?.graphData || defaultGraphData;
+    const query = new URLSearchParams(location.search);
+    const graphDataStr = query.get('graphData');
+    const graphData = graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : defaultGraphData;
+
 
     const pseudocodeSteps = `
         <strong>Step 1: </strong>
@@ -58,14 +61,12 @@ const ETFAlgorithm = () => {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setStepsList(response.data);
-                console.log("Fetched stepsList:", response.data);
             } catch (error) {
                 console.error('Error fetching stepsList:', error);
             }
         };
 
         fetchStepsList();
-        console.log("Component mounted");
     }, []); // Empty dependency array ensures this effect runs only once
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {

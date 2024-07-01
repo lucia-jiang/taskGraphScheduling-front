@@ -12,7 +12,6 @@ const GraphProperties = ({graphData}) => {
                 const response = await axios.post('http://localhost:8000/graph/properties', graphData, {
                     headers: {'Content-Type': 'application/json'}
                 });
-                console.log("Response graph properties: ", response.data);
                 setProperties(response.data); // Update state with response data
             } catch (error) {
                 console.error('Error making request:', error);

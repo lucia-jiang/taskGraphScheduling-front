@@ -6,10 +6,6 @@ import DownloadButton from "../drag-and-drop/DownloadButton";
 const GraphComponent = ({imageSrc = null, graphData = null}) => {
     const isImage = !!imageSrc;
 
-    console.log("Rendering GraphComponent");
-    console.log("isImage:", isImage);
-    console.log("graphData:", graphData);
-
     return (
         <div className="rounded-square graph-placeholder">
             <h4>Graph</h4>

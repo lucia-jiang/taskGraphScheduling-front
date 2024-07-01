@@ -5,7 +5,6 @@ const AlgorithmDropdown = ({ onSelect }) => {
     const [selectedAlgorithm, setSelectedAlgorithm] = useState('Algorithm Selection');
 
     const handleSelect = (algorithmName, displayName) => {
-        console.log(algorithmName, displayName)
         setSelectedAlgorithm(displayName);
         onSelect(algorithmName, displayName); // Pass both algorithmName and displayName back to the parent component
     };

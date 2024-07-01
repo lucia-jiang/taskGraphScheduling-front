@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import "../components/Components.css";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 import '../components/NodeProcessorMatching/NodeProcessorMatching.css';
 import axios from 'axios';
-
-// Import the JSON data
-// import graphData from '../graph-examples-json/graph-1.json';
 import graphData from '../graph-examples-json/graph-2.json';
-// import graphData from '../graph-examples-json/graph-3.json';
-// import graphData from '../graph-examples-json/graph-4.json';
 
 const fetchAlgorithmResults = async () => {
     const hlfet = await axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, {
@@ -36,8 +32,10 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
         const predecessorTask = scheduledTasks.find(task => task.node === source);
         if (predecessorTask) {
             if (predecessorTask.processor === processor) {
+                console.log("Same processor")
                 startTime = Math.max(startTime, predecessorTask.endTime);
             } else {
+                console.log("Different processor")
                 const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node).cost;
                 startTime = Math.max(startTime, predecessorTask.endTime + commCost);
             }
@@ -97,11 +95,12 @@ const UsersSolveProblem = () => {
         setCurrentProcessorTimes(processors.reduce((acc, processor) => ({ ...acc, [processor]: 0 }), {}));
     }, []);
 
-    // Calculate user's total end time
     const userEndTime = scheduledTasks.length > 0
         ? Math.max(...scheduledTasks.map(task => task.endTime))
         : 0;
 
+    // Convert graphData to a URL-friendly string
+    const graphDataStr = encodeURIComponent(JSON.stringify(graphData));
 
     return (
         <div className={"mb-4"}>
@@ -155,6 +154,17 @@ const UsersSolveProblem = () => {
                                     <li>ETF algorithm time: {algorithmResults.algorithm3.time} units of time.</li>
                                 </ul>
                             )}
+                            <div className="algorithm-links">
+                                <Link to={`/algorithms/hlfet?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
+                                    View HLFET Steps
+                                </Link>
+                                <Link to={`/algorithms/mcp?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
+                                    View MCP Steps
+                                </Link>
+                                <Link to={`/algorithms/etf?graphData=${graphDataStr}`} className="btn btn-primary mt-2">
+                                    View ETF Steps
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

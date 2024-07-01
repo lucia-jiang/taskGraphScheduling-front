@@ -51,7 +51,6 @@ const DLSAlgorithm = () => {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setStepsList(response.data);
-                console.log("Fetched stepsList:", response.data);
             } catch (error) {
                 console.error('Error fetching stepsList:', error);
             }
