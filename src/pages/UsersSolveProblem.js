@@ -32,10 +32,8 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
         const predecessorTask = scheduledTasks.find(task => task.node === source);
         if (predecessorTask) {
             if (predecessorTask.processor === processor) {
-                console.log("Same processor")
                 startTime = Math.max(startTime, predecessorTask.endTime);
             } else {
-                console.log("Different processor")
                 const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node).cost;
                 startTime = Math.max(startTime, predecessorTask.endTime + commCost);
             }
