@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import Pseudocode from '../components/algorithm/Pseudocode';
 import ProcessorAssignment from '../components/algorithm/ProcessorAssignment';
 import GraphComponent from '../components/algorithm/GraphComponent';
@@ -17,7 +17,7 @@ const MCPAlgorithm = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const graphDataStr = query.get('graphData');
-    const graphData = graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : defaultGraphData;
+    const graphData = location.state?.graphData || (graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : defaultGraphData);
 
     const pseudocodeSteps = `
         <strong>Step 1:</strong> 
@@ -50,7 +50,7 @@ const MCPAlgorithm = () => {
         const fetchStepsList = async () => {
             try {
                 const response = await axios.post('http://localhost:8000/algorithm/mcp-steps', graphData, {
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 setStepsList(response.data);
             } catch (error) {
@@ -71,15 +71,15 @@ const MCPAlgorithm = () => {
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-12 col-md-4">
-                        <Pseudocode steps={pseudocodeSteps} />
-                        <ProcessorAssignment assignments={cumulativeAssignments} />
+                        <Pseudocode steps={pseudocodeSteps}/>
+                        <ProcessorAssignment assignments={cumulativeAssignments}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphComponent graphData={graphData} />
+                        <GraphComponent graphData={graphData}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData} />
-                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments} />
+                        <GraphProperties graphData={graphData}/>
+                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
                     </div>
                 </div>
             </div>
