@@ -165,8 +165,8 @@ const UsersSolveProblem = () => {
                                     <li>HLFET algorithm time: {algorithmResults.algorithm1.time} units of time.</li>
                                     <li>MCP algorithm time: {algorithmResults.algorithm2.time} units of time.</li>
                                     <li>ETF algorithm time: {algorithmResults.algorithm3.time} units of time.</li>
-                                </ul>
-                            )}
+                                </ul>)}
+                            {finished && algorithmResults && (
                             <div className="algorithm-links">
                                 <Link to={`/algorithms/hlfet?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
                                     View HLFET Steps
@@ -178,6 +178,7 @@ const UsersSolveProblem = () => {
                                     View ETF Steps
                                 </Link>
                             </div>
+                                )}
                         </div>
                     </div>
                 </div>
