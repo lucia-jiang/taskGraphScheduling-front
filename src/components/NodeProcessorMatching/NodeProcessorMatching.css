@@ -10,14 +10,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-left: -15px;
-    margin-right: -15px;
+    margin: 0 -15px;
 }
 
 /* Column styling */
 .col-md-4, .col-md-6 {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 15px;
 }
 
 /* Specific columns for the layout */
@@ -65,7 +63,7 @@
 /* Styling for bubbles (nodes) */
 .bubble {
     display: block;
-    width: 80px; /* Adjusted width for node bubbles */
+    width: 75px;
     padding: 10px 15px;
     margin: 5px 0;
     border: 2px solid #6c757d;
@@ -83,12 +81,13 @@
 .bubble.assigned {
     background-color: #28a745;
     color: #fff;
+    pointer-events: none;
 }
 
 .bubble.disabled {
     background-color: #e0e0e0;
     color: #a0a0a0;
-    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Styling for processor list */
@@ -115,9 +114,15 @@
 /* Node Processor Matching styling */
 .node-processor-matching {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    width: 100%;
+}
+
+.node-processor-container {
+    display: flex;
+    flex-direction: column;
     width: 100%;
 }
 
@@ -129,4 +134,9 @@
 .processor-selection {
     display: flex;
     flex-direction: column;
+    flex-grow: 1; /* Ensure it takes up remaining space */
+}
+
+.refresh-button {
+    align-self: stretch; /* Make the button take the full width of its container */
 }

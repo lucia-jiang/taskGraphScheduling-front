@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import "../components/Components.css";
@@ -18,58 +18,77 @@ const fetchAlgorithmResults = async () => {
         headers: { 'Content-Type': 'application/json' }
     });
     return {
-        algorithm1: { time: (hlfet.data[hlfet.data.length-1])["details"]["total_time"] },
-        algorithm2: { time: (mcp.data[mcp.data.length-1])["details"]["total_time"] },
-        algorithm3: { time: (etf.data[etf.data.length-1])["details"]["total_time"] }
+        algorithm1: { time: (hlfet.data[hlfet.data.length - 1])["details"]["total_time"] },
+        algorithm2: { time: (mcp.data[mcp.data.length - 1])["details"]["total_time"] },
+        algorithm3: { time: (etf.data[etf.data.length - 1])["details"]["total_time"] }
     };
 };
 
 const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes) => {
-    let startTime = 0;
+    let maxPredecessorEndTime = 0;
     const predecessors = graphData.edges.filter(edge => edge.target === node);
 
     for (const { source } of predecessors) {
         const predecessorTask = scheduledTasks.find(task => task.node === source);
         if (predecessorTask) {
+            const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node)?.cost || 0;
             if (predecessorTask.processor === processor) {
-                startTime = Math.max(startTime, predecessorTask.endTime);
+                maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime);
             } else {
-                const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node).cost;
-                startTime = Math.max(startTime, predecessorTask.endTime + commCost);
+                maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime + commCost);
             }
         }
     }
 
     const latestProcessorTime = currentProcessorTimes[processor] || 0;
-    return Math.max(startTime, latestProcessorTime);
+    const startTime = Math.max(maxPredecessorEndTime, latestProcessorTime);
+
+    return startTime;
 };
 
 const UsersSolveProblem = () => {
+    const nodeIds = graphData.nodes.map(node => node.id);
+    const numProcessors = graphData.num_processors || 4;
+    const processors = Array.from({ length: numProcessors }, (_, i) => `P${i + 1}`);
+    const nodePredecessors = nodeIds.reduce((acc, nodeId) => {
+        acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source);
+        return acc;
+    }, {});
+
     const [assignments, setAssignments] = useState({});
     const [finished, setFinished] = useState(false);
     const [algorithmResults, setAlgorithmResults] = useState(null);
     const [scheduledTasks, setScheduledTasks] = useState([]);
-    const [currentProcessorTimes, setCurrentProcessorTimes] = useState({});
+    const [currentProcessorTimes, setCurrentProcessorTimes] = useState(processors.reduce((acc, processor) => ({ ...acc, [processor]: 0 }), {}));
 
-    const handleAssignment = (newAssignments) => {
-        const updatedAssignments = { ...assignments, ...newAssignments };
-        const updatedProcessorTimes = { ...currentProcessorTimes };
-        const updatedScheduledTasks = [...scheduledTasks];
+    const handleAssignment = useCallback((newAssignments) => {
+        setAssignments((prevAssignments) => {
+            const trulyNewAssignments = Object.entries(newAssignments)
+                .filter(([node, processor]) => !prevAssignments[node] || prevAssignments[node] !== processor)
+                .reduce((acc, [node, processor]) => {
+                    acc[node] = processor;
+                    return acc;
+                }, {});
 
-        for (const [node, processor] of Object.entries(newAssignments)) {
-            const startTime = calculateAssignmentTime(node, processor, assignments, scheduledTasks, currentProcessorTimes);
-            const nodeWeight = graphData.nodes.find(n => n.id === node).weight;
-            const endTime = startTime + nodeWeight;
+            const updatedAssignments = { ...prevAssignments, ...trulyNewAssignments };
+            const updatedProcessorTimes = { ...currentProcessorTimes };
+            const updatedScheduledTasks = [...scheduledTasks];
 
-            updatedScheduledTasks.push({ node, processor, startTime, endTime });
-            updatedProcessorTimes[processor] = endTime;
-        }
+            for (const [node, processor] of Object.entries(trulyNewAssignments)) {
+                const startTime = calculateAssignmentTime(node, processor, updatedAssignments, updatedScheduledTasks, updatedProcessorTimes);
+                const nodeWeight = graphData.nodes.find(n => n.id === node).weight;
+                const endTime = startTime + nodeWeight;
 
-        setAssignments(updatedAssignments);
-        setScheduledTasks(updatedScheduledTasks);
-        setCurrentProcessorTimes(updatedProcessorTimes);
+                updatedScheduledTasks.push({ node, processor, startTime, endTime });
+                updatedProcessorTimes[processor] = endTime;
+            }
+
+            setScheduledTasks(updatedScheduledTasks);
+            setCurrentProcessorTimes(updatedProcessorTimes);
+            return updatedAssignments;
+        });
         setFinished(false);
-    };
+    }, [currentProcessorTimes, scheduledTasks]);
 
     const handleFinished = async () => {
         try {
@@ -81,23 +100,18 @@ const UsersSolveProblem = () => {
         }
     };
 
-    const nodeIds = graphData.nodes.map(node => node.id);
-    const numProcessors = graphData.num_processors || 4;
-    const processors = Array.from({ length: numProcessors }, (_, i) => `P${i + 1}`);
-    const nodePredecessors = nodeIds.reduce((acc, nodeId) => {
-        acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source);
-        return acc;
-    }, {});
-
-    useEffect(() => {
+    const resetState = () => {
+        setAssignments({});
+        setFinished(false);
+        setAlgorithmResults(null);
+        setScheduledTasks([]);
         setCurrentProcessorTimes(processors.reduce((acc, processor) => ({ ...acc, [processor]: 0 }), {}));
-    }, []);
+    };
 
     const userEndTime = scheduledTasks.length > 0
         ? Math.max(...scheduledTasks.map(task => task.endTime))
         : 0;
 
-    // Convert graphData to a URL-friendly string
     const graphDataStr = encodeURIComponent(JSON.stringify(graphData));
 
     return (
@@ -116,6 +130,7 @@ const UsersSolveProblem = () => {
                             assignments={assignments}
                             onAssignment={handleAssignment}
                             refreshButton={true}
+                            onRefresh={resetState} // Pass the resetState function as a prop
                         />
                         {Object.keys(assignments).length === nodeIds.length && !finished && (
                             <button className="btn btn-primary mt-2" onClick={handleFinished}>
