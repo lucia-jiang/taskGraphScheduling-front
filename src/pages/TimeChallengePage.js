@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import GraphComponent from "../components/algorithm/GraphComponent";
-import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
+import GraphComponent from '../components/algorithm/GraphComponent';
+import NodeProcessorMatching from '../components/NodeProcessorMatching/NodeProcessorMatching';
 import axios from 'axios';
-import GameLostModal from "../modals/GameLostModal";
+import GameLostModal from '../modals/GameLostModal';
 import graphData from '../graph-examples-json/graph-2.json'; // Example graph data
 
 const fetchAlgorithmResults = async () => {
@@ -14,9 +14,9 @@ const fetchAlgorithmResults = async () => {
             axios.post('http://localhost:8000/algorithm/etf-steps', graphData, { headers: { 'Content-Type': 'application/json' } })
         ]);
 
-        const algorithm1Time = (hlfet.data[hlfet.data.length - 1])["details"]["total_time"];
-        const algorithm2Time = (mcp.data[mcp.data.length - 1])["details"]["total_time"];
-        const algorithm3Time = (etf.data[etf.data.length - 1])["details"]["total_time"];
+        const algorithm1Time = hlfet.data[hlfet.data.length - 1].details.total_time;
+        const algorithm2Time = mcp.data[mcp.data.length - 1].details.total_time;
+        const algorithm3Time = etf.data[etf.data.length - 1].details.total_time;
 
         const minTime = Math.min(algorithm1Time, algorithm2Time, algorithm3Time);
 
@@ -73,8 +73,6 @@ const TimeChallengePage = () => {
     const [timeRemaining, setTimeRemaining] = useState(gameDuration); // Initial time limit in seconds
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [showTimeUpModal, setShowTimeUpModal] = useState(false); // State to control showing the game lost modal
-
-    //TODO: threshold time?
     const [thresholdTime] = useState(10); // Example threshold time (adjust as per your game's requirement)
 
     useEffect(() => {
@@ -89,17 +87,18 @@ const TimeChallengePage = () => {
         }
     }, [timeRemaining, finished]);
 
-    useEffect(async () => {
-        try {
-            const results = await fetchAlgorithmResults();
-            setAlgorithmResults(results);
+    useEffect(() => {
+        const fetchResults = async () => {
+            try {
+                const results = await fetchAlgorithmResults();
+                setAlgorithmResults(results);
+            } catch (error) {
+                console.error('Error fetching algorithm results:', error);
+            }
+        };
 
-        } catch (error) {
-            console.error('Error fetching algorithm results:', error);
-        }
+        fetchResults();
     }, []);
-
-
 
     const handleAssignment = useCallback((newAssignments) => {
         setAssignments((prevAssignments) => {
@@ -147,11 +146,12 @@ const TimeChallengePage = () => {
             );
 
             if (userEndTime <= optimalTime + thresholdTime) {
+                setShowTimeUpModal(true);
                 console.log('Congratulations! You completed the challenge within the optimal time range.');
             } else {
+                setShowTimeUpModal(true);
                 console.log('You did not meet the optimal time range requirement. Please try again.');
             }
-
         } catch (error) {
             console.error('Error fetching algorithm results:', error);
         }
@@ -267,12 +267,15 @@ const TimeChallengePage = () => {
                     </div>
                 </div>
             </div>
-            <GameLostModal
-                show={showTimeUpModal}
-                onRetrySameGraph={handleRetrySameGraph}
-                onTryNewGraph={handleTryNewGraph}
-                onClose={handleCloseModal}
-            />
+            {algorithmResults && (
+                <GameLostModal
+                    show={showTimeUpModal}
+                    isWin={finished && userEndTime <= algorithmResults.minTime + thresholdTime}
+                    onRetrySameGraph={handleRetrySameGraph}
+                    onTryNewGraph={handleTryNewGraph}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     );
 };
