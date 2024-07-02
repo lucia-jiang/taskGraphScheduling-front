@@ -6,8 +6,6 @@ const Games = () => {
     return (
         <div>
             <h1>Games</h1>
-            <p>Games for users to play: timing and guess the next step</p>
-
             <div className={"container"}>
                 <div className={"row"}>
                     <div className={"col-12 col-md-6"}>
