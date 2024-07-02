@@ -35,34 +35,32 @@ const NodeProcessorMatching = ({ nodes, processors, nodePredecessors, assignment
 
     return (
         <div className="node-processor-matching">
-            <div className="node-processor-container">
-                <div className="node-list">
-                    {nodes.map((node, index) => {
-                        const predecessors = nodePredecessors[node];
-                        const allPredecessorsAssigned = predecessors.every(predecessor => assignments[predecessor] !== undefined);
+            <div className="node-list mr-1">
+                {nodes.map((node, index) => {
+                    const predecessors = nodePredecessors[node];
+                    const allPredecessorsAssigned = predecessors.every(predecessor => assignments[predecessor] !== undefined);
 
-                        return (
-                            <NodeBubble
-                                key={index}
-                                node={node}
-                                onClick={() => handleNodeClick(node)}
-                                isSelected={selectedNode === node}
-                                isAssigned={assignments[node] !== undefined}
-                                isDisabled={!allPredecessorsAssigned}
-                            />
-                        );
-                    })}
-                </div>
-                <div className="processor-selection">
-                    {selectedNode && (
-                        <>
-                            <p>Select Processor for Node {selectedNode}</p>
-                            <ProcessorList processors={processors} onSelect={handleProcessorSelect} />
-                        </>
-                    )}
-                </div>
+                    return (
+                        <NodeBubble
+                            key={index}
+                            node={node}
+                            onClick={() => handleNodeClick(node)}
+                            isSelected={selectedNode === node}
+                            isAssigned={assignments[node] !== undefined}
+                            isDisabled={!allPredecessorsAssigned}
+                        />
+                    );
+                })}
                 {refreshButton && (
-                    <Button className="refresh-button mt-1" onClick={handleRefresh}>Refresh Choices</Button>
+                    <Button className="mt-1" onClick={handleRefresh}>Refresh Choices</Button>
+                )}
+            </div>
+            <div className="processor-selection ml-1">
+                {selectedNode && (
+                    <>
+                        <p>Select Processor for Node {selectedNode}</p>
+                        <ProcessorList processors={processors} onSelect={handleProcessorSelect} />
+                    </>
                 )}
             </div>
         </div>
