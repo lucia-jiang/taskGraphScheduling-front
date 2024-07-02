@@ -14,14 +14,25 @@ const Home = () => {
                 {/* Explanation Section */}
                 <div className="col-md-5">
                     <h2>What is Task Graph Scheduling?</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non hendrerit ipsum. In at
-                        dapibus sem. Etiam et porta quam, at fermentum diam. Suspendisse potenti. Aliquam eu iaculis
-                        neque, ut congue justo. Nullam ut rutrum sapien. Ut id commodo nunc, vitae scelerisque ipsum.
-                        Quisque imperdiet, nisi in eleifend porta, ligula libero viverra augue, eu cursus arcu libero eu
-                        nisl. Nullam leo enim, porta quis arcu eu, aliquet rutrum est. Aenean et neque feugiat,
-                        imperdiet mauris eu, tristique urna. Sed tortor dolor, posuere at varius a, iaculis sodales
-                        ipsum. Praesent porta ipsum id pretium posuere. Phasellus vestibulum arcu eu sodales
-                        viverra.</p>
+                    <p>
+                        Task graph scheduling problems involve efficiently <strong>assigning interdependent tasks to multiple
+                        processors</strong>. These tasks, along with their dependencies, are represented using <strong>directed acyclic
+                        graphs (DAGs)</strong>. In these graphs, nodes represent tasks, and edges indicate dependencies between
+                        tasks. Each node has a weight that signifies the time required to complete the task, while each
+                        edge has a weight representing the communication cost for transferring data between tasks
+                        assigned to different processors. If the predecessor task and the current task are assigned to
+                        the same processor, no communication cost is incurred. Additionally, a key constraint in task
+                        scheduling is that each processor can only handle one task at a time.
+                    </p>
+                    <p>
+                        The primary goal of task graph scheduling algorithms is to <strong>minimise the total completion time of
+                        all tasks.</strong> This involves not only optimising the order in which tasks are executed but also
+                        strategically assigning tasks to processors to reduce communication overhead. Effective
+                        scheduling ensures a balanced workload distribution among processors and minimises idle time,
+                        leading to improved performance in computational systems. These algorithms are crucial in
+                        parallel computing environments, where tasks are often interdependent and must be executed in a
+                        specific sequence.
+                    </p>
                     {/*TODO: change list to 2x2 buttoms*/}
                     <div className="list-group">
                         <Link to="/algorithms" className="list-group-item list-group-item-action">Algorithms</Link>
