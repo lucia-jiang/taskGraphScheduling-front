@@ -1,25 +1,70 @@
-// src/components/games/GuessNextStep.js
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import "../Components.css"
-import {Button} from "react-bootstrap";
+import {Button, Dropdown} from "react-bootstrap";
 import {useNavigate} from 'react-router-dom';
 
-const GuessNextStep = ({}) => {
+const GuessNextStep = () => {
     const navigate = useNavigate();
-    return (<div className={"rounded-square"}>
-        <h1>Guess the next step</h1>
-        <p1>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
-            rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-            explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-            consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
-            dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora
-            incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum
-            exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
-            vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum
-            qui dolorem eum fugiat quo voluptas nulla pariatur?
-        </p1>
-        <Button onClick={() => navigate('/game/guess-next-step')} className={"mt-2"}>Let's go!</Button>
-    </div>);
+    const [algorithmName, setAlgorithmName] = useState(null);
+    const [selectedAlgorithmDisplayName, setSelectedAlgorithmDisplayName] = useState('Algorithm Selection');
+    const [isGoEnabled, setIsGoEnabled] = useState(false);
+
+    const handleSelectAlgorithm = (selectedAlgorithm, displayName) => {
+        setAlgorithmName(selectedAlgorithm);
+        setSelectedAlgorithmDisplayName(displayName);
+    };
+
+    useEffect(() => {
+        setIsGoEnabled(algorithmName !== null);
+    }, [algorithmName]);
+
+    const handleGoClick = () => {
+        navigate('/game/guess-next-step', {state: {algorithmName}}); // Pass algorithmName as state
+    };
+
+    return (
+        <div className={"rounded-square"}>
+            <h1>Guess the Next Step</h1>
+            <p>
+                Guess Next Step is a game where you put your scheduling skills to the test! Presented with a
+                series of interdependent tasks in a directed acyclic graph (DAG), your mission is to <strong>predict the
+                next
+                optimal step in scheduling.</strong> First, select an algorithm to guide your strategy. Then, for each
+                task, you need
+                to correctly assign it to a processor while considering dependencies and communication costs. Make sure
+                your
+                selected steps follow the chosen algorithm precisely. Can you guess the correct assignment and stay
+                ahead of
+                the algorithm?
+            </p>
+            <div className="d-flex align-items-center">
+                <Dropdown className="mr-2">
+                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                        {selectedAlgorithmDisplayName}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item
+                            onClick={() => handleSelectAlgorithm('hlfet', 'HLFET (Highest Level First with Estimated Time)')}>
+                            HLFET (Highest Level First with Estimated Time)
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSelectAlgorithm('mcp', 'MCT (Minimum Communication Time)')}>
+                            MCT (Minimum Communication Time)
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSelectAlgorithm('etf', 'ETF (Earliest Task First)')}>
+                            ETF (Earliest Task First)
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSelectAlgorithm('dls', 'DLS (Dynamic Level Scheduling)')}>
+                            DLS (Dynamic Level Scheduling)
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Button onClick={handleGoClick} disabled={!isGoEnabled} className="mt-2">
+                    Let's go!
+                </Button>
+            </div>
+        </div>
+    );
 };
 
 export default GuessNextStep;

@@ -3,10 +3,11 @@ import GraphComponent from "../components/algorithm/GraphComponent";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 import axios from 'axios';
 import graphData from '../graph-examples-json/graph-2.json';
+import {useLocation} from 'react-router-dom';
 
-const fetchHLFETSteps = async () => {
+const fetchHLFETSteps = async (algorithmName) => {
     try {
-        const response = await axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, {
+        const response = await axios.post(`http://localhost:8000/algorithm/${algorithmName}-steps`, graphData, {
             headers: {'Content-Type': 'application/json'}
         });
 
@@ -14,7 +15,7 @@ const fetchHLFETSteps = async () => {
         console.log(filteredSteps);
         return filteredSteps;
     } catch (error) {
-        console.error('Error fetching HLFET steps:', error);
+        console.error(`Error fetching ${algorithmName} steps:`, error);
         throw error;
     }
 };
@@ -36,12 +37,12 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
     }
 
     const latestProcessorTime = currentProcessorTimes[processor] || 0;
-    const startTime = Math.max(maxPredecessorEndTime, latestProcessorTime);
 
-    return startTime;
+    return Math.max(maxPredecessorEndTime, latestProcessorTime);
 };
 
 const GuessNextStepPage = () => {
+    const {state} = useLocation();
     const nodeIds = graphData.nodes.map(node => node.id);
     const numProcessors = graphData.num_processors || 4;
     const processors = Array.from({length: numProcessors}, (_, i) => `P${i + 1}`);
@@ -63,16 +64,19 @@ const GuessNextStepPage = () => {
 
     useEffect(() => {
         const fetchSteps = async () => {
+            if (!state || !state.algorithmName) return;
+
+            const {algorithmName} = state;
             try {
-                const steps = await fetchHLFETSteps();
+                const steps = await fetchHLFETSteps(algorithmName);
                 setHlfetSteps(steps);
             } catch (error) {
-                console.error('Error fetching HLFET steps:', error);
+                console.error(`Error fetching ${algorithmName} steps:`, error);
             }
         };
 
         fetchSteps();
-    }, []);
+    }, [state]);
 
     const handleAssignment = useCallback((newAssignmentsDict) => {
         const newAssignmentsArray = Object.entries(newAssignmentsDict);
@@ -147,6 +151,7 @@ const GuessNextStepPage = () => {
     return (
         <div className="mb-4">
             <h1>Guess the Next Step</h1>
+            {/*<p>{state.algorithmName}</p>*/}
             <div className="container">
                 <div className="row">
                     <div className="col-12 col-md-5 mt-2">

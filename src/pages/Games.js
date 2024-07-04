@@ -7,7 +7,7 @@ const Games = () => {
         <div>
             <h1>Games</h1>
             <div className={"container"}>
-                <div className={"row"}>
+                <div className={"row mt-3"}>
                     <div className={"col-12 col-md-6"}>
                         <TimeChallenge/>
                     </div>
