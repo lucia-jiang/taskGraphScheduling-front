@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import ReactFlow, {Background, Controls, MarkerType} from 'react-flow-renderer';
+import ReactFlow, {Controls, MarkerType} from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 
-// Import your JSON graph data
 import graphData1 from '../graph-examples-json/graph-1.json';
 import graphData2 from '../graph-examples-json/graph-2.json';
 import graphData3 from '../graph-examples-json/graph-3.json';
@@ -28,6 +27,7 @@ const ImageGallery = () => {
     return (
         <div className="rounded-square">
             <h3>Graph</h3>
+            <label>Number of processors: {graphData.num_processors}</label>
             <div style={{width: '100%', height: '500px'}}>
                 {graphData && (
                     <ReactFlow
