@@ -6,13 +6,12 @@ const Home = () => {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-7">
+                <div className="col-md-6">
                     <div className="task-graph-example">
                         <ImageGallery/>
                     </div>
                 </div>
-                {/* Explanation Section */}
-                <div className="col-md-5">
+                <div className="col-md-6">
                     <h2>What is Task Graph Scheduling?</h2>
                     <p>
                         Task graph scheduling problems involve efficiently <strong>assigning interdependent tasks to
@@ -40,19 +39,25 @@ const Home = () => {
                     </p>
                     <p>
                         It's important to note that while these algorithms provide good enough solutions, the underlying
-                        problem is NP-complete. This means that there is no known polynomial-time solution that
+                        problem is <strong>NP-complete.</strong> This means that there is no known polynomial-time solution that
                         guarantees finding the optimal solution in all cases. Therefore, task graph scheduling
                         algorithms focus on heuristic and approximation methods to find near-optimal solutions within a
                         reasonable time frame.
                     </p>
                     {/*TODO: change list to 2x2 buttoms*/}
-                    <div className="list-group">
-                        <Link to="/algorithms" className="list-group-item list-group-item-action">Algorithms</Link>
-                        <Link to="/users-solve-problem" className="list-group-item list-group-item-action">Users Solve
-                            Problem</Link>
-                        <Link to="/create-customised-graph" className="list-group-item list-group-item-action">Create
-                            Customised Graph</Link>
-                        <Link to="/games" className="list-group-item list-group-item-action">Games</Link>
+                    <div className="row mb-4">
+                        <div className="col-6 mb-3">
+                            <Link to="/algorithms" className="btn btn-primary w-100">Algorithms</Link>
+                        </div>
+                        <div className="col-6 mb-3">
+                            <Link to="/users-solve-problem" className="btn btn-primary w-100">Users Solve Problem</Link>
+                        </div>
+                        <div className="col-6 mb-3">
+                            <Link to="/create-customised-graph" className="btn btn-primary w-100">Create Customised Graph</Link>
+                        </div>
+                        <div className="col-6 mb-3">
+                            <Link to="/games" className="btn btn-primary w-100">Games</Link>
+                        </div>
                     </div>
                 </div>
             </div>
