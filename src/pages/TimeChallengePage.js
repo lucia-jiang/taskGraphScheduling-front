@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import GraphComponent from '../components/algorithm/GraphComponent';
 import NodeProcessorMatching from '../components/NodeProcessorMatching/NodeProcessorMatching';
-import axios from 'axios';
 import GameLostModal from '../modals/GameLostModal';
-import graphData from '../graph-examples-json/graph-2.json'; // Example graph data
+import axios from 'axios';
+import AssignmentDetails from "../components/games/AssignmentDetails"
+import AlgorithmResults from '../components/games/AlgorithmResults';
+
+import graphData from '../graph-examples-json/graph-2.json';
 
 const fetchAlgorithmResults = async () => {
     try {
@@ -21,37 +23,15 @@ const fetchAlgorithmResults = async () => {
         const minTime = Math.min(algorithm1Time, algorithm2Time, algorithm3Time);
 
         return {
-            algorithm1: { time: algorithm1Time },
-            algorithm2: { time: algorithm2Time },
-            algorithm3: { time: algorithm3Time },
+            algorithm1: { time: algorithm1Time, data: hlfet.data },
+            algorithm2: { time: algorithm2Time, data: mcp.data },
+            algorithm3: { time: algorithm3Time, data: etf.data },
             minTime: minTime
         };
     } catch (error) {
         console.error('Error fetching algorithm results:', error);
         throw error;
     }
-};
-
-const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes) => {
-    let maxPredecessorEndTime = 0;
-    const predecessors = graphData.edges.filter(edge => edge.target === node);
-
-    for (const { source } of predecessors) {
-        const predecessorTask = scheduledTasks.find(task => task.node === source);
-        if (predecessorTask) {
-            const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node)?.cost || 0;
-            if (predecessorTask.processor === processor) {
-                maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime);
-            } else {
-                maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime + commCost);
-            }
-        }
-    }
-
-    const latestProcessorTime = currentProcessorTimes[processor] || 0;
-    const startTime = Math.max(maxPredecessorEndTime, latestProcessorTime);
-
-    return startTime;
 };
 
 const TimeChallengePage = () => {
@@ -67,9 +47,12 @@ const TimeChallengePage = () => {
     const [finished, setFinished] = useState(false);
     const [algorithmResults, setAlgorithmResults] = useState(null);
     const [scheduledTasks, setScheduledTasks] = useState([]);
-    const [currentProcessorTimes, setCurrentProcessorTimes] = useState(processors.reduce((acc, processor) => ({ ...acc, [processor]: 0 }), {}));
+    const [currentProcessorTimes, setCurrentProcessorTimes] = useState(processors.reduce((acc, processor) => ({
+        ...acc,
+        [processor]: 0
+    }), {}));
 
-    const gameDuration = 10; // in seconds
+    const gameDuration = 10; // TODO: in seconds
     const [timeRemaining, setTimeRemaining] = useState(gameDuration); // Initial time limit in seconds
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [showTimeUpModal, setShowTimeUpModal] = useState(false); // State to control showing the game lost modal
@@ -100,6 +83,26 @@ const TimeChallengePage = () => {
         fetchResults();
     }, []);
 
+    const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes) => {
+        let maxPredecessorEndTime = 0;
+        const predecessors = graphData.edges.filter(edge => edge.target === node);
+
+        for (const {source} of predecessors) {
+            const predecessorTask = scheduledTasks.find(task => task.node === source);
+            if (predecessorTask) {
+                const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node)?.cost || 0;
+                if (predecessorTask.processor === processor) {
+                    maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime);
+                } else {
+                    maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime + commCost);
+                }
+            }
+        }
+        const latestProcessorTime = currentProcessorTimes[processor] || 0;
+
+        return  Math.max(maxPredecessorEndTime, latestProcessorTime);
+    };
+
     const handleAssignment = useCallback((newAssignments) => {
         setAssignments((prevAssignments) => {
             const trulyNewAssignments = Object.entries(newAssignments)
@@ -127,35 +130,12 @@ const TimeChallengePage = () => {
 
             if (Object.keys(updatedAssignments).length === nodeIds.length) {
                 setFinished(true);
-                setShowTimeUpModal(false); // Ensure modal is hidden if finished
+                setShowTimeUpModal(true); // Ensure modal is hidden if finished
             }
 
             return updatedAssignments;
         });
     }, [currentProcessorTimes, scheduledTasks, nodeIds]);
-
-    const handleFinished = async () => {
-        try {
-            const results = await fetchAlgorithmResults();
-            setAlgorithmResults(results);
-
-            const optimalTime = Math.min(
-                results.algorithm1.time,
-                results.algorithm2.time,
-                results.algorithm3.time
-            );
-
-            if (userEndTime <= optimalTime + thresholdTime) {
-                setShowTimeUpModal(true);
-                console.log('Congratulations! You completed the challenge within the optimal time range.');
-            } else {
-                setShowTimeUpModal(true);
-                console.log('You did not meet the optimal time range requirement. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error fetching algorithm results:', error);
-        }
-    };
 
     const resetState = () => {
         setAssignments({});
@@ -214,56 +194,11 @@ const TimeChallengePage = () => {
                                 <h3>Time Remaining: {timeRemaining} seconds</h3>
                             </div>
                         )}
-                        {finished && (
-                            <button className="btn btn-primary mt-2" onClick={handleFinished}>
-                                Finish
-                            </button>
-                        )}
+
                     </div>
                     <div className="col-12 col-md-5">
-                        <div className="assignment-container">
-                            <h3>Assignment Details</h3>
-                            <ul>
-                                {Object.entries(assignments).map(([node, processor], index) => {
-                                    const task = scheduledTasks.find(task => task.node === node);
-                                    return (
-                                        <li key={index}>
-                                            Node {node} assigned to Processor {processor}
-                                            {task && (
-                                                <span>
-                                                    &nbsp;(Start time: {task.startTime}, End time: {task.endTime})
-                                                </span>
-                                            )}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                        <div className="results-container">
-                            <h3>Results</h3>
-                            {finished && algorithmResults && (
-                                <ul>
-                                    <li>Your time: {userEndTime} units of time.</li>
-                                    <li>HLFET algorithm time: {algorithmResults.algorithm1.time} units of time.</li>
-                                    <li>MCP algorithm time: {algorithmResults.algorithm2.time} units of time.</li>
-                                    <li>ETF algorithm time: {algorithmResults.algorithm3.time} units of time.</li>
-                                    <li>Best time: {algorithmResults.minTime}</li>
-                                </ul>
-                            )}
-                            {finished && algorithmResults && (
-                                <div className="algorithm-links">
-                                    <Link to={`/algorithms/hlfet?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
-                                        View HLFET Steps
-                                    </Link>
-                                    <Link to={`/algorithms/mcp?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
-                                        View MCP Steps
-                                    </Link>
-                                    <Link to={`/algorithms/etf?graphData=${graphDataStr}`} className="btn btn-primary mt-2">
-                                        View ETF Steps
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
+                        <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks} maxTime={userEndTime} finished={finished} />
+                        {finished && <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr}/>}
                     </div>
                 </div>
             </div>

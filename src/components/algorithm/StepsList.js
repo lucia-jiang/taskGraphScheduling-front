@@ -1,8 +1,6 @@
 // StepsList.js
-
 import React, {useEffect, useState, useCallback} from 'react';
-import {Button} from 'react-bootstrap';
-import Accordion from 'react-bootstrap/Accordion';
+import {Button, Accordion} from 'react-bootstrap';
 
 const StepsList = ({steps, onUpdateAssignments}) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -32,7 +30,7 @@ const StepsList = ({steps, onUpdateAssignments}) => {
             <h4>Steps</h4>
             <div>
                 {currentStep && (
-                    <div className="step-item">
+                    <div>
                         <p>
                             <strong>Step {currentStepIndex + 1}: </strong>
                             {currentStep.step} <br/>
