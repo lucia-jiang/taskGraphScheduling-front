@@ -1,8 +1,8 @@
 import React from 'react';
-import { Table, Accordion } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {Table, Accordion} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
-const AlgorithmResults = ({ algorithmResults, graphDataStr }) => {
+const AlgorithmResults = ({algorithmResults, graphDataStr}) => {
     return (
         <div className="results-container">
             <h3>Results</h3>
@@ -36,7 +36,8 @@ const AlgorithmResults = ({ algorithmResults, graphDataStr }) => {
                                     ))}
                                     </tbody>
                                 </Table>
-                                <Link to={`/algorithms/hlfet?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
+                                <Link to={`/algorithms/hlfet?graphData=${graphDataStr}`}
+                                      className="btn btn-primary mt-2 mr-2">
                                     View HLFET Steps
                                 </Link>
                             </Accordion.Body>
@@ -70,7 +71,8 @@ const AlgorithmResults = ({ algorithmResults, graphDataStr }) => {
                                     ))}
                                     </tbody>
                                 </Table>
-                                <Link to={`/algorithms/mcp?graphData=${graphDataStr}`} className="btn btn-primary mt-2 mr-2">
+                                <Link to={`/algorithms/mcp?graphData=${graphDataStr}`}
+                                      className="btn btn-primary mt-2 mr-2">
                                     View MCP Steps
                                 </Link>
                             </Accordion.Body>

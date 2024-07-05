@@ -1,7 +1,7 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 
-const AssignmentDetails = ({ assignments, scheduledTasks, maxTime, finished }) => {
+const AssignmentDetails = ({assignments, scheduledTasks, maxTime, finished}) => {
     return (
         <div className="assignment-container">
             <h3>Assignment Details</h3>

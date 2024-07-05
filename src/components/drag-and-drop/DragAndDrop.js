@@ -145,7 +145,7 @@ const DnDFlow = ({onFileUpload}) => {
 
             <div className="dndflow">
                 <ReactFlowProvider>
-                    <div style={{width: '100vw', height: '75vh'}} className="reactflow-wrapper" ref={reactFlowWrapper}>
+                    <div style={{width: '100vw', height: '50vh'}} className="reactflow-wrapper" ref={reactFlowWrapper}>
                         <ReactFlow
                             nodes={nodes}
                             edges={edges}
