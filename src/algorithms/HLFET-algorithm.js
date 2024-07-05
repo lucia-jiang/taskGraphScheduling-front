@@ -1,5 +1,4 @@
-// src/pages/HLFETAlgorithm.js
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Pseudocode from '../components/algorithm/Pseudocode';
 import ProcessorAssignment from '../components/algorithm/ProcessorAssignment';
 import GraphComponent from '../components/algorithm/GraphComponent';
@@ -7,13 +6,9 @@ import GraphProperties from '../components/algorithm/GraphProperties';
 import StepsList from '../components/algorithm/StepsList';
 import './Pseudocode.css';
 import axios from 'axios';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-// Import default graph data from JSON file
-import defaultGraphData from '../graph-examples-json/graph-1.json';
-// import defaultGraphData from '../graph-examples-json/graph-2.json';
-// import defaultGraphData from '../graph-examples-json/graph-3.json';
-// import defaultGraphData from '../graph-examples-json/graph-4.json';
+import defaultGraphData from '../graph-examples-json/graph-2.json';
 
 const HLFETAlgorithm = () => {
     const location = useLocation();
@@ -43,7 +38,7 @@ const HLFETAlgorithm = () => {
             <ul>
                 <li>Take the task with the highest SL.</li>
                 <li>Determine the earliest start time on available processors.</li>
-                 <ul>
+                <ul>
                     <li>If the task's processor is the same as the previous task's processor:
                         Earliest start time = end time of the previous task. </li>
                     <li>Otherwise:
@@ -55,13 +50,13 @@ const HLFETAlgorithm = () => {
     `;
 
     const [stepsList, setStepsList] = useState([]);
-    const [cumulativeAssignments, setCumulativeAssignments] = useState([]);
+    const [scheduledTasks, setScheduledTasks] = useState([]);
 
     useEffect(() => {
         const fetchStepsList = async () => {
             try {
                 const response = await axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, {
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
                 setStepsList(response.data);
@@ -71,11 +66,11 @@ const HLFETAlgorithm = () => {
         };
 
         fetchStepsList();
-    }, []);
+    }, [graphData]);
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {
-        setCumulativeAssignments(updatedAssignments);
-    }, []);
+        setScheduledTasks(updatedAssignments);
+    }, [graphData.nodes.length]);
 
     return (
         <div>
@@ -83,15 +78,15 @@ const HLFETAlgorithm = () => {
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-12 col-md-4">
-                        <Pseudocode steps={pseudocodeSteps}/>
-                        <ProcessorAssignment assignments={cumulativeAssignments}/>
+                        <Pseudocode steps={pseudocodeSteps} />
+                        <ProcessorAssignment assignments={scheduledTasks}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphComponent graphData={graphData}/>
+                        <GraphComponent graphData={graphData} />
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData}/>
-                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
+                        <GraphProperties graphData={graphData} />
+                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments} />
                     </div>
                 </div>
             </div>

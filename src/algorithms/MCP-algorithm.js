@@ -44,7 +44,7 @@ const MCPAlgorithm = () => {
     `;
 
     const [stepsList, setStepsList] = useState([]);
-    const [cumulativeAssignments, setCumulativeAssignments] = useState([]);
+    const [scheduledTasks, setScheduledTasks] = useState([]);
 
     useEffect(() => {
         const fetchStepsList = async () => {
@@ -62,7 +62,7 @@ const MCPAlgorithm = () => {
     }, []); // Empty dependency array ensures this effect runs only once
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {
-        setCumulativeAssignments(updatedAssignments);
+        setScheduledTasks(updatedAssignments);
     }, []);
 
     return (
@@ -72,7 +72,9 @@ const MCPAlgorithm = () => {
                 <div className="row">
                     <div className="col-12 col-md-4">
                         <Pseudocode steps={pseudocodeSteps}/>
-                        <ProcessorAssignment assignments={cumulativeAssignments}/>
+                        <ProcessorAssignment
+                            assignments={scheduledTasks}
+                        />
                     </div>
                     <div className="col-12 col-md-4">
                         <GraphComponent graphData={graphData}/>

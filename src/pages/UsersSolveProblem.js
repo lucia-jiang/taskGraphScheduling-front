@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import "../components/Components.css";
@@ -41,9 +41,7 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
     }
 
     const latestProcessorTime = currentProcessorTimes[processor] || 0;
-    const startTime = Math.max(maxPredecessorEndTime, latestProcessorTime);
-
-    return startTime;
+    return Math.max(maxPredecessorEndTime, latestProcessorTime);
 };
 
 const UsersSolveProblem = () => {

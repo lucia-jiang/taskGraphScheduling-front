@@ -51,7 +51,7 @@ const ETFAlgorithm = () => {
 // Now you can use pseudocodeSteps in your React component or application
 
     const [stepsList, setStepsList] = useState([]);
-    const [cumulativeAssignments, setCumulativeAssignments] = useState([]);
+    const [scheduledTasks, setScheduledTasks] = useState([]);
 
     useEffect(() => {
         const fetchStepsList = async () => {
@@ -69,7 +69,7 @@ const ETFAlgorithm = () => {
     }, []); // Empty dependency array ensures this effect runs only once
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {
-        setCumulativeAssignments(updatedAssignments);
+        setScheduledTasks(updatedAssignments);
     }, []);
 
     return (
@@ -79,7 +79,9 @@ const ETFAlgorithm = () => {
                 <div className="row">
                     <div className="col-12 col-md-4">
                         <Pseudocode steps={pseudocodeSteps}/>
-                        <ProcessorAssignment assignments={cumulativeAssignments}/>
+                        <ProcessorAssignment
+                            assignments={scheduledTasks}
+                        />
                     </div>
                     <div className="col-12 col-md-4">
                         <GraphComponent graphData={graphData}/>
