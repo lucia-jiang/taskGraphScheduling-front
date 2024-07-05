@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import React, {useRef, useCallback, useEffect, useState} from 'react';
 import ReactFlow, {
     MiniMap, Background, ReactFlowProvider, addEdge, useNodesState, useEdgesState, Controls, MarkerType
 } from 'reactflow';
@@ -13,16 +13,14 @@ import Sidebar from './Sidebar';
 
 const initialNodes = [];
 
-const DnDFlow = ({ onFileUpload }) => {
+const DnDFlow = ({onFileUpload}) => {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
-    const [viewport, setViewport] = useState(null);
     const [edgeLabel, setEdgeLabel] = useState(5);
     const [nodeWeight, setNodeWeight] = useState(5);
     const [processorCount, setProcessorCount] = useState(3); // State for processor count
-    const [graphData, setGraphData] = useState(null); // State to store graph data
 
     const handleInputChange = (valueSetter) => (value) => {
         valueSetter(value);
@@ -101,21 +99,18 @@ const DnDFlow = ({ onFileUpload }) => {
             })),
         };
 
-        // Update graphData state
-        setGraphData(json);
-
         // Notify parent component about graph data change
         onFileUpload(json);
     }, [nodes, edges, onFileUpload, processorCount]);
 
     const handleFileUpload = (json) => {
-        const { num_processors, nodes, edges } = json; // Destructure num_processors from json
+        const {num_processors, nodes, edges} = json; // Destructure num_processors from json
 
         const validNodes = nodes.map((node) => ({
             id: node.id,
             type: 'default',
-            position: { x: node.pos[0], y: node.pos[1] },
-            data: { label: `Node ${node.id}: ${node.weight}`, weight: node.weight },
+            position: {x: node.pos[0], y: node.pos[1]},
+            data: {label: `Node ${node.id}: ${node.weight}`, weight: node.weight},
         }));
 
         const validEdges = edges.map((edge) => ({
@@ -139,18 +134,18 @@ const DnDFlow = ({ onFileUpload }) => {
     return (
         <div>
             <div className="form-group row">
-                <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)} />
-                <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)} />
+                <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)}/>
+                <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)}/>
                 <div className="col-md-4">
-                    <QuantityPicker value={processorCount} onChange={handleQuantityChange} />
+                    <QuantityPicker value={processorCount} onChange={handleQuantityChange}/>
                 </div>
             </div>
 
-            <DragAndDropUpload onFileUpload={handleFileUpload} />
+            <DragAndDropUpload onFileUpload={handleFileUpload}/>
 
             <div className="dndflow">
                 <ReactFlowProvider>
-                    <div style={{ width: '100vw', height: '75vh' }} className="reactflow-wrapper" ref={reactFlowWrapper}>
+                    <div style={{width: '100vw', height: '75vh'}} className="reactflow-wrapper" ref={reactFlowWrapper}>
                         <ReactFlow
                             nodes={nodes}
                             edges={edges}
@@ -162,14 +157,14 @@ const DnDFlow = ({ onFileUpload }) => {
                             onDragOver={onDragOver}
                             fitView={true}
                         >
-                            <Controls />
-                            <MiniMap />
-                            <Background variant="dots" gap={12} size={1} />
-                            <DownloadButton nodes={nodes} edges={edges} />
-                            <TransformToJsonButton nodes={nodes} edges={edges} />
+                            <Controls/>
+                            <MiniMap/>
+                            <Background variant="dots" gap={12} size={1}/>
+                            <TransformToJsonButton nodes={nodes} edges={edges} numProcessors={processorCount}/>
+                            <DownloadButton nodes={nodes} edges={edges}/>
                         </ReactFlow>
                     </div>
-                    <Sidebar />
+                    <Sidebar/>
                 </ReactFlowProvider>
             </div>
         </div>
