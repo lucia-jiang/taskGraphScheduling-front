@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useLocation} from 'react-router-dom';
 import Pseudocode from '../components/algorithm/Pseudocode';
 import ProcessorAssignment from '../components/algorithm/ProcessorAssignment';
 import GraphComponent from '../components/algorithm/GraphComponent';
 import GraphProperties from '../components/algorithm/GraphProperties';
 import StepsList from '../components/algorithm/StepsList';
-import './Pseudocode.css';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 
-import defaultGraphData from '../graph-examples-json/graph-2.json';
+// Import graph data from JSON file
+// import defaultGraphData from '../graph-examples-json/graph-1.json';
+// import defaultGraphData from '../graph-examples-json/graph-2.json';
+import defaultGraphData from '../graph-examples-json/graph-3.json';
+// import defaultGraphData from '../graph-examples-json/graph-4.json';
 
 const HLFETAlgorithm = () => {
     const location = useLocation();
@@ -56,9 +59,8 @@ const HLFETAlgorithm = () => {
         const fetchStepsList = async () => {
             try {
                 const response = await axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, {
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
-
                 setStepsList(response.data);
             } catch (error) {
                 console.error('Error fetching stepsList:', error);
@@ -66,11 +68,11 @@ const HLFETAlgorithm = () => {
         };
 
         fetchStepsList();
-    }, [graphData]);
+    }, []);
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {
         setScheduledTasks(updatedAssignments);
-    }, [graphData.nodes.length]);
+    }, []);
 
     return (
         <div>
@@ -78,15 +80,15 @@ const HLFETAlgorithm = () => {
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-12 col-md-4">
-                        <Pseudocode steps={pseudocodeSteps} />
+                        <Pseudocode steps={pseudocodeSteps}/>
                         <ProcessorAssignment assignments={scheduledTasks}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphComponent graphData={graphData} />
+                        <GraphComponent key={JSON.stringify(graphData)} graphData={graphData}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData} />
-                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments} />
+                        <GraphProperties graphData={graphData}/>
+                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
                     </div>
                 </div>
             </div>

@@ -48,8 +48,6 @@ const ETFAlgorithm = () => {
         </ul>
     `;
 
-// Now you can use pseudocodeSteps in your React component or application
-
     const [stepsList, setStepsList] = useState([]);
     const [scheduledTasks, setScheduledTasks] = useState([]);
 
