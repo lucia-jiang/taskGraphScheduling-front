@@ -4,6 +4,7 @@ import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProce
 import axios from 'axios';
 import graphData from '../graph-examples-json/graph-2.json';
 import {useLocation} from 'react-router-dom';
+import AssignmentDetails from '../components/games/AssignmentDetails'; // Import AssignmentDetails component
 
 const fetchHLFETSteps = async (algorithmName) => {
     try {
@@ -11,9 +12,7 @@ const fetchHLFETSteps = async (algorithmName) => {
             headers: {'Content-Type': 'application/json'}
         });
 
-        const filteredSteps = response.data.filter(step => step.details && step.details.processor);
-        console.log(filteredSteps);
-        return filteredSteps;
+        return response.data.filter(step => step.details && step.details.processor);
     } catch (error) {
         console.error(`Error fetching ${algorithmName} steps:`, error);
         throw error;
@@ -80,49 +79,56 @@ const GuessNextStepPage = () => {
 
     const handleAssignment = useCallback((newAssignmentsDict) => {
         const newAssignmentsArray = Object.entries(newAssignmentsDict);
-        let newAssignmentIndex = -1;
+        let newAssignmentFound = false;
+        let newAssignmentNode = null;
+        let newAssignmentProcessor = null;
 
         for (let i = 0; i < newAssignmentsArray.length; i++) {
             const [node, processor] = newAssignmentsArray[i];
             if (!previousAssignments.some(prev => prev.node === node && prev.processor === processor)) {
-                newAssignmentIndex = i;
+                newAssignmentFound = true;
+                newAssignmentNode = node;
+                newAssignmentProcessor = processor;
                 break;
             }
         }
 
-        if (newAssignmentIndex === -1) {
+        if (!newAssignmentFound) {
             console.log('No new assignment found.');
             return;
         }
 
-        const [node, processor] = newAssignmentsArray[newAssignmentIndex];
-
         const correctStep = hlfetSteps[currentStep];
         const correctProcessor = correctStep.details.processor.toString();
-        let trimmedProcessor = processor;
-        if (processor.startsWith('P')) {
-            trimmedProcessor = processor.slice(1);
+        let trimmedProcessor = newAssignmentProcessor;
+        if (newAssignmentProcessor.startsWith('P')) {
+            trimmedProcessor = newAssignmentProcessor.slice(1);
         }
 
-        if (correctStep.details.node === node && correctProcessor === trimmedProcessor) {
+        if (correctStep.details.node === newAssignmentNode && correctProcessor === trimmedProcessor) {
             setAssignments((prevAssignments) => ({
                 ...prevAssignments,
-                [node]: processor
+                [newAssignmentNode]: newAssignmentProcessor
             }));
 
-            const startTime = calculateAssignmentTime(node, processor, assignments, scheduledTasks, currentProcessorTimes);
-            const nodeWeight = graphData.nodes.find(n => n.id === node).weight;
+            const startTime = calculateAssignmentTime(newAssignmentNode, newAssignmentProcessor, assignments, scheduledTasks, currentProcessorTimes);
+            const nodeWeight = graphData.nodes.find(n => n.id === newAssignmentNode).weight;
             const endTime = startTime + nodeWeight;
 
             setScheduledTasks((prevScheduledTasks) => [
                 ...prevScheduledTasks,
-                {node, processor, startTime, endTime}
+                {node: newAssignmentNode, processor: newAssignmentProcessor, startTime, endTime}
             ]);
 
             setCurrentProcessorTimes((prevProcessorTimes) => ({
                 ...prevProcessorTimes,
-                [processor]: endTime
+                [newAssignmentProcessor]: endTime
             }));
+
+            setPreviousAssignments(prevAssignments => [...prevAssignments, {
+                node: newAssignmentNode,
+                processor: newAssignmentProcessor
+            }]);
 
             setFeedback('Correct! Proceeding to the next step.');
 
@@ -135,13 +141,13 @@ const GuessNextStepPage = () => {
             setFeedback(`Incorrect. The correct assignment was Node ${correctStep.details.node} to Processor ${correctProcessor}. Try again.`);
         }
 
-        setPreviousAssignments(prevAssignments => [...prevAssignments, {node, processor}]);
     }, [currentStep, hlfetSteps, assignments, scheduledTasks, currentProcessorTimes, previousAssignments]);
+
 
     const resetState = () => {
         setAssignments({});
         setCurrentStep(0);
-        fetchHLFETSteps();
+        fetchHLFETSteps(state.algorithmName);
         setScheduledTasks([]);
         setCurrentProcessorTimes(processors.reduce((acc, processor) => ({...acc, [processor]: 0}), {}));
         setFeedback(null);
@@ -151,7 +157,6 @@ const GuessNextStepPage = () => {
     return (
         <div className="mb-4">
             <h1>Guess the Next Step</h1>
-            {/*<p>{state.algorithmName}</p>*/}
             <div className="container">
                 <div className="row">
                     <div className="col-12 col-md-5 mt-2">
@@ -174,17 +179,9 @@ const GuessNextStepPage = () => {
                         )}
                     </div>
                     <div className="col-12 col-md-5">
-                        <div className="assignment-container">
-                            <h3>Assignment Details</h3>
-                            <ul>
-                                {scheduledTasks.map((task, index) => (
-                                    <li key={index}>
-                                        Node {task.node} assigned to Processor {task.processor}
-                                        (Start time: {task.startTime}, End time: {task.endTime})
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks}
+                                           maxTime={currentProcessorTimes[processors[0]]}
+                                           finished={currentStep === hlfetSteps.length}/>
                     </div>
                 </div>
             </div>
