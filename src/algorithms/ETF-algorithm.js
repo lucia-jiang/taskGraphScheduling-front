@@ -85,7 +85,7 @@ const ETFAlgorithm = () => {
                         <GraphComponent graphData={graphData}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData}/>
+                        <GraphProperties graphData={graphData} prop={"SL"}/>
                         <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
                     </div>
                 </div>

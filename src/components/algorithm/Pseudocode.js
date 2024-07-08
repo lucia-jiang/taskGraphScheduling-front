@@ -3,15 +3,7 @@ import React from 'react';
 import Accordion from "react-bootstrap/Accordion";
 import "./AccordionComponents.css"
 
-const Pseudocode = ({ steps }) => {
-    // return (
-    //     <div className="rounded-square">
-    //         <div className="rounded-subsection">
-    //             <h4>Pseudocode</h4>
-    //             <div dangerouslySetInnerHTML={{ __html: steps }} />
-    //         </div>
-    //     </div>
-    // );
+const Pseudocode = ({steps}) => {
     return (
         <div>
             <Accordion className={"mb-3 custom-accordion"}>
@@ -20,7 +12,7 @@ const Pseudocode = ({ steps }) => {
                         <h4>Pseudocode</h4>
                     </Accordion.Header>
                     <Accordion.Body>
-                        <div dangerouslySetInnerHTML={{ __html: steps }} />
+                        <div dangerouslySetInnerHTML={{__html: steps}}/>
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>

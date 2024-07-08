@@ -9,8 +9,8 @@ import axios from 'axios';
 
 // Import graph data from JSON file
 // import defaultGraphData from '../graph-examples-json/graph-1.json';
-// import defaultGraphData from '../graph-examples-json/graph-2.json';
-import defaultGraphData from '../graph-examples-json/graph-3.json';
+import defaultGraphData from '../graph-examples-json/graph-2.json';
+// import defaultGraphData from '../graph-examples-json/graph-3.json';
 // import defaultGraphData from '../graph-examples-json/graph-4.json';
 
 const HLFETAlgorithm = () => {
@@ -87,7 +87,7 @@ const HLFETAlgorithm = () => {
                         <GraphComponent key={JSON.stringify(graphData)} graphData={graphData}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData}/>
+                        <GraphProperties graphData={graphData} prop="SL"/>
                         <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
                     </div>
                 </div>

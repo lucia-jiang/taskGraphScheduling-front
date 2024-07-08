@@ -1,25 +1,39 @@
 import React, {useState, useEffect} from 'react';
-import {Table, Container, Row, Col} from 'react-bootstrap';
+import {Table, Accordion, Card} from 'react-bootstrap';
 import axios from 'axios';
-import Accordion from "react-bootstrap/Accordion";
+import GraphPropertiesStepList from "./GraphPropertiesStepList";
 
-const GraphProperties = ({graphData}) => {
+const GraphProperties = ({graphData, prop}) => {
     const [properties, setProperties] = useState({});
+    const [sortConfig, setSortConfig] = useState({key: 'SL', direction: 'ascending'});
+    const [steps, setSteps] = useState([]);
 
     useEffect(() => {
-        const transformToJson = async () => {
+        const fetchGraphProperties = async () => {
             try {
-                const response = await axios.post('http://localhost:8000/graph/properties', graphData, {
+                const response = await axios.post('http://localhost:8000/graph/properties/', graphData, {
                     headers: {'Content-Type': 'application/json'}
                 });
-                setProperties(response.data); // Update state with response data
+                if (prop === "SL") {
+                    const steps = await axios.post('http://localhost:8000/graph/properties/sl', graphData, {
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    setSteps(steps.data);
+                } else {
+                    const steps = await axios.post('http://localhost:8000/graph/properties/lst', graphData, {
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    setSteps(steps.data);
+                }
+                setProperties(response.data);
+
             } catch (error) {
-                console.error('Error making request:', error);
+                console.error('Error fetching graph properties:', error);
             }
         };
 
-        transformToJson(); // Call transformToJson on component mount
-    }, [graphData]); // Include graphData in dependency array to watch for changes
+        fetchGraphProperties();
+    }, []);
 
     // Check if properties is empty or undefined
     if (!properties || Object.keys(properties).length === 0) {
@@ -31,43 +45,41 @@ const GraphProperties = ({graphData}) => {
         );
     }
 
-    const propertyNames = Object.keys(properties);
-    const nodeIds = Object.keys(properties[propertyNames[0]]);
+    const nodeIds = Object.keys(properties[prop] || {});
+
+    const sortedData = nodeIds.map(nodeId => ({
+        nodeId,
+        ...Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value[nodeId]]))
+    }));
+
+    if (sortConfig.key && properties[prop]) {
+        sortedData.sort((a, b) => {
+            if (a[sortConfig.key] < b[sortConfig.key]) {
+                return sortConfig.direction === 'ascending' ? -1 : 1;
+            }
+            if (a[sortConfig.key] > b[sortConfig.key]) {
+                return sortConfig.direction === 'ascending' ? 1 : -1;
+            }
+            return 0;
+        });
+    }
+
+    const requestSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({key, direction});
+    };
+
+    const getSortIndicator = (key) => {
+        if (sortConfig.key !== key) return null;
+        return sortConfig.direction === 'ascending' ? '▲' : '▼';
+    };
 
     return (
-        // <Container>
-        //     <Row>
-        //         <Col>
-        //             <div className="rounded-square">
-        //                 <h3>Graph Properties</h3>
-        //                 <Table striped bordered hover responsive className="border">
-        //                     <thead>
-        //                     <tr>
-        //                         <th>Node ID</th>
-        //                         {propertyNames.map((property) => (
-        //                             <th key={property}>{property}</th>
-        //                         ))}
-        //                     </tr>
-        //                     </thead>
-        //                     <tbody>
-        //                     {nodeIds.map((nodeId) => (
-        //                         <tr key={nodeId}>
-        //                             <td>{nodeId}</td>
-        //                             {propertyNames.map((property) => (
-        //                                 <td key={`${nodeId}-${property}`}>
-        //                                     {properties[property][nodeId]}
-        //                                 </td>
-        //                             ))}
-        //                         </tr>
-        //                     ))}
-        //                     </tbody>
-        //                 </Table>
-        //             </div>
-        //         </Col>
-        //     </Row>
-        // </Container>
         <div>
-            <Accordion className={"mb-3 custom-accordion"}>
+            <Accordion className="mb-3 custom-accordion">
                 <Accordion.Item>
                     <Accordion.Header>
                         <h4>Graph Properties</h4>
@@ -76,25 +88,42 @@ const GraphProperties = ({graphData}) => {
                         <Table striped bordered hover responsive className="border">
                             <thead>
                             <tr>
-                                <th>Node ID</th>
-                                {propertyNames.map((property) => (
-                                    <th key={property}>{property}</th>
-                                ))}
+                                <th onClick={() => requestSort('nodeId')}>Node ID {getSortIndicator('nodeId')}</th>
+                                {prop === 'SL' &&
+                                    <th onClick={() => requestSort('SL')}>SL {getSortIndicator('SL')}</th>}
+                                {prop === 'LST' && (
+                                    <>
+                                        <th onClick={() => requestSort('EST')}>EST {getSortIndicator('EST')}</th>
+                                        <th onClick={() => requestSort('LST')}>LST {getSortIndicator('LST')}</th>
+                                    </>
+                                )}
                             </tr>
                             </thead>
                             <tbody>
-                            {nodeIds.map((nodeId) => (
+                            {sortedData.map(({nodeId, SL, EST, LST}) => (
                                 <tr key={nodeId}>
                                     <td>{nodeId}</td>
-                                    {propertyNames.map((property) => (
-                                        <td key={`${nodeId}-${property}`}>
-                                            {properties[property][nodeId]}
-                                        </td>
-                                    ))}
+                                    {prop === 'SL' && <td>{SL}</td>}
+                                    {prop === 'LST' && (
+                                        <>
+                                            <td>{EST}</td>
+                                            <td>{LST}</td>
+                                        </>
+                                    )}
                                 </tr>
                             ))}
                             </tbody>
                         </Table>
+                        <Accordion>
+                            <Card>
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>Steps</Accordion.Header>
+                                    <Accordion.Body>
+                                        <GraphPropertiesStepList steps={steps} prop={prop}/>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Card>
+                        </Accordion>
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>

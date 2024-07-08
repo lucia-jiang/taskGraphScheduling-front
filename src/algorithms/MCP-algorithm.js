@@ -8,8 +8,8 @@ import axios from 'axios';
 import {useLocation} from "react-router-dom";
 
 // Import graph data from JSON file
-// import defaultGraphData from '../graph-examples-json/graph-1.json';
-import defaultGraphData from '../graph-examples-json/graph-2.json';
+import defaultGraphData from '../graph-examples-json/graph-1.json';
+// import defaultGraphData from '../graph-examples-json/graph-2.json';
 // import defaultGraphData from '../graph-examples-json/graph-3.json';
 // import defaultGraphData from '../graph-examples-json/graph-4.json';
 
@@ -22,6 +22,13 @@ const MCPAlgorithm = () => {
     const pseudocodeSteps = `
         <strong>Step 1:</strong> 
         Calculate the Latest Start Time (LST) for each task in the graph.<br />
+        <ul>
+            <li>If v<sub>i</sub> is an end node, LST(v<sub>i</sub>)=EST(v<sub>i</sub>). To calculate the Earliest Start Time (EST):</li>
+            <ul>
+                <li>EST(v<sub>i</sub>) = max<sub>v<sub>m</sub> ∈ pred(v<sub>i</sub>)</sub></sub>{EST(v<sub>m</sub>)+w<sub>m</sub>+c<sub>m,i</sub>}</li>
+            </ul>
+            <li>Otherwise, LST(v<sub>i</sub>) = min<sub>v<sub>m</sub> ∈ succ(v<sub>i</sub>)</sub>{LST(v<sub>m</sub>)-c<sub>i,m</sub>}-w<sub>i</sub></li>
+        </ul>
         <strong>Step 2:</strong> 
         For each task, create a list containing its LST and the LST of all its dependent tasks.<br />
         <strong>Step 3:</strong> 
@@ -80,7 +87,7 @@ const MCPAlgorithm = () => {
                         <GraphComponent graphData={graphData}/>
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData}/>
+                        <GraphProperties graphData={graphData} prop={"LST"}/>
                         <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
                     </div>
                 </div>
