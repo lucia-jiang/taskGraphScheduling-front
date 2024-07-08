@@ -1,31 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {Table, Accordion, Card} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Table, Accordion, Card } from 'react-bootstrap';
 import axios from 'axios';
-import GraphPropertiesStepList from "./GraphPropertiesStepList";
+import GraphPropertiesStepList from './GraphPropertiesStepList';
 
-const GraphProperties = ({graphData, prop}) => {
+const GraphProperties = ({ graphData, prop }) => {
     const [properties, setProperties] = useState({});
-    const [sortConfig, setSortConfig] = useState({key: 'SL', direction: 'ascending'});
+    const [sortConfig, setSortConfig] = useState({ key: 'SL', direction: 'ascending' });
     const [steps, setSteps] = useState([]);
 
     useEffect(() => {
         const fetchGraphProperties = async () => {
             try {
                 const response = await axios.post('http://localhost:8000/graph/properties/', graphData, {
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
-                if (prop === "SL") {
-                    const steps = await axios.post('http://localhost:8000/graph/properties/sl', graphData, {
-                        headers: {'Content-Type': 'application/json'}
+                const stepsResponse = prop === 'SL'
+                    ? await axios.post('http://localhost:8000/graph/properties/sl', graphData, {
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    : await axios.post('http://localhost:8000/graph/properties/lst', graphData, {
+                        headers: { 'Content-Type': 'application/json' }
                     });
-                    setSteps(steps.data);
-                } else {
-                    const steps = await axios.post('http://localhost:8000/graph/properties/lst', graphData, {
-                        headers: {'Content-Type': 'application/json'}
-                    });
-                    setSteps(steps.data);
-                }
                 setProperties(response.data);
+                setSteps(stepsResponse.data);
 
             } catch (error) {
                 console.error('Error fetching graph properties:', error);
@@ -33,7 +30,7 @@ const GraphProperties = ({graphData, prop}) => {
         };
 
         fetchGraphProperties();
-    }, []);
+    }, [graphData, prop]);
 
     // Check if properties is empty or undefined
     if (!properties || Object.keys(properties).length === 0) {
@@ -45,8 +42,11 @@ const GraphProperties = ({graphData, prop}) => {
         );
     }
 
-    const nodeIds = Object.keys(properties[prop] || {});
+    // Function to check if a value is numeric
+    const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
 
+    // Sort node IDs conditionally
+    const nodeIds = Object.keys(properties[prop] || {});
     const sortedData = nodeIds.map(nodeId => ({
         nodeId,
         ...Object.fromEntries(Object.entries(properties).map(([key, value]) => [key, value[nodeId]]))
@@ -54,14 +54,23 @@ const GraphProperties = ({graphData, prop}) => {
 
     if (sortConfig.key && properties[prop]) {
         sortedData.sort((a, b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) {
-                return sortConfig.direction === 'ascending' ? -1 : 1;
+            const aValue = a[sortConfig.key];
+            const bValue = b[sortConfig.key];
+
+            if (isNumeric(aValue) && isNumeric(bValue)) {
+                return aValue - bValue;
+            } else if (isNumeric(aValue)) {
+                return -1;
+            } else if (isNumeric(bValue)) {
+                return 1;
+            } else {
+                return aValue.localeCompare(bValue);
             }
-            if (a[sortConfig.key] > b[sortConfig.key]) {
-                return sortConfig.direction === 'ascending' ? 1 : -1;
-            }
-            return 0;
         });
+
+        if (sortConfig.direction === 'descending') {
+            sortedData.reverse();
+        }
     }
 
     const requestSort = (key) => {
@@ -69,7 +78,7 @@ const GraphProperties = ({graphData, prop}) => {
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
-        setSortConfig({key, direction});
+        setSortConfig({ key, direction });
     };
 
     const getSortIndicator = (key) => {
@@ -100,7 +109,7 @@ const GraphProperties = ({graphData, prop}) => {
                             </tr>
                             </thead>
                             <tbody>
-                            {sortedData.map(({nodeId, SL, EST, LST}) => (
+                            {sortedData.map(({ nodeId, SL, EST, LST }) => (
                                 <tr key={nodeId}>
                                     <td>{nodeId}</td>
                                     {prop === 'SL' && <td>{SL}</td>}
@@ -119,7 +128,7 @@ const GraphProperties = ({graphData, prop}) => {
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Steps</Accordion.Header>
                                     <Accordion.Body>
-                                        <GraphPropertiesStepList steps={steps} prop={prop}/>
+                                        <GraphPropertiesStepList steps={steps} prop={prop} />
                                     </Accordion.Body>
                                 </Accordion.Item>
                             </Card>
