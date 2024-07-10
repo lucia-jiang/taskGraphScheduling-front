@@ -9,10 +9,10 @@ import {useLocation} from "react-router-dom";
 
 
 // Import graph data from JSON file
-import defaultGraphData from '../graph-examples-json/graph-1.json';
-// import defaultGraphData from '../graph-examples-json/graph-2.json';
-// import defaultGraphData from '../graph-examples-json/graph-3.json';
-// import defaultGraphData from '../graph-examples-json/graph-4.json';
+import defaultGraphData from '../graphData-generate/graphData-templates/graph-10nodes.json';
+// import defaultGraphData from '../graphData-generate/graph-5nodes.json';
+// import defaultGraphData from '../graphData-generate/graph-6nodes2.json';
+// import defaultGraphData from '../graphData-generate/graph-7nodes2.json';
 
 const DLSAlgorithm = () => {
     const location = useLocation();

@@ -6,18 +6,13 @@ import GraphComponent from '../components/algorithm/GraphComponent';
 import GraphProperties from '../components/algorithm/GraphProperties';
 import StepsList from '../components/algorithm/StepsList';
 import axios from 'axios';
-
-// Import graph data from JSON file
-// import defaultGraphData from '../graph-examples-json/graph-1.json';
-import defaultGraphData from '../graph-examples-json/graph-2.json';
-// import defaultGraphData from '../graph-examples-json/graph-3.json';
-// import defaultGraphData from '../graph-examples-json/graph-4.json';
+import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
 
 const HLFETAlgorithm = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const graphDataStr = query.get('graphData');
-    const graphData = location.state?.graphData || (graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : defaultGraphData);
+    const graphData = location.state?.graphData || (graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : generateRandomGraph());
 
     const pseudocodeSteps = `
         <strong>Step 1:</strong> 

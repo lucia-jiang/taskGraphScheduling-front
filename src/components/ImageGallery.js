@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import ReactFlow, {Controls, MarkerType} from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 
-import graphData1 from '../graph-examples-json/graph-1.json';
-import graphData2 from '../graph-examples-json/graph-2.json';
-import graphData3 from '../graph-examples-json/graph-3.json';
-import graphData4 from '../graph-examples-json/graph-4.json';
+import graphData1 from '../graphData-generate/graphData-templates/graph-10nodes.json';
+import graphData2 from '../graphData-generate/graphData-templates/graph-5nodes.json';
+import graphData3 from '../graphData-generate/graphData-templates/graph-6nodes2.json';
+import graphData4 from '../graphData-generate/graphData-templates/graph-7nodes2.json';
 
 const ImageGallery = () => {
     // Array of graph data

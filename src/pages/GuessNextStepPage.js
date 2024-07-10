@@ -2,11 +2,11 @@ import React, {useState, useEffect, useCallback} from 'react';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
 import axios from 'axios';
-import graphData from '../graph-examples-json/graph-2.json';
 import {useLocation} from 'react-router-dom';
-import AssignmentDetails from '../components/games/AssignmentDetails'; // Import AssignmentDetails component
+import AssignmentDetails from '../components/games/AssignmentDetails';
+import generateRandomGraph from "../graphData-generate/GenerateRandomGraph"; // Import AssignmentDetails component
 
-const fetchHLFETSteps = async (algorithmName) => {
+const fetchHLFETSteps = async (algorithmName, graphData) => {
     try {
         const response = await axios.post(`http://localhost:8000/algorithm/${algorithmName}-steps`, graphData, {
             headers: {'Content-Type': 'application/json'}
@@ -19,7 +19,7 @@ const fetchHLFETSteps = async (algorithmName) => {
     }
 };
 
-const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes) => {
+const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes, graphData) => {
     let maxPredecessorEndTime = 0;
     const predecessors = graphData.edges.filter(edge => edge.target === node);
 
@@ -41,7 +41,9 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
 };
 
 const GuessNextStepPage = () => {
-    const {state} = useLocation();
+    const { state } = useLocation();
+    const [graphData, setGraphData] = useState(generateRandomGraph());
+
     const nodeIds = graphData.nodes.map(node => node.id);
     const numProcessors = graphData.num_processors || 4;
     const processors = Array.from({length: numProcessors}, (_, i) => `P${i + 1}`);
@@ -67,7 +69,7 @@ const GuessNextStepPage = () => {
 
             const {algorithmName} = state;
             try {
-                const steps = await fetchHLFETSteps(algorithmName);
+                const steps = await fetchHLFETSteps(algorithmName, graphData);
                 setHlfetSteps(steps);
             } catch (error) {
                 console.error(`Error fetching ${algorithmName} steps:`, error);
@@ -111,7 +113,7 @@ const GuessNextStepPage = () => {
                 [newAssignmentNode]: newAssignmentProcessor
             }));
 
-            const startTime = calculateAssignmentTime(newAssignmentNode, newAssignmentProcessor, assignments, scheduledTasks, currentProcessorTimes);
+            const startTime = calculateAssignmentTime(newAssignmentNode, newAssignmentProcessor, assignments, scheduledTasks, currentProcessorTimes, graphData);
             const nodeWeight = graphData.nodes.find(n => n.id === newAssignmentNode).weight;
             const endTime = startTime + nodeWeight;
 
@@ -147,7 +149,7 @@ const GuessNextStepPage = () => {
     const resetState = () => {
         setAssignments({});
         setCurrentStep(0);
-        fetchHLFETSteps(state.algorithmName);
+        fetchHLFETSteps(state.algorithmName, graphData);
         setScheduledTasks([]);
         setCurrentProcessorTimes(processors.reduce((acc, processor) => ({...acc, [processor]: 0}), {}));
         setFeedback(null);

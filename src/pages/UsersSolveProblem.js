@@ -6,11 +6,9 @@ import '../components/NodeProcessorMatching/NodeProcessorMatching.css';
 import AssignmentDetails from "../components/games/AssignmentDetails";
 import AlgorithmResults from "../components/games/AlgorithmResults";
 import axios from 'axios';
+import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
 
-import graphData from '../graph-examples-json/graph-2.json';
-
-
-const fetchAlgorithmResults = async () => {
+const fetchAlgorithmResults = async (graphData) => {
     const hlfet = await axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, {
         headers: {'Content-Type': 'application/json'}
     });
@@ -36,7 +34,7 @@ const fetchAlgorithmResults = async () => {
     };
 };
 
-const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes) => {
+const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes, graphData) => {
     let maxPredecessorEndTime = 0;
     const predecessors = graphData.edges.filter(edge => edge.target === node);
 
@@ -57,6 +55,7 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
 };
 
 const UsersSolveProblem = () => {
+    const [graphData] = useState(generateRandomGraph());
     const nodeIds = graphData.nodes.map(node => node.id);
     const numProcessors = graphData.num_processors || 4;
     const processors = Array.from({length: numProcessors}, (_, i) => `P${i + 1}`);
@@ -88,7 +87,7 @@ const UsersSolveProblem = () => {
             const updatedScheduledTasks = [...scheduledTasks];
 
             for (const [node, processor] of Object.entries(trulyNewAssignments)) {
-                const startTime = calculateAssignmentTime(node, processor, updatedAssignments, updatedScheduledTasks, updatedProcessorTimes);
+                const startTime = calculateAssignmentTime(node, processor, updatedAssignments, updatedScheduledTasks, updatedProcessorTimes, graphData);
                 const nodeWeight = graphData.nodes.find(n => n.id === node).weight;
                 const endTime = startTime + nodeWeight;
 

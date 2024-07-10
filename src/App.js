@@ -14,8 +14,6 @@ import TimeChallengePage from "./pages/TimeChallengePage";
 import GuessNextStepPage from "./pages/GuessNextStepPage";
 import GenerateGraphPage from "./pages/GenerateGraphPage";
 
-import graphData from './graph-examples-json/graph-1.json';
-
 const App = () => {
     return (
         <Router>
@@ -27,7 +25,6 @@ const App = () => {
                     <Route path="/users-solve-problem" element={<UsersSolveProblem/>}/>
                     <Route path="/create-customised-graph/:algorithmName?" element={<CreateCustomisedGraph/>}/>
                     <Route path="/games" element={<Games/>}/>
-                    {/*<Route path="/algorithms/alg1" element={<Algorithm algorithmName={"Algorithm 1"} graphData={graphData}/>}/>*/}
                     <Route path="/algorithms/hlfet" element={<HLFETAlgorithm/>}/>
                     <Route path="/algorithms/mcp" element={<MCPAlgorithm/>}/>
                     <Route path="/algorithms/etf" element={<ETFAlgorithm/>}/>

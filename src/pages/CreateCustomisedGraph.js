@@ -67,8 +67,8 @@ const CreateCustomisedGraph = () => {
                 return 'MCT (Minimum Communication Time)';
             case 'etf':
                 return 'ETF (Earliest Task First)';
-            case 'dls':
-                return 'DLS (Dynamic Level Scheduling)';
+            // case 'dls':
+            //     return 'DLS (Dynamic Level Scheduling)';
             default:
                 return 'Algorithm Selection';
         }
@@ -99,9 +99,9 @@ const CreateCustomisedGraph = () => {
                             <Dropdown.Item onClick={() => handleSelectAlgorithm('etf', 'ETF (Earliest Task First)')}>
                                 ETF (Earliest Task First)
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleSelectAlgorithm('dls', 'DLS (Dynamic Level Scheduling)')}>
-                                DLS (Dynamic Level Scheduling)
-                            </Dropdown.Item>
+                            {/*<Dropdown.Item onClick={() => handleSelectAlgorithm('dls', 'DLS (Dynamic Level Scheduling)')}>*/}
+                            {/*    DLS (Dynamic Level Scheduling)*/}
+                            {/*</Dropdown.Item>*/}
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
