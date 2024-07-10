@@ -1,64 +1,64 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useState, useCallback } from 'react';
 import GraphComponent from '../components/algorithm/GraphComponent';
 import NodeProcessorMatching from '../components/NodeProcessorMatching/NodeProcessorMatching';
 import GameLostModal from '../modals/GameLostModal';
-import axios from 'axios';
-import AssignmentDetails from "../components/games/AssignmentDetails"
+import AssignmentDetails from "../components/games/AssignmentDetails";
 import AlgorithmResults from '../components/games/AlgorithmResults';
 import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
-
-const fetchAlgorithmResults = async (graphData) => {
-    try {
-        const [hlfet, mcp, etf] = await Promise.all([
-            axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
-            axios.post('http://localhost:8000/algorithm/mcp-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
-            axios.post('http://localhost:8000/algorithm/etf-steps', graphData, { headers: { 'Content-Type': 'application/json' } })
-        ]);
-
-        const algorithm1Time = hlfet.data[hlfet.data.length - 1].details.total_time;
-        const algorithm2Time = mcp.data[mcp.data.length - 1].details.total_time;
-        const algorithm3Time = etf.data[etf.data.length - 1].details.total_time;
-
-        const minTime = Math.min(algorithm1Time, algorithm2Time, algorithm3Time);
-
-        return {
-            algorithm1: { time: algorithm1Time, data: hlfet.data },
-            algorithm2: { time: algorithm2Time, data: mcp.data },
-            algorithm3: { time: algorithm3Time, data: etf.data },
-            minTime: minTime
-        };
-    } catch (error) {
-        console.error('Error fetching algorithm results:', error);
-        throw error;
-    }
-};
+import { calculateAssignmentTime, fetchAlgorithmResults } from "./commonFunctions";
 
 const TimeChallengePage = () => {
-    const [graphData] = useState(generateRandomGraph());
-
-    const nodeIds = graphData.nodes.map(node => node.id);
-    const numProcessors = graphData.num_processors || 4;
-    const processors = Array.from({ length: numProcessors }, (_, i) => `P${i + 1}`);
-    const nodePredecessors = nodeIds.reduce((acc, nodeId) => {
-        acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source);
-        return acc;
-    }, {});
-
+    const [graphData, setGraphData] = useState(generateRandomGraph());
     const [assignments, setAssignments] = useState({});
     const [finished, setFinished] = useState(false);
     const [algorithmResults, setAlgorithmResults] = useState(null);
     const [scheduledTasks, setScheduledTasks] = useState([]);
-    const [currentProcessorTimes, setCurrentProcessorTimes] = useState(processors.reduce((acc, processor) => ({
-        ...acc,
-        [processor]: 0
-    }), {}));
+    const [currentProcessorTimes, setCurrentProcessorTimes] = useState({});
 
-    const gameDuration = 10; // TODO: in seconds
-    const [timeRemaining, setTimeRemaining] = useState(gameDuration); // Initial time limit in seconds
+    const gameDuration = 3 //TODO: seconds
+    const [timeRemaining, setTimeRemaining] = useState(gameDuration);
     const [isTimeUp, setIsTimeUp] = useState(false);
-    const [showTimeUpModal, setShowTimeUpModal] = useState(false); // State to control showing the game lost modal
-    const [thresholdTime] = useState(10); // Example threshold time (adjust as per your game's requirement)
+    const [showTimeUpModal, setShowTimeUpModal] = useState(false);
+    const [thresholdTime] = useState(10);
+    const [nodeIds, setNodeIds] = useState([]);
+    const [processors, setProcessors] = useState([]);
+    const [nodePredecessors, setNodePredecessors] = useState({});
 
+
+    // Update nodeIds, processors, and nodePredecessors when graphData changes
+    useEffect(() => {
+        if (graphData) {
+            const ids = graphData.nodes.map(node => node.id);
+            const numProcessors = graphData.num_processors || 4;
+            const processors = Array.from({ length: numProcessors }, (_, i) => `P${i + 1}`);
+            const predecessors = ids.reduce((acc, nodeId) => {
+                acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source) || [];
+                return acc;
+            }, {});
+
+            setNodeIds(ids);
+            setProcessors(processors);
+            setNodePredecessors(predecessors);
+        }
+    }, [graphData]);
+
+    // Fetch algorithm results when graphData changes
+    useEffect(() => {
+        if (graphData) {
+            const fetchResults = async () => {
+                try {
+                    const results = await fetchAlgorithmResults(graphData);
+                    setAlgorithmResults(results);
+                } catch (error) {
+                    console.error('Error fetching algorithm results:', error);
+                }
+            };
+
+            fetchResults();
+        }
+    }, [graphData]);
+
+    // Timer effect
     useEffect(() => {
         if (timeRemaining > 0 && !finished) {
             const timerId = setTimeout(() => setTimeRemaining(timeRemaining - 1), 1000);
@@ -66,44 +66,12 @@ const TimeChallengePage = () => {
         } else {
             setIsTimeUp(true);
             if (!finished) {
-                setShowTimeUpModal(true); // Show the game lost modal only if not finished
+                setShowTimeUpModal(true);
             }
         }
     }, [timeRemaining, finished]);
 
-    useEffect(() => {
-        const fetchResults = async () => {
-            try {
-                const results = await fetchAlgorithmResults();
-                setAlgorithmResults(results);
-            } catch (error) {
-                console.error('Error fetching algorithm results:', error);
-            }
-        };
-
-        fetchResults();
-    }, []);
-
-    const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes, graphData) => {
-        let maxPredecessorEndTime = 0;
-        const predecessors = graphData.edges.filter(edge => edge.target === node);
-
-        for (const {source} of predecessors) {
-            const predecessorTask = scheduledTasks.find(task => task.node === source);
-            if (predecessorTask) {
-                const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node)?.cost || 0;
-                if (predecessorTask.processor === processor) {
-                    maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime);
-                } else {
-                    maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime + commCost);
-                }
-            }
-        }
-        const latestProcessorTime = currentProcessorTimes[processor] || 0;
-
-        return  Math.max(maxPredecessorEndTime, latestProcessorTime);
-    };
-
+    // Handle node assignment
     const handleAssignment = useCallback((newAssignments) => {
         setAssignments((prevAssignments) => {
             const trulyNewAssignments = Object.entries(newAssignments)
@@ -136,37 +104,39 @@ const TimeChallengePage = () => {
 
             return updatedAssignments;
         });
-    }, [currentProcessorTimes, scheduledTasks, nodeIds]);
+    }, [currentProcessorTimes, scheduledTasks, nodeIds, graphData]);
 
+    // Reset game state
     const resetState = () => {
         setAssignments({});
         setFinished(false);
-        setAlgorithmResults(null);
         setScheduledTasks([]);
-        setCurrentProcessorTimes(processors.reduce((acc, processor) => ({ ...acc, [processor]: 0 }), {}));
-        setIsTimeUp(false); // Reset time up state
-        setShowTimeUpModal(false); // Hide the game lost modal
+        setCurrentProcessorTimes({});
+        setIsTimeUp(false);
+        setShowTimeUpModal(false);
     };
 
+    // Handle modal close
     const handleCloseModal = () => {
-        setShowTimeUpModal(false); // Hide the game lost modal
+        setShowTimeUpModal(false);
     };
 
+    // Retry with the same graph
     const handleRetrySameGraph = () => {
         resetState();
-        setTimeRemaining(gameDuration); // Reset time remaining to initial game duration
+        setTimeRemaining(gameDuration);
     };
 
+    // Try with a new randomly generated graph
     const handleTryNewGraph = () => {
-        // TODO: Logic to load a new graph or redirect to a new graph page
-        console.log('Trying a new graph...');
+        resetState();
+        setTimeRemaining(gameDuration)
+        setGraphData(generateRandomGraph());
     };
 
-    const userEndTime = scheduledTasks.length > 0
-        ? Math.max(...scheduledTasks.map(task => task.endTime))
-        : 0;
-
-    const graphDataStr = encodeURIComponent(JSON.stringify(graphData));
+    // Calculate the maximum end time of scheduled tasks
+    const userEndTime = scheduledTasks.length > 0 ? Math.max(...scheduledTasks.map(task => task.endTime)) : 0;
+    const graphDataStr = graphData ? encodeURIComponent(JSON.stringify(graphData)) : '';
 
     return (
         <div className="mb-4">
@@ -177,7 +147,7 @@ const TimeChallengePage = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-12 col-md-5 mt-2">
-                        <GraphComponent graphData={graphData} />
+                        <MemoizedGraphComponent graphData={graphData} />
                     </div>
                     <div className="col-12 col-md-2">
                         <NodeProcessorMatching
@@ -187,19 +157,18 @@ const TimeChallengePage = () => {
                             assignments={assignments}
                             onAssignment={handleAssignment}
                             refreshButton={true}
-                            isDisabled={isTimeUp || finished} // Disable if time is up or finished
-                            onRefresh={resetState} // Pass the resetState function as a prop
+                            isDisabled={isTimeUp || finished}
+                            onRefresh={resetState}
                         />
                         {!finished && (
                             <div className="timer mt-3">
                                 <h3>Time Remaining: {timeRemaining} seconds</h3>
                             </div>
                         )}
-
                     </div>
                     <div className="col-12 col-md-5">
                         <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks} maxTime={userEndTime} finished={finished} />
-                        {finished && <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr}/>}
+                        {finished && <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr} />}
                     </div>
                 </div>
             </div>
@@ -215,5 +184,8 @@ const TimeChallengePage = () => {
         </div>
     );
 };
+
+// Memoized GraphComponent
+const MemoizedGraphComponent = memo(GraphComponent);
 
 export default TimeChallengePage;

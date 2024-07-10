@@ -1,0 +1,49 @@
+import axios from "axios";
+
+export const fetchAlgorithmResults = async (graphData) => {
+    try {
+        console.log(graphData);
+        const [hlfet, mcp, etf] = await Promise.all([
+            axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
+            axios.post('http://localhost:8000/algorithm/mcp-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
+            axios.post('http://localhost:8000/algorithm/etf-steps', graphData, { headers: { 'Content-Type': 'application/json' } })
+        ]);
+
+        const algorithm1Time = hlfet.data[hlfet.data.length - 1].details.total_time;
+        const algorithm2Time = mcp.data[mcp.data.length - 1].details.total_time;
+        const algorithm3Time = etf.data[etf.data.length - 1].details.total_time;
+
+        const minTime = Math.min(algorithm1Time, algorithm2Time, algorithm3Time);
+
+        return {
+            algorithm1: { time: algorithm1Time, data: hlfet.data },
+            algorithm2: { time: algorithm2Time, data: mcp.data },
+            algorithm3: { time: algorithm3Time, data: etf.data },
+            minTime: minTime
+        };
+    } catch (error) {
+        console.error('Error fetching algorithm results:', error);
+        throw error;
+    }
+};
+
+export const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, currentProcessorTimes, graphData) => {
+    let maxPredecessorEndTime = 0;
+    const predecessors = graphData.edges.filter(edge => edge.target === node);
+
+    for (const { source } of predecessors) {
+        const predecessorTask = scheduledTasks.find(task => task.node === source);
+        if (predecessorTask) {
+            const commCost = graphData.edges.find(edge => edge.source === source && edge.target === node)?.cost || 0;
+            if (predecessorTask.processor === processor) {
+                maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime);
+            } else {
+                maxPredecessorEndTime = Math.max(maxPredecessorEndTime, predecessorTask.endTime + commCost);
+            }
+        }
+    }
+    const latestProcessorTime = currentProcessorTimes[processor] || 0;
+
+    return Math.max(maxPredecessorEndTime, latestProcessorTime);
+};
+
