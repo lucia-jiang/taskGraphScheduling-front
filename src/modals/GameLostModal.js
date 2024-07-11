@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const GameLostModal = ({ show, isWin, onRetrySameGraph, onTryNewGraph, onClose }) => {
+const GameLostModal = ({ show, isWin, onRetrySameGraph, onTryNewGraph, onClose, onShowResults }) => {
     if (!show) return null;
 
     return (
@@ -28,10 +28,13 @@ const GameLostModal = ({ show, isWin, onRetrySameGraph, onTryNewGraph, onClose }
                         )}
                     </div>
                     <div className="modal-footer">
+                        <button type="button" className="btn btn-primary" onClick={onShowResults}>
+                            Show Results
+                        </button>
                         <button type="button" className="btn btn-primary" onClick={onRetrySameGraph}>
                             {isWin ? 'Play Again' : 'Retry Same Graph'}
                         </button>
-                        <button type="button" className="btn btn-secondary" onClick={onTryNewGraph}>
+                        <button type="button" className="btn btn-primary" onClick={onTryNewGraph}>
                             Try New Graph
                         </button>
                     </div>
@@ -46,7 +49,8 @@ GameLostModal.propTypes = {
     isWin: PropTypes.bool.isRequired,
     onRetrySameGraph: PropTypes.func.isRequired,
     onTryNewGraph: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    onShowResults: PropTypes.func.isRequired // Define the prop for showing results
 };
 
 export default GameLostModal;

@@ -19,6 +19,7 @@ const TimeChallengePage = () => {
     const [timeRemaining, setTimeRemaining] = useState(gameDuration);
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [showTimeUpModal, setShowTimeUpModal] = useState(false);
+    const [showResults, setShowResults] = useState(false); // State to manage showing detailed results
     const [thresholdTime] = useState(10);
     const [nodeIds, setNodeIds] = useState([]);
     const [processors, setProcessors] = useState([]);
@@ -114,6 +115,7 @@ const TimeChallengePage = () => {
         setCurrentProcessorTimes({});
         setIsTimeUp(false);
         setShowTimeUpModal(false);
+        setShowResults(false); // Reset showing detailed results state
     };
 
     // Handle modal close
@@ -132,6 +134,11 @@ const TimeChallengePage = () => {
         resetState();
         setTimeRemaining(gameDuration)
         setGraphData(generateRandomGraph());
+    };
+
+    // Toggle showing detailed results
+    const handleShowResults = () => {
+        setShowResults(true);
     };
 
     // Calculate the maximum end time of scheduled tasks
@@ -168,7 +175,7 @@ const TimeChallengePage = () => {
                     </div>
                     <div className="col-12 col-md-5">
                         <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks} maxTime={userEndTime} finished={finished} />
-                        {finished && <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr} />}
+                        {(showResults || finished) && <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr} />}
                     </div>
                 </div>
             </div>
@@ -179,6 +186,7 @@ const TimeChallengePage = () => {
                     onRetrySameGraph={handleRetrySameGraph}
                     onTryNewGraph={handleTryNewGraph}
                     onClose={handleCloseModal}
+                    onShowResults={handleShowResults} // Define the function to show detailed results
                 />
             )}
         </div>
