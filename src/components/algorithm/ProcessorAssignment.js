@@ -2,6 +2,8 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 const ProcessorAssignment = ({ assignments }) => {
+    // Compute the maximum end time
+    const makespan = Math.max(...assignments.map(step => step.details?.end_time ?? 0));
 
     return (
         <div className="rounded-square">
@@ -29,9 +31,7 @@ const ProcessorAssignment = ({ assignments }) => {
                     ))}
                     </tbody>
                 </Table>
-                {/*{allTasksAssigned && (*/}
-                {/*    <p>Makespan: {makespan} units of time</p>*/}
-                {/*)}*/}
+                <p>Total time: {makespan} units of time</p>
             </div>
         </div>
     );
