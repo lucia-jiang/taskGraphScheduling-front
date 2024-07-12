@@ -57,6 +57,10 @@ const generateRandomCostOrWeight = () => {
     return Math.floor(Math.random() * (30 - 4 + 1)) + 4; // Random integer between 4 and 30
 };
 
+const generateRandomProcessors = () => {
+    return Math.floor(Math.random() * (5 - 2 + 1)) + 2; // Random integer between 2 and 5
+};
+
 const generateRandomGraph = () => {
     const randomIndex = Math.floor(Math.random() * templates.length);
     const templateData = JSON.parse(JSON.stringify(templates[randomIndex])); // Deep clone to avoid mutating original template
@@ -69,6 +73,9 @@ const generateRandomGraph = () => {
     templateData.edges.forEach(edge => {
         edge.cost = generateRandomCostOrWeight();
     });
+
+    // Set a random number of processors
+    templateData.num_processors = generateRandomProcessors();
 
     return templateData;
 };
