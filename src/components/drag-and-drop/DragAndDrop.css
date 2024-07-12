@@ -92,5 +92,5 @@
 }
 
 .react-flow__controls-interactive {
-    display: none;
+    display: none !important;
 }
