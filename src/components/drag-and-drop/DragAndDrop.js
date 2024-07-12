@@ -133,7 +133,7 @@ const DragAndDrop = ({onFileUpload}) => {
 
     return (
         <div>
-            <div className="form-group row">
+            <div className="form-group row mt-3">
                 <InputLabel label="Enter edge cost" value={edgeLabel} onChange={handleInputChange(setEdgeLabel)}/>
                 <InputLabel label="Enter node weight" value={nodeWeight} onChange={handleInputChange(setNodeWeight)}/>
                 <div className="col-md-4">
