@@ -8,7 +8,7 @@ import generateRandomGraph from "../graphData-generate/GenerateRandomGraph"; // 
 
 const fetchHLFETSteps = async (algorithmName, graphData) => {
     try {
-        const response = await axios.post(`http://localhost:8000/algorithm/${algorithmName}-steps`, graphData, {
+        const response = await axios.post(`https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app0/algorithm/${algorithmName}-steps`, graphData, {
             headers: {'Content-Type': 'application/json'}
         });
 

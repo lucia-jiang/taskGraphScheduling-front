@@ -11,14 +11,14 @@ const GraphProperties = ({ graphData, prop }) => {
     useEffect(() => {
         const fetchGraphProperties = async () => {
             try {
-                const response = await axios.post('http://localhost:8000/graph/properties/', graphData, {
+                const response = await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/graph/properties/', graphData, {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const stepsResponse = prop === 'SL'
-                    ? await axios.post('http://localhost:8000/graph/properties/sl', graphData, {
+                    ? await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/graph/properties/sl', graphData, {
                         headers: { 'Content-Type': 'application/json' }
                     })
-                    : await axios.post('http://localhost:8000/graph/properties/lst', graphData, {
+                    : await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/graph/properties/lst', graphData, {
                         headers: { 'Content-Type': 'application/json' }
                     });
                 setProperties(response.data);

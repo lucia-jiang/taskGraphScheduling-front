@@ -44,7 +44,6 @@ const Home = () => {
                         algorithms focus on heuristic and approximation methods to find near-optimal solutions within a
                         reasonable time frame.
                     </p>
-                    {/*TODO: change list to 2x2 buttoms*/}
                     <div className="row mb-4">
                         <div className="col-6 mb-3">
                             <Link to="/algorithms" className="btn btn-primary w-100">Algorithms</Link>

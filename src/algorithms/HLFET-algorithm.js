@@ -56,7 +56,7 @@ const HLFETAlgorithm = () => {
     useEffect(() => {
         const fetchStepsList = async () => {
             try {
-                const response = await axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, {
+                const response = await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/hlfet-steps', graphData, {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setStepsList(response.data);

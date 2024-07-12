@@ -9,7 +9,6 @@ import Games from './pages/Games';
 import HLFETAlgorithm from "./algorithms/HLFET-algorithm";
 import MCPAlgorithm from "./algorithms/MCP-algorithm";
 import ETFAlgorithm from "./algorithms/ETF-algorithm";
-import DLSAlgorithm from "./algorithms/DLS-algorithm";
 import TimeChallengePage from "./pages/TimeChallengePage";
 import GuessNextStepPage from "./pages/GuessNextStepPage";
 import GenerateGraphPage from "./pages/GenerateGraphPage";
@@ -20,7 +19,8 @@ const App = () => {
             <Navbar/>
             <div className="container mt-4"> {/* Add margin-top */}
                 <Routes>
-                    <Route path="/" element={<Home/>}/> {/* Home route */}
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/taskGraphScheduling-front" element={<Home/>}/>
                     <Route path="/algorithms" element={<Algorithms/>}/>
                     <Route path="/users-solve-problem" element={<UsersSolveProblem/>}/>
                     <Route path="/create-customised-graph/:algorithmName?" element={<CreateCustomisedGraph/>}/>
@@ -28,7 +28,6 @@ const App = () => {
                     <Route path="/algorithms/hlfet" element={<HLFETAlgorithm/>}/>
                     <Route path="/algorithms/mcp" element={<MCPAlgorithm/>}/>
                     <Route path="/algorithms/etf" element={<ETFAlgorithm/>}/>
-                    <Route path="/algorithms/dls" element={<DLSAlgorithm/>}/>
                     <Route path="/game/time-challenge" element={<TimeChallengePage/>}/>
                     <Route path="/game/guess-next-step" element={<GuessNextStepPage/>}/>
                     <Route path="/generate-graph" element={<GenerateGraphPage/>}/>

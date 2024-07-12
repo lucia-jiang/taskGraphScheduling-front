@@ -50,7 +50,7 @@ const ETFAlgorithm = () => {
     useEffect(() => {
         const fetchStepsList = async () => {
             try {
-                const response = await axios.post('http://localhost:8000/algorithm/etf-steps', graphData, {
+                const response = await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/etf-steps', graphData, {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setStepsList(response.data);

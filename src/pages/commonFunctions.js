@@ -4,9 +4,9 @@ export const fetchAlgorithmResults = async (graphData) => {
     try {
         console.log(graphData);
         const [hlfet, mcp, etf] = await Promise.all([
-            axios.post('http://localhost:8000/algorithm/hlfet-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
-            axios.post('http://localhost:8000/algorithm/mcp-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
-            axios.post('http://localhost:8000/algorithm/etf-steps', graphData, { headers: { 'Content-Type': 'application/json' } })
+            axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/hlfet-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
+            axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/mcp-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
+            axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/etf-steps', graphData, { headers: { 'Content-Type': 'application/json' } })
         ]);
 
         const algorithm1Time = hlfet.data[hlfet.data.length - 1].details.total_time;
