@@ -1,11 +1,11 @@
-import React, { memo, useEffect, useState, useCallback } from 'react';
+import React, {memo, useEffect, useState, useCallback} from 'react';
 import GraphComponent from '../components/algorithm/GraphComponent';
 import NodeProcessorMatching from '../components/NodeProcessorMatching/NodeProcessorMatching';
 import GameLostModal from '../modals/GameLostModal';
 import AssignmentDetails from "../components/games/AssignmentDetails";
 import AlgorithmResults from '../components/games/AlgorithmResults';
 import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
-import { calculateAssignmentTime, fetchAlgorithmResults } from "./commonFunctions";
+import {calculateAssignmentTime, fetchAlgorithmResults} from "./commonFunctions";
 
 const TimeChallengePage = () => {
     const [graphData, setGraphData] = useState(generateRandomGraph());
@@ -15,7 +15,7 @@ const TimeChallengePage = () => {
     const [scheduledTasks, setScheduledTasks] = useState([]);
     const [currentProcessorTimes, setCurrentProcessorTimes] = useState({});
 
-    const gameDuration = 3 //TODO: seconds
+    const gameDuration = 300 //seconds
     const [timeRemaining, setTimeRemaining] = useState(gameDuration);
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [showTimeUpModal, setShowTimeUpModal] = useState(false);
@@ -31,7 +31,7 @@ const TimeChallengePage = () => {
         if (graphData) {
             const ids = graphData.nodes.map(node => node.id);
             const numProcessors = graphData.num_processors || 4;
-            const processors = Array.from({ length: numProcessors }, (_, i) => `P${i + 1}`);
+            const processors = Array.from({length: numProcessors}, (_, i) => `P${i + 1}`);
             const predecessors = ids.reduce((acc, nodeId) => {
                 acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source) || [];
                 return acc;
@@ -82,8 +82,8 @@ const TimeChallengePage = () => {
                     return acc;
                 }, {});
 
-            const updatedAssignments = { ...prevAssignments, ...trulyNewAssignments };
-            const updatedProcessorTimes = { ...currentProcessorTimes };
+            const updatedAssignments = {...prevAssignments, ...trulyNewAssignments};
+            const updatedProcessorTimes = {...currentProcessorTimes};
             const updatedScheduledTasks = [...scheduledTasks];
 
             for (const [node, processor] of Object.entries(trulyNewAssignments)) {
@@ -91,7 +91,7 @@ const TimeChallengePage = () => {
                 const nodeWeight = graphData.nodes.find(n => n.id === node).weight;
                 const endTime = startTime + nodeWeight;
 
-                updatedScheduledTasks.push({ node, processor, startTime, endTime });
+                updatedScheduledTasks.push({node, processor, startTime, endTime});
                 updatedProcessorTimes[processor] = endTime;
             }
 
@@ -147,37 +147,37 @@ const TimeChallengePage = () => {
     const graphDataStr = graphData ? encodeURIComponent(JSON.stringify(graphData)) : '';
 
     return (
-        <div className="mb-4">
+        <div className="container-fluid pl-3 pr-3 mt-3 mb-4">
             <h1>Time Challenge Page</h1>
             {algorithmResults && (
                 <p>Can you solve the problem under {algorithmResults.minTime} units of time?</p>
             )}
-            <div className="container">
-                <div className="row">
-                    <div className="col-12 col-md-5 mt-2">
-                        <MemoizedGraphComponent graphData={graphData} />
-                    </div>
-                    <div className="col-12 col-md-2">
-                        <NodeProcessorMatching
-                            nodes={nodeIds}
-                            processors={processors}
-                            nodePredecessors={nodePredecessors}
-                            assignments={assignments}
-                            onAssignment={handleAssignment}
-                            refreshButton={true}
-                            isDisabled={isTimeUp || finished}
-                            onRefresh={resetState}
-                        />
-                        {!finished && (
-                            <div className="timer mt-3">
-                                <h3>Time Remaining: {timeRemaining} seconds</h3>
-                            </div>
-                        )}
-                    </div>
-                    <div className="col-12 col-md-5">
-                        <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks} maxTime={userEndTime} finished={finished} />
-                        {(showResults || finished) && <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr} />}
-                    </div>
+            <div className="row">
+                <div className="col-12 col-md-5 mt-2">
+                    <MemoizedGraphComponent graphData={graphData}/>
+                </div>
+                <div className="col-12 col-md-2">
+                    <NodeProcessorMatching
+                        nodes={nodeIds}
+                        processors={processors}
+                        nodePredecessors={nodePredecessors}
+                        assignments={assignments}
+                        onAssignment={handleAssignment}
+                        refreshButton={true}
+                        isDisabled={isTimeUp || finished}
+                        onRefresh={resetState}
+                    />
+                    {!finished && (
+                        <div className="timer mt-3">
+                            <h3>Time Remaining: {timeRemaining} seconds</h3>
+                        </div>
+                    )}
+                </div>
+                <div className="col-12 col-md-5">
+                    <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks} maxTime={userEndTime}
+                                       finished={finished}/>
+                    {(showResults || finished) &&
+                        <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr}/>}
                 </div>
             </div>
             {algorithmResults && (

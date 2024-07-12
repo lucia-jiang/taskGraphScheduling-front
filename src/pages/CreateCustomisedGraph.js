@@ -75,7 +75,7 @@ const CreateCustomisedGraph = () => {
     };
 
     return (
-        <div className="mb-3">
+        <div className="container-fluid mb-3 pl-3 pr-3">
             <h1>Create Customised Graph</h1>
             {algorithmName !== null ? (
                 <div>

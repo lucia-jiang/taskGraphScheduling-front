@@ -81,9 +81,9 @@ const UsersSolveProblem = () => {
     const graphDataStr = encodeURIComponent(JSON.stringify(graphData));
 
     return (
-        <div className={"mb-4"}>
+        <div className={"mb-4 p-3"}>
             <h1>Users solve problem</h1>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-12 col-md-5 mt-2">
                         <GraphComponent graphData={graphData}/>

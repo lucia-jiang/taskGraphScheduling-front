@@ -4,7 +4,7 @@ import ImageGallery from "../components/ImageGallery";
 
 const Home = () => {
     return (
-        <div className="container">
+        <div className="container-fluid p-3">
             <div className="row">
                 <div className="col-md-6">
                     <div className="task-graph-example">

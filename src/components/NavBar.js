@@ -5,7 +5,7 @@ import {faHome} from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light ml-4">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light ml-4 mr-4">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/"> <FontAwesomeIcon icon={faHome}/> Home</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"

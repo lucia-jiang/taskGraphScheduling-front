@@ -41,7 +41,7 @@ const calculateAssignmentTime = (node, processor, assignments, scheduledTasks, c
 };
 
 const GuessNextStepPage = () => {
-    const { state } = useLocation();
+    const {state} = useLocation();
     const [graphData, setGraphData] = useState(generateRandomGraph());
 
     const nodeIds = graphData.nodes.map(node => node.id);
@@ -157,34 +157,32 @@ const GuessNextStepPage = () => {
     };
 
     return (
-        <div className="mb-4">
+        <div className="container-fluid pl-3 pr-3 mt-3 mb-4">
             <h1>Guess the Next Step</h1>
-            <div className="container">
-                <div className="row">
-                    <div className="col-12 col-md-5 mt-2">
-                        <GraphComponent key="graph" graphData={graphData}/>
-                    </div>
-                    <div className="col-12 col-md-2">
-                        <NodeProcessorMatching
-                            nodes={nodeIds}
-                            processors={processors}
-                            nodePredecessors={nodePredecessors}
-                            assignments={assignments}
-                            onAssignment={handleAssignment}
-                            refreshButton={true}
-                            onRefresh={resetState}
-                        />
-                        {feedback && (
-                            <div className="feedback mt-3">
-                                <p>{feedback}</p>
-                            </div>
-                        )}
-                    </div>
-                    <div className="col-12 col-md-5">
-                        <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks}
-                                           maxTime={currentProcessorTimes[processors[0]]}
-                                           finished={currentStep === hlfetSteps.length-1}/>
-                    </div>
+            <div className="row">
+                <div className="col-12 col-md-5 mt-2">
+                    <GraphComponent key="graph" graphData={graphData}/>
+                </div>
+                <div className="col-12 col-md-2">
+                    <NodeProcessorMatching
+                        nodes={nodeIds}
+                        processors={processors}
+                        nodePredecessors={nodePredecessors}
+                        assignments={assignments}
+                        onAssignment={handleAssignment}
+                        refreshButton={true}
+                        onRefresh={resetState}
+                    />
+                    {feedback && (
+                        <div className="feedback mt-3">
+                            <p>{feedback}</p>
+                        </div>
+                    )}
+                </div>
+                <div className="col-12 col-md-5">
+                    <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks}
+                                       maxTime={currentProcessorTimes[processors[0]]}
+                                       finished={currentStep === hlfetSteps.length - 1}/>
                 </div>
             </div>
         </div>
