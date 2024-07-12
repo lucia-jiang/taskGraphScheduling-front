@@ -1,19 +1,18 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {useLocation} from 'react-router-dom';
+import React, {useState, useEffect, useCallback, memo} from 'react';
+import { useLocation } from 'react-router-dom';
 import Pseudocode from '../components/algorithm/Pseudocode';
 import ProcessorAssignment from '../components/algorithm/ProcessorAssignment';
 import GraphComponent from '../components/algorithm/GraphComponent';
 import GraphProperties from '../components/algorithm/GraphProperties';
 import StepsList from '../components/algorithm/StepsList';
 import axios from 'axios';
-
 import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
 
 const ETFAlgorithm = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const graphDataStr = query.get('graphData');
-    const graphData = location.state?.graphData || (graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : generateRandomGraph());
+    const initialGraphData = location.state?.graphData || (graphDataStr ? JSON.parse(decodeURIComponent(graphDataStr)) : generateRandomGraph());
 
     const pseudocodeSteps = `
         <strong>Step 1: </strong>
@@ -46,12 +45,13 @@ const ETFAlgorithm = () => {
 
     const [stepsList, setStepsList] = useState([]);
     const [scheduledTasks, setScheduledTasks] = useState([]);
+    const [graphData] = useState(initialGraphData);
 
     useEffect(() => {
         const fetchStepsList = async () => {
             try {
                 const response = await axios.post('http://localhost:8000/algorithm/etf-steps', graphData, {
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 setStepsList(response.data);
             } catch (error) {
@@ -60,7 +60,7 @@ const ETFAlgorithm = () => {
         };
 
         fetchStepsList();
-    }, []); // Empty dependency array ensures this effect runs only once
+    }, [graphData]);
 
     const handleUpdateAssignments = useCallback((updatedAssignments) => {
         setScheduledTasks(updatedAssignments);
@@ -72,22 +72,23 @@ const ETFAlgorithm = () => {
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-12 col-md-4">
-                        <Pseudocode steps={pseudocodeSteps}/>
-                        <ProcessorAssignment
-                            assignments={scheduledTasks}
-                        />
+                        <Pseudocode steps={pseudocodeSteps} />
+                        <ProcessorAssignment assignments={scheduledTasks} />
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphComponent graphData={graphData}/>
+                        <MemoizedGraphComponent graphData={graphData} />
                     </div>
                     <div className="col-12 col-md-4">
-                        <GraphProperties graphData={graphData} prop={"SL"}/>
-                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments}/>
+                        <GraphProperties graphData={graphData} prop={"SL"} />
+                        <StepsList steps={stepsList} onUpdateAssignments={handleUpdateAssignments} />
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
+// Memoized GraphComponent
+const MemoizedGraphComponent = memo(GraphComponent);
 
 export default ETFAlgorithm;
