@@ -54,9 +54,6 @@ const GuessNextStep = () => {
                         <Dropdown.Item onClick={() => handleSelectAlgorithm('etf', 'ETF (Earliest Task First)')}>
                             ETF (Earliest Task First)
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSelectAlgorithm('dls', 'DLS (Dynamic Level Scheduling)')}>
-                            DLS (Dynamic Level Scheduling)
-                        </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 <Button onClick={handleGoClick} disabled={!isGoEnabled} className="mt-2">
