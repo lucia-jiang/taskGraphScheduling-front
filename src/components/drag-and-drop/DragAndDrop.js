@@ -1,6 +1,6 @@
 import React, {useRef, useCallback, useEffect, useState} from 'react';
 import ReactFlow, {
-    MiniMap, Background, ReactFlowProvider, addEdge, useNodesState, useEdgesState, Controls, MarkerType
+    MiniMap, Background, ReactFlowProvider, Controls, addEdge, useNodesState, useEdgesState, MarkerType
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './DragAndDrop.css';
@@ -13,7 +13,7 @@ import Sidebar from './Sidebar';
 
 const initialNodes = [];
 
-const DnDFlow = ({onFileUpload}) => {
+const DragAndDrop = ({onFileUpload}) => {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -171,4 +171,4 @@ const DnDFlow = ({onFileUpload}) => {
     );
 };
 
-export default DnDFlow;
+export default DragAndDrop;

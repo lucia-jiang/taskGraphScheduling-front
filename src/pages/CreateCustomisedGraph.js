@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import DnDFlow from '../components/drag-and-drop/DragAndDrop';
+import DragAndDrop from '../components/drag-and-drop/DragAndDrop';
 import 'reactflow/dist/style.css';
 import { Button, Dropdown } from 'react-bootstrap';
 import { useAlgorithmName } from '../contexts/algorithmNameContext';
@@ -107,7 +107,7 @@ const CreateCustomisedGraph = () => {
                 </div>
             )}
 
-            <DnDFlow onFileUpload={handleFileUpload} />
+            <DragAndDrop onFileUpload={handleFileUpload} />
 
             <Button onClick={handleSolveGraph} disabled={!solveEnabled}>
                 Solve graph

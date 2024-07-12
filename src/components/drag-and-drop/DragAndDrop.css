@@ -90,3 +90,7 @@
 .file-list div {
     margin-bottom: 5px;
 }
+
+.react-flow__controls-interactive {
+    display: none;
+}
