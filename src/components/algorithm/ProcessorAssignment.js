@@ -31,7 +31,7 @@ const ProcessorAssignment = ({ assignments }) => {
                     ))}
                     </tbody>
                 </Table>
-                <p>Total time: {makespan} units of time</p>
+                <p>Total time: {makespan} units of time.</p>
             </div>
         </div>
     );
