@@ -139,6 +139,7 @@ const TimeChallengePage = () => {
     // Toggle showing detailed results
     const handleShowResults = () => {
         setShowResults(true);
+        handleCloseModal()
     };
 
     // Calculate the maximum end time of scheduled tasks
