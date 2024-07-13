@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 const QuantityPicker = ({ value, onChange }) => {
@@ -13,21 +13,21 @@ const QuantityPicker = ({ value, onChange }) => {
     };
 
     return (
-        <Form.Group>
-            <Form.Label>Number of processors:</Form.Label>
-            <div className="input-group" style={{ backgroundColor: 'white' }}>
+        <Form.Group className="d-flex align-items-center">
+            <Form.Label className="mb-0" style={{ minWidth: '200px' }}>Number of processors:</Form.Label> {/* mr-2 for margin-right */}
+            <div className="input-group">
                 <input
                     type="text"
                     className="form-control"
                     value={value}
                     readOnly
-                    style={{ backgroundColor: 'white', color: 'black' }}
+                    style={{ backgroundColor: 'white', color: 'black', maxWidth: '100px' }}
                 />
                 <div className="input-group-append">
-                    <Button variant="outline-secondary" style={{ backgroundColor: 'white', color: 'black' }} onClick={handleIncrease}>
+                    <Button variant="outline-secondary" onClick={handleIncrease} style={{ backgroundColor: 'white', color: 'black', border:'1px solid lightgray' }}>
                         +
                     </Button>
-                    <Button variant="outline-secondary" style={{ backgroundColor: 'white', color: 'black' }} onClick={handleDecrease}>
+                    <Button variant="outline-secondary" onClick={handleDecrease} style={{ backgroundColor: 'white', color: 'black', border: '1px solid lightgray' }}>
                         -
                     </Button>
                 </div>

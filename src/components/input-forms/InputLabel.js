@@ -12,16 +12,15 @@ const InputLabel = ({ label, value, onChange }) => {
     };
 
     return (
-        <div className="form-group col-md-4">
-            <label>{label}:</label>
-            <div className="input-group">
-                <input
-                    type="text"
-                    value={value}
-                    onChange={handleChange}
-                    className="form-control"
-                />
-            </div>
+        <div className="form-group col-md-4 d-flex align-items-center">
+            <label className="col-form-label">{label}:</label>
+            <input
+                type="text"
+                value={value}
+                onChange={handleChange}
+                className="form-control ml-1"
+                style={{ maxWidth: '150px' }}
+            />
         </div>
     );
 };

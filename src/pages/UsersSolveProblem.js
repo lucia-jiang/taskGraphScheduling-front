@@ -92,7 +92,7 @@ const UsersSolveProblem = () => {
     const graphDataStr = encodeURIComponent(JSON.stringify(graphData));
 
     return (
-        <div className="mb-4 p-3">
+        <div className="mb-4 pl-3 pr-3">
             <h1>Users solve problem</h1>
             <div className="container-fluid">
                 <div className="row">

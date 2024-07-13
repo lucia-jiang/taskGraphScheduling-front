@@ -70,25 +70,19 @@ const CreateCustomisedGraph = () => {
             // case 'dls':
             //     return 'DLS (Dynamic Level Scheduling)';
             default:
-                return 'Algorithm Selection';
+                return 'Select an algorithm to solve the graph';
         }
     };
 
     return (
         <div className="container-fluid mb-3 pl-3 pr-3">
             <h1>Create Customised Graph</h1>
-            {algorithmName !== null ? (
                 <div>
-                    <h3>{getDisplayNameForAlgorithm(algorithmName)}</h3>
-                </div>
-            ) : (
-                <div>
-                    <p>Please select an algorithm to solve the graph.</p>
-                    <Dropdown>
+                    <label className="mr-2">Please select an algorithm to solve the graph:</label>
+                    <Dropdown className="d-inline-block">
                         <Dropdown.Toggle variant="primary" id="dropdown-basic">
                             {selectedAlgorithmDisplayName}
                         </Dropdown.Toggle>
-
                         <Dropdown.Menu>
                             <Dropdown.Item onClick={() => handleSelectAlgorithm('hlfet', 'HLFET (Highest Level First with Estimated Time)')}>
                                 HLFET (Highest Level First with Estimated Time)
@@ -104,14 +98,14 @@ const CreateCustomisedGraph = () => {
                             {/*</Dropdown.Item>*/}
                         </Dropdown.Menu>
                     </Dropdown>
+                    <Button className={"ml-3"} onClick={handleSolveGraph} disabled={!solveEnabled}>
+                        Solve graph
+                    </Button>
                 </div>
-            )}
 
             <DragAndDrop onFileUpload={handleFileUpload} />
 
-            <Button onClick={handleSolveGraph} disabled={!solveEnabled}>
-                Solve graph
-            </Button>
+
         </div>
     );
 };
