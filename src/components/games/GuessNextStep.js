@@ -56,7 +56,7 @@ const GuessNextStep = () => {
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-                <Button onClick={handleGoClick} disabled={!isGoEnabled} className="mt-2">
+                <Button onClick={handleGoClick} disabled={!isGoEnabled}>
                     Let's go!
                 </Button>
             </div>

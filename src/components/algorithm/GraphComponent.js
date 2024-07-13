@@ -2,6 +2,7 @@ import React from 'react';
 import ReactFlow, { Background, Controls, MarkerType } from 'reactflow';
 import 'reactflow/dist/style.css';
 import DownloadOptions from "../drag-and-drop/DownloadOptions";
+import InfoTooltip from "../../InfoToolTip";
 
 const GraphComponent = ({ graphData }) => {
     if (!graphData) {
@@ -24,7 +25,11 @@ const GraphComponent = ({ graphData }) => {
 
     return (
         <div className="rounded-square graph-placeholder">
-            <h4>Graph</h4>
+            <h4>
+                Graph{' '}
+                <InfoTooltip tooltipText={"Use your cursor to move the graph and scroll to zoom in or out. " +
+                    "Use the left panel to zoom in, zoom out, or center the view."}/>
+            </h4>
             <label>Number of processors: {graphData.num_processors}</label>
             <div style={{ width: '100%', height: '500px' }}>
                 <ReactFlow

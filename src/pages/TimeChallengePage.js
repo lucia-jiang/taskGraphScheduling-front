@@ -6,6 +6,7 @@ import AssignmentDetails from "../components/games/AssignmentDetails";
 import AlgorithmResults from '../components/games/AlgorithmResults';
 import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
 import {calculateAssignmentTime, fetchAlgorithmResults} from "./commonFunctions";
+import InfoTooltip from "../InfoToolTip";
 
 const TimeChallengePage = () => {
     const [graphData, setGraphData] = useState(generateRandomGraph());
@@ -148,9 +149,12 @@ const TimeChallengePage = () => {
 
     return (
         <div className="container-fluid pl-3 pr-3 mt-3 mb-4">
-            <h1>Time Challenge Page</h1>
+            <h1>
+                Time Challenge Page{' '}
+                <InfoTooltip tooltipText={"Assign nodes to processors within the given time limit."}/>
+            </h1>
             {algorithmResults && (
-                <p>Can you solve the problem under {algorithmResults.minTime} units of time?</p>
+                <p>Can you solve the problem under {algorithmResults.minTime+thresholdTime} units of time?</p>
             )}
             <div className="row">
                 <div className="col-12 col-md-5 mt-2">

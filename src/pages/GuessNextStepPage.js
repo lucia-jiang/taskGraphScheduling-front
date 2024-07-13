@@ -4,9 +4,10 @@ import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProce
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
 import AssignmentDetails from '../components/games/AssignmentDetails';
-import generateRandomGraph from "../graphData-generate/GenerateRandomGraph"; // Import AssignmentDetails component
+import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
+import InfoTooltip from "../InfoToolTip"; // Import AssignmentDetails component
 
-const fetchHLFETSteps = async (algorithmName, graphData) => {
+const fetchAlgorithmSteps = async (algorithmName, graphData) => {
     try {
         const response = await axios.post(`https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/${algorithmName}-steps`, graphData, {
             headers: {'Content-Type': 'application/json'}
@@ -69,7 +70,7 @@ const GuessNextStepPage = () => {
 
             const {algorithmName} = state;
             try {
-                const steps = await fetchHLFETSteps(algorithmName, graphData);
+                const steps = await fetchAlgorithmSteps(algorithmName, graphData);
                 setHlfetSteps(steps);
             } catch (error) {
                 console.error(`Error fetching ${algorithmName} steps:`, error);
@@ -149,7 +150,7 @@ const GuessNextStepPage = () => {
     const resetState = () => {
         setAssignments({});
         setCurrentStep(0);
-        fetchHLFETSteps(state.algorithmName, graphData);
+        fetchAlgorithmSteps(state.algorithmName, graphData);
         setScheduledTasks([]);
         setCurrentProcessorTimes(processors.reduce((acc, processor) => ({...acc, [processor]: 0}), {}));
         setFeedback(null);
@@ -158,7 +159,13 @@ const GuessNextStepPage = () => {
 
     return (
         <div className="container-fluid pl-3 pr-3 mt-3 mb-4">
-            <h1>Guess the Next Step</h1>
+            <h1>
+                Guess the Next Step{' '}
+                <InfoTooltip tooltipText={"Predict the next step of the algorithm chosen."}/>
+            </h1>
+            {state.algorithmName==='hlfet' && <h2>HLFET (Highest Level First with Estimated Time)</h2>}
+            {state.algorithmName==='etf' && <h2>ETF (Earliest Task First)</h2>}
+            {state.algorithmName==='mcp' && <h2>MCT (Minimum Communication Time)</h2>}
             <div className="row">
                 <div className="col-12 col-md-5 mt-2">
                     <GraphComponent key="graph" graphData={graphData}/>

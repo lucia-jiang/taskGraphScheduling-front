@@ -19,7 +19,7 @@ const InputLabel = ({ label, value, onChange }) => {
                 value={value}
                 onChange={handleChange}
                 className="form-control ml-1"
-                style={{ maxWidth: '150px' }}
+                style={{ maxWidth: '350px' }}
             />
         </div>
     );

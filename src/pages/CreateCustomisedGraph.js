@@ -19,9 +19,9 @@ const CreateCustomisedGraph = () => {
     useEffect(() => {
         if (paramAlgorithmName) {
             storeAlgorithmName(paramAlgorithmName);
-            setLocalAlgorithmName(paramAlgorithmName)
+            setLocalAlgorithmName(paramAlgorithmName);
         } else {
-            setLocalAlgorithmName(algorithmName)
+            setLocalAlgorithmName(algorithmName);
         }
         return () => {
             resetAlgorithmName();
@@ -33,7 +33,7 @@ const CreateCustomisedGraph = () => {
         if (localAlgorithmName) {
             let displayName = getDisplayNameForAlgorithm(localAlgorithmName);
             setSelectedAlgorithmDisplayName(displayName);
-            setLocalAlgorithmName(localAlgorithmName)
+            setLocalAlgorithmName(localAlgorithmName);
         }
     }, [localAlgorithmName]);
 
@@ -81,41 +81,51 @@ const CreateCustomisedGraph = () => {
                 <InfoToolTip
                     tooltipText={
                         'Create your own task graph scheduling problem. Drag nodes from the right panel to add them. ' +
-                        'Connect nodes to create edges. Specify weight and cost before creation.' +
-                        'Delete nodes and edges by pressing the delete key on your keyboard.'
+                        'Connect nodes to create edges. Specify weight and cost before creation. ' +
+                        'Delete nodes and edges by pressing the delete key on your keyboard. ' +
+                        'You can also import a JSON file with the graph.'
                     }
                 />
             </h1>
             <div>
-                <label className="mr-2">Please select an algorithm to solve the graph:</label>
-                <Dropdown className="d-inline-block">
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                        {selectedAlgorithmDisplayName}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item
-                            onClick={() => handleSelectAlgorithm('hlfet', 'HLFET (Highest Level First with Estimated Time)')}>
-                            HLFET (Highest Level First with Estimated Time)
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSelectAlgorithm('mcp', 'MCT (Minimum Communication Time)')}>
-                            MCT (Minimum Communication Time)
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSelectAlgorithm('etf', 'ETF (Earliest Task First)')}>
-                            ETF (Earliest Task First)
-                        </Dropdown.Item>
-                        {/*<Dropdown.Item onClick={() => handleSelectAlgorithm('dls', 'DLS (Dynamic Level Scheduling)')}>*/}
-                        {/*    DLS (Dynamic Level Scheduling)*/}
-                        {/*</Dropdown.Item>*/}
-                    </Dropdown.Menu>
-                </Dropdown>
-                <Button className={"ml-3"} onClick={handleSolveGraph} disabled={!solveEnabled}>
-                    Solve graph
-                </Button>
+                {paramAlgorithmName ? (
+                    <h2>{selectedAlgorithmDisplayName}
+                        <Button className={"ml-3"} onClick={handleSolveGraph} disabled={!solveEnabled}>
+                            Solve graph
+                        </Button>
+                    </h2>
+                ) : (
+                    <div>
+                        <label className="mr-2">Please select an algorithm to solve the graph:</label>
+                        <Dropdown className="d-inline-block mr-3">
+                            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                                {selectedAlgorithmDisplayName}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                    onClick={() => handleSelectAlgorithm('hlfet', 'HLFET (Highest Level First with Estimated Time)')}>
+                                    HLFET (Highest Level First with Estimated Time)
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    onClick={() => handleSelectAlgorithm('mcp', 'MCT (Minimum Communication Time)')}>
+                                    MCT (Minimum Communication Time)
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    onClick={() => handleSelectAlgorithm('etf', 'ETF (Earliest Task First)')}>
+                                    ETF (Earliest Task First)
+                                </Dropdown.Item>
+                                {/*<Dropdown.Item onClick={() => handleSelectAlgorithm('dls', 'DLS (Dynamic Level Scheduling)')}>*/}
+                                {/*    DLS (Dynamic Level Scheduling)*/}
+                                {/*</Dropdown.Item>*/}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Button onClick={handleSolveGraph} disabled={!solveEnabled}>
+                            Solve graph
+                        </Button>
+                    </div>
+                )}
             </div>
-
             <DragAndDrop onFileUpload={handleFileUpload}/>
-
-
         </div>
     );
 };

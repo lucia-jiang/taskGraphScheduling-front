@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Accordion, Card } from 'react-bootstrap';
 import axios from 'axios';
 import GraphPropertiesStepList from './GraphPropertiesStepList';
+import InfoTooltip from "../../InfoToolTip";
 
 const GraphProperties = ({ graphData, prop }) => {
     const [properties, setProperties] = useState({});
@@ -91,7 +92,10 @@ const GraphProperties = ({ graphData, prop }) => {
             <Accordion className="mb-3 custom-accordion">
                 <Accordion.Item>
                     <Accordion.Header>
-                        <h4>Graph Properties</h4>
+                        <h4>
+                            Graph Properties{' '}
+                            <InfoTooltip tooltipText={"Click on column names to sort in ascending or descending order."}/>
+                        </h4>
                     </Accordion.Header>
                     <Accordion.Body>
                         <Table striped bordered hover responsive className="border">

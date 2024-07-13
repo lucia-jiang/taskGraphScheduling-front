@@ -14,14 +14,14 @@ const QuantityPicker = ({ value, onChange }) => {
 
     return (
         <Form.Group className="d-flex align-items-center">
-            <Form.Label className="mb-0" style={{ minWidth: '200px' }}>Number of processors:</Form.Label> {/* mr-2 for margin-right */}
+            <Form.Label className="mb-0" style={{ minWidth: '175px' }}>Number of processors:</Form.Label> {/* mr-2 for margin-right */}
             <div className="input-group">
                 <input
                     type="text"
                     className="form-control"
                     value={value}
                     readOnly
-                    style={{ backgroundColor: 'white', color: 'black', maxWidth: '100px' }}
+                    style={{ backgroundColor: 'white', color: 'black', maxWidth: '200px' }}
                 />
                 <div className="input-group-append">
                     <Button variant="outline-secondary" onClick={handleIncrease} style={{ backgroundColor: 'white', color: 'black', border:'1px solid lightgray' }}>

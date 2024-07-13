@@ -63,7 +63,7 @@ const NodeProcessorMatching = ({ nodes, processors, nodePredecessors, assignment
                 </div>
             </div>
             {refreshButton && (
-                <Button className="mt-1 refresh-button" onClick={handleRefresh}>Refresh Choices</Button>
+                <Button className="m3-1 refresh-button" onClick={handleRefresh}>Refresh Choices</Button>
             )}
         </div>
     );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactFlow, { Controls, MarkerType } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
+import InfoTooltip from "../InfoToolTip";
 
 const ImageGallery = () => {
     const [graphData, setGraphData] = useState(generateRandomGraph); // Initial graph data
@@ -15,7 +16,11 @@ const ImageGallery = () => {
 
     return (
         <div className="rounded-square">
-            <h3>Graph</h3>
+            <h3>
+                Graph{' '}
+                <InfoTooltip tooltipText={"Use your cursor to move the graph and scroll to zoom in or out. " +
+                    "Use the left panel to zoom in, zoom out, or center the view."}/>
+            </h3>
             <label>Number of processors: {graphData.num_processors}</label>
             <div style={{ width: '100%', height: '500px' }}>
                 {graphData && (
@@ -43,7 +48,7 @@ const ImageGallery = () => {
                 )}
             </div>
             <button className="btn btn-primary mt-3" onClick={handleRefresh}>
-                Refresh
+                Another example
             </button>
         </div>
     );

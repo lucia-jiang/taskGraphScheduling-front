@@ -1,9 +1,14 @@
 import React from 'react';
 import AlgorithmExplanation from "../components/algorithm/AlgorithmExplanation";
+import InfoTooltip from "../InfoToolTip";
 
 const Algorithms = () => {
     return (
         <div className={"container-fluid mr-3"}>
+            <h1>
+                Algorithms{' '}
+                <InfoTooltip tooltipText={"Visualise algorithm steps on a randomly generated graph, or design your own graph."}/>
+            </h1>
             <div className={"row"}>
                 <div className={"col-12 col-md-6"}>
                     <AlgorithmExplanation algorithmTitle={"HLFET Algorithm"}

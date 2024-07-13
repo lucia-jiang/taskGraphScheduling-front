@@ -96,7 +96,8 @@ const UsersSolveProblem = () => {
         <div className="mb-4 pl-3 pr-3">
             <h1>
                 Users solve problem{' '}
-                <InfoToolTip tooltipText={"Click on the nodes to assign the processors in the minimum time possible."}/>
+                <InfoToolTip tooltipText={"Click on the nodes to assign the processors in the minimum time possible. " +
+                    " Refresh the page to generate a new random graph."}/>
             </h1>
 
             <div className="container-fluid">
