@@ -6,12 +6,12 @@ const Home = () => {
     return (
         <div className="container-fluid p-3">
             <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-5 pl-3 pr-3">
                     <div className="task-graph-example">
                         <ImageGallery/>
                     </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-7 pl-3 pr-3">
                     <h2>What is Task Graph Scheduling?</h2>
                     <p>
                         Task graph scheduling problems involve efficiently <strong>assigning interdependent tasks to

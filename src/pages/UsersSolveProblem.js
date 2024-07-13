@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import GraphComponent from "../components/algorithm/GraphComponent";
 import "../components/Components.css";
 import NodeProcessorMatching from "../components/NodeProcessorMatching/NodeProcessorMatching";
@@ -9,23 +9,31 @@ import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
 import {fetchAlgorithmResults, calculateAssignmentTime} from "./commonFunctions";
 
 const UsersSolveProblem = () => {
-    const [graphData] = useState(generateRandomGraph());
-    const nodeIds = graphData.nodes.map(node => node.id);
-    const numProcessors = graphData.num_processors || 4;
-    const processors = Array.from({length: numProcessors}, (_, i) => `P${i + 1}`);
-    const nodePredecessors = nodeIds.reduce((acc, nodeId) => {
-        acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source);
-        return acc;
-    }, {});
-
+    const [graphData, setGraphData] = useState(generateRandomGraph());
     const [assignments, setAssignments] = useState({});
     const [finished, setFinished] = useState(false);
     const [algorithmResults, setAlgorithmResults] = useState(null);
     const [scheduledTasks, setScheduledTasks] = useState([]);
-    const [currentProcessorTimes, setCurrentProcessorTimes] = useState(processors.reduce((acc, processor) => ({
-        ...acc,
-        [processor]: 0
-    }), {}));
+    const [currentProcessorTimes, setCurrentProcessorTimes] = useState({});
+    const [nodeIds, setNodeIds] = useState([]);
+    const [processors, setProcessors] = useState([]);
+    const [nodePredecessors, setNodePredecessors] = useState({});
+
+    useEffect(() => {
+        if (graphData) {
+            const ids = graphData.nodes.map(node => node.id);
+            const numProcessors = graphData.num_processors || 4;
+            const proc = Array.from({length: numProcessors}, (_, i) => `P${i + 1}`);
+            const predecessors = ids.reduce((acc, nodeId) => {
+                acc[nodeId] = graphData.edges.filter(edge => edge.target === nodeId).map(edge => edge.source) || [];
+                return acc;
+            }, {});
+
+            setNodeIds(ids);
+            setProcessors(proc);
+            setNodePredecessors(predecessors);
+        }
+    }, [graphData]);
 
     const handleAssignment = useCallback((newAssignments) => {
         setAssignments((prevAssignments) => {
@@ -51,14 +59,16 @@ const UsersSolveProblem = () => {
 
             setScheduledTasks(updatedScheduledTasks);
             setCurrentProcessorTimes(updatedProcessorTimes);
+            setFinished(false);
             return updatedAssignments;
         });
-        setFinished(false);
-    }, [currentProcessorTimes, scheduledTasks]);
+    }, [currentProcessorTimes, scheduledTasks, graphData]);
 
     const handleFinished = async () => {
+        console.log('Finished button clicked');
         try {
-            const results = await fetchAlgorithmResults();
+            const results = await fetchAlgorithmResults(graphData);
+            console.log('Algorithm results fetched:', results);
             setAlgorithmResults(results);
             setFinished(true);
         } catch (error) {
@@ -71,7 +81,8 @@ const UsersSolveProblem = () => {
         setFinished(false);
         setAlgorithmResults(null);
         setScheduledTasks([]);
-        setCurrentProcessorTimes(processors.reduce((acc, processor) => ({...acc, [processor]: 0}), {}));
+        setCurrentProcessorTimes({});
+        setGraphData(generateRandomGraph());
     };
 
     const userEndTime = scheduledTasks.length > 0
@@ -81,7 +92,7 @@ const UsersSolveProblem = () => {
     const graphDataStr = encodeURIComponent(JSON.stringify(graphData));
 
     return (
-        <div className={"mb-4 p-3"}>
+        <div className="mb-4 p-3">
             <h1>Users solve problem</h1>
             <div className="container-fluid">
                 <div className="row">
@@ -89,25 +100,29 @@ const UsersSolveProblem = () => {
                         <GraphComponent graphData={graphData}/>
                     </div>
                     <div className="col-12 col-md-2">
-                        <NodeProcessorMatching
-                            nodes={nodeIds}
-                            processors={processors}
-                            nodePredecessors={nodePredecessors}
-                            assignments={assignments}
-                            onAssignment={handleAssignment}
-                            refreshButton={true}
-                            onRefresh={resetState} // Pass the resetState function as a prop
-                        />
-                        {Object.keys(assignments).length === nodeIds.length && !finished && (
-                            <button className="btn btn-primary mt-2" onClick={handleFinished}>
-                                Finished
-                            </button>
-                        )}
+                        <div className="node-processor-container">
+                            <NodeProcessorMatching
+                                nodes={nodeIds}
+                                processors={processors}
+                                nodePredecessors={nodePredecessors}
+                                assignments={assignments}
+                                onAssignment={handleAssignment}
+                                refreshButton={true}
+                                onRefresh={resetState}
+                            />
+                            {Object.keys(assignments).length === nodeIds.length && !finished && (
+                                <button className="btn btn-primary mt-2 finished-button" onClick={handleFinished}>
+                                    Finished
+                                </button>
+                            )}
+                        </div>
                     </div>
                     <div className="col-12 col-md-5">
                         <AssignmentDetails assignments={assignments} scheduledTasks={scheduledTasks}
                                            maxTime={userEndTime} finished={finished}/>
-                        <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr}/>
+                        {finished && (
+                            <AlgorithmResults algorithmResults={algorithmResults} graphDataStr={graphDataStr}/>
+                        )}
                     </div>
                 </div>
             </div>

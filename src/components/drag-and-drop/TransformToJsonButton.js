@@ -1,6 +1,5 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
-import {Panel} from 'reactflow';
 
 const TransformToJsonButton = ({nodes, edges, numProcessors}) => {
     const transformToJson = () => {
@@ -36,11 +35,9 @@ const TransformToJsonButton = ({nodes, edges, numProcessors}) => {
     };
 
     return (
-        <Panel>
-            <Button className="mt-5" onClick={transformToJson}>
-                Download JSON
-            </Button>
-        </Panel>
+        <Button style={{ margin: 0, background: 'none', color: 'black', border: 'none'}} onClick={transformToJson}>
+            Download JSON
+        </Button>
     );
 };
 

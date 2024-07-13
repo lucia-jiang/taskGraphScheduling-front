@@ -1,10 +1,10 @@
 //code extracted from https://reactflow.dev/examples/misc/download-image
 import React from 'react';
-import {Panel, useReactFlow, getRectOfNodes, getTransformForBounds} from 'reactflow';
+import {useReactFlow, getRectOfNodes, getTransformForBounds} from 'reactflow';
 import {toPng} from 'html-to-image';
 import {Button} from "react-bootstrap";
 
-function downloadImage(dataUrl) {
+export function downloadImage(dataUrl) {
     const a = document.createElement('a');
 
     a.setAttribute('download', 'graph.png');
@@ -33,11 +33,11 @@ function DownloadButton() {
         }).then(downloadImage);
     };
 
-    return (<Panel>
-        <Button className="download-btn" onClick={onClick}>
+    return (
+        <Button style={{ margin: 0, background: 'none', color: 'black', border: 'none'}} onClick={onClick}>
             Download Image
         </Button>
-    </Panel>);
+    );
 }
 
 export default DownloadButton;

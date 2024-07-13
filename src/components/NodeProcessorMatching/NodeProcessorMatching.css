@@ -1,34 +1,3 @@
-/* General container styling */
-.container {
-    max-width: 100%;
-    padding: 0 15px;
-    margin: 0 auto;
-}
-
-/* Row styling */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 0 -15px;
-}
-
-/* Column styling */
-.col-md-4, .col-md-6 {
-    padding: 0 15px;
-}
-
-/* Specific columns for the layout */
-.col-md-4 {
-    flex: 0 0 32%;
-    max-width: 32%;
-}
-
-.col-md-6 {
-    flex: 0 0 48%;
-    max-width: 48%;
-}
-
 /* Aligning label and input spinner horizontally */
 .number-processors-container {
     display: flex;
@@ -114,9 +83,15 @@
 /* Node Processor Matching styling */
 .node-processor-matching {
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lists-container {
+    display: flex;
+    flex-direction: row;
     width: 100%;
+    justify-content: center;
 }
 
 .node-processor-container {
@@ -126,16 +101,19 @@
 }
 
 .node-list {
-    display: flex;
-    flex-direction: column;
+    margin-right: 1rem;
+    flex: 1;
 }
 
 .processor-selection {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Ensure it takes up remaining space */
+    margin-left: 1rem;
+    flex: 1;
 }
 
 .refresh-button {
-    align-self: stretch; /* Make the button take the full width of its container */
+    margin-top: 1rem;
+}
+
+.finished-button {
+    align-self: center;
 }
