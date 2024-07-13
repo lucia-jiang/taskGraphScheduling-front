@@ -7,6 +7,7 @@ import AssignmentDetails from "../components/games/AssignmentDetails";
 import AlgorithmResults from "../components/games/AlgorithmResults";
 import generateRandomGraph from "../graphData-generate/GenerateRandomGraph";
 import {fetchAlgorithmResults, calculateAssignmentTime} from "./commonFunctions";
+import InfoToolTip from "../InfoToolTip";
 
 const UsersSolveProblem = () => {
     const [graphData, setGraphData] = useState(generateRandomGraph());
@@ -93,7 +94,11 @@ const UsersSolveProblem = () => {
 
     return (
         <div className="mb-4 pl-3 pr-3">
-            <h1>Users solve problem</h1>
+            <h1>
+                Users solve problem{' '}
+                <InfoToolTip tooltipText={"Click on the nodes to assign the processors in the minimum time possible."}/>
+            </h1>
+
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12 col-md-5 mt-2">
