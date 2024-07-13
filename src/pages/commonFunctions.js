@@ -9,9 +9,23 @@ export const fetchAlgorithmResults = async (graphData) => {
             axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/etf-steps', graphData, { headers: { 'Content-Type': 'application/json' } })
         ]);
 
-        const algorithm1Time = hlfet.data[hlfet.data.length - 1].details.total_time;
-        const algorithm2Time = mcp.data[mcp.data.length - 1].details.total_time;
-        const algorithm3Time = etf.data[etf.data.length - 1].details.total_time;
+        // Function to find the maximum total time for an algorithm
+        const getMaxTotalTime = (data) => {
+            if (!data || data.length === 0) {
+                return 0;
+            }
+
+            // Filter out steps that don't have details.total_time
+            const validSteps = data.filter(step => step.details && typeof step.details.total_time === 'number');
+
+            // Find the maximum total_time among valid steps
+            return Math.max(...validSteps.map(step => step.details.total_time));
+        };
+
+        // Calculate maximum times for each algorithm
+        const algorithm1Time = getMaxTotalTime(hlfet.data);
+        const algorithm2Time = getMaxTotalTime(mcp.data);
+        const algorithm3Time = getMaxTotalTime(etf.data);
 
         const minTime = Math.min(algorithm1Time, algorithm2Time, algorithm3Time);
 

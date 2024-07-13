@@ -66,10 +66,8 @@ const UsersSolveProblem = () => {
     }, [currentProcessorTimes, scheduledTasks, graphData]);
 
     const handleFinished = async () => {
-        console.log('Finished button clicked');
         try {
             const results = await fetchAlgorithmResults(graphData);
-            console.log('Algorithm results fetched:', results);
             setAlgorithmResults(results);
             setFinished(true);
         } catch (error) {
