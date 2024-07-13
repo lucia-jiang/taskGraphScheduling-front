@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const fetchAlgorithmResults = async (graphData) => {
     try {
-        console.log(graphData);
         const [hlfet, mcp, etf] = await Promise.all([
             axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/hlfet-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),
             axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/algorithm/mcp-steps', graphData, { headers: { 'Content-Type': 'application/json' } }),

@@ -49,9 +49,7 @@ const HLFETAlgorithm = () => {
 
     const [stepsList, setStepsList] = useState([]);
     const [scheduledTasks, setScheduledTasks] = useState([]);
-    const [graphData, setGraphData] = useState(initialGraphData);
-
-    console.log(graphData)
+    const [graphData] = useState(initialGraphData);
 
     useEffect(() => {
         const fetchStepsList = async () => {

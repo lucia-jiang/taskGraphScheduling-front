@@ -3,7 +3,6 @@ import {Table, Accordion} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 const AlgorithmResults = ({algorithmResults, graphDataStr}) => {
-    console.log(algorithmResults)
     return (
         <div className="results-container">
             <h3>Results</h3>
