@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Accordion, Card } from 'react-bootstrap';
+import React, {useState, useEffect} from 'react';
+import {Table, Accordion, Card} from 'react-bootstrap';
 import axios from 'axios';
 import GraphPropertiesStepList from './GraphPropertiesStepList';
 import InfoTooltip from "../../InfoToolTip";
+import './GraphProperties.css'
 
-const GraphProperties = ({ graphData, prop }) => {
+const GraphProperties = ({graphData, prop}) => {
     const [properties, setProperties] = useState({});
-    const [sortConfig, setSortConfig] = useState({ key: 'SL', direction: 'ascending' });
+    const [sortConfig, setSortConfig] = useState({key: 'SL', direction: 'ascending'});
     const [steps, setSteps] = useState([]);
 
     useEffect(() => {
         const fetchGraphProperties = async () => {
             try {
                 const response = await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/graph/properties/', graphData, {
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 const stepsResponse = prop === 'SL'
                     ? await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/graph/properties/sl', graphData, {
-                        headers: { 'Content-Type': 'application/json' }
+                        headers: {'Content-Type': 'application/json'}
                     })
                     : await axios.post('https://task-graph-scheduling-lucia-jiang-2e58e4e5.koyeb.app/graph/properties/lst', graphData, {
-                        headers: { 'Content-Type': 'application/json' }
+                        headers: {'Content-Type': 'application/json'}
                     });
                 setProperties(response.data);
                 setSteps(stepsResponse.data);
@@ -79,7 +80,7 @@ const GraphProperties = ({ graphData, prop }) => {
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
-        setSortConfig({ key, direction });
+        setSortConfig({key, direction});
     };
 
     const getSortIndicator = (key) => {
@@ -94,26 +95,31 @@ const GraphProperties = ({ graphData, prop }) => {
                     <Accordion.Header>
                         <h4>
                             Graph Properties{' '}
-                            <InfoTooltip tooltipText={"Click on column names to sort in ascending or descending order."}/>
+                            <InfoTooltip
+                                tooltipText={"Click on column names to sort in ascending or descending order."}/>
                         </h4>
                     </Accordion.Header>
                     <Accordion.Body>
                         <Table striped bordered hover responsive className="border">
                             <thead>
                             <tr>
-                                <th onClick={() => requestSort('nodeId')}>Node ID {getSortIndicator('nodeId')}</th>
+                                <th className={"sortable"} onClick={() => requestSort('nodeId')}>Node
+                                    ID {getSortIndicator('nodeId')}</th>
                                 {prop === 'SL' &&
-                                    <th onClick={() => requestSort('SL')}>SL {getSortIndicator('SL')}</th>}
+                                    <th className={"sortable"}
+                                        onClick={() => requestSort('SL')}>SL {getSortIndicator('SL')}</th>}
                                 {prop === 'LST' && (
                                     <>
-                                        <th onClick={() => requestSort('EST')}>EST {getSortIndicator('EST')}</th>
-                                        <th onClick={() => requestSort('LST')}>LST {getSortIndicator('LST')}</th>
+                                        <th className={"sortable"}
+                                            onClick={() => requestSort('EST')}>EST {getSortIndicator('EST')}</th>
+                                        <th className={"sortable"}
+                                            onClick={() => requestSort('LST')}>LST {getSortIndicator('LST')}</th>
                                     </>
                                 )}
                             </tr>
                             </thead>
                             <tbody>
-                            {sortedData.map(({ nodeId, SL, EST, LST }) => (
+                            {sortedData.map(({nodeId, SL, EST, LST}) => (
                                 <tr key={nodeId}>
                                     <td>{nodeId}</td>
                                     {prop === 'SL' && <td>{SL}</td>}
@@ -132,7 +138,7 @@ const GraphProperties = ({ graphData, prop }) => {
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Steps</Accordion.Header>
                                     <Accordion.Body>
-                                        <GraphPropertiesStepList steps={steps} prop={prop} />
+                                        <GraphPropertiesStepList steps={steps} prop={prop}/>
                                     </Accordion.Body>
                                 </Accordion.Item>
                             </Card>
