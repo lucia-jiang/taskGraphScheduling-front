@@ -23,4 +23,31 @@
     font-size: 1rem;
 }
 
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.custom-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.custom-button:hover {
+    background-color: #0056b3;
+}
+
+.custom-button:focus {
+    outline: none;
+}
+
 
