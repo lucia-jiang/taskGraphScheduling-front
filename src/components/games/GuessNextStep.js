@@ -26,16 +26,14 @@ const GuessNextStep = () => {
         <div className={"rounded-square"}>
             <h1>Guess the Next Step</h1>
             <p>
-                Guess Next Step is a game where you put your scheduling skills to the test! Presented with a
-                series of interdependent tasks in a directed acyclic graph (DAG), your mission is to <strong>predict the
-                next
-                optimal step in scheduling.</strong> First, select an algorithm to guide your strategy. Then, for each
-                task, you need
-                to correctly assign it to a processor while considering dependencies and communication costs. Make sure
-                your
-                selected steps follow the chosen algorithm precisely. Can you guess the correct assignment and stay
-                ahead of
-                the algorithm?
+                Guess Next Step is a game where you put your scheduling skills to the test! Presented with a series of
+                interdependent tasks in a directed acyclic graph (DAG), your mission is to <strong>predict the next
+                optimal step in scheduling</strong>. First, select an algorithm to guide your strategy. Then, for each
+                task, you need to correctly assign it to a processor while considering dependencies and communication
+                costs. <strong>When there is a tie between which processor to choose, always select the smallest number
+                processor. When there are two nodes to choose from, start by choosing the highest node</strong>. Make
+                sure your selected steps follow the chosen algorithm precisely. Can you guess the correct assignment and
+                stay ahead of the algorithm?
             </p>
             <div className="d-flex align-items-center">
                 <Dropdown className="mr-2">
