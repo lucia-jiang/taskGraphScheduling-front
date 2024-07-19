@@ -81,7 +81,6 @@ const UsersSolveProblem = () => {
         setAlgorithmResults(null);
         setScheduledTasks([]);
         setCurrentProcessorTimes({});
-        setGraphData(generateRandomGraph());
     };
 
     const userEndTime = scheduledTasks.length > 0
