@@ -24,11 +24,11 @@ const QuantityPicker = ({ value, onChange }) => {
                     style={{ backgroundColor: 'white', color: 'black', maxWidth: '200px' }}
                 />
                 <div className="input-group-append">
-                    <Button variant="outline-secondary" onClick={handleIncrease} style={{ backgroundColor: 'white', color: 'black', border:'1px solid lightgray' }}>
-                        +
-                    </Button>
                     <Button variant="outline-secondary" onClick={handleDecrease} style={{ backgroundColor: 'white', color: 'black', border: '1px solid lightgray' }}>
                         -
+                    </Button>
+                    <Button variant="outline-secondary" onClick={handleIncrease} style={{ backgroundColor: 'white', color: 'black', border:'1px solid lightgray' }}>
+                        +
                     </Button>
                 </div>
             </div>
