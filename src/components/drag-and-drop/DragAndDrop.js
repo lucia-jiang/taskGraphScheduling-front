@@ -22,12 +22,12 @@ const DragAndDrop = ({ onFileUpload }) => {
     const [processorCount, setProcessorCount] = useState(3); // State for processor count
 
     const handleInputChange = (valueSetter) => (value) => {
-        valueSetter(value);
+        valueSetter(parseFloat(value));
     };
 
     // Function to handle quantity change from QuantityPicker
     const handleQuantityChange = (value) => {
-        setProcessorCount(value); // Update processorCount state
+        setProcessorCount(parseFloat(value)); // Update processorCount state
     };
 
     const onConnect = useCallback((params) => {
